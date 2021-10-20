@@ -27,6 +27,7 @@ Thumbs.db
 simulator*.log
 comparison*.log
 unitTests*.log
+failed-simulator*.log
 funnel_comp
 
 # Files in top-level directory
