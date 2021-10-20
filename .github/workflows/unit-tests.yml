@@ -1,5 +1,5 @@
 # Workflow for CI tests
-name: CI-jmodelica-simulation
+name: CI-unit-tests-simulation
 
 # Controls when the action will run.
 on:
@@ -20,7 +20,7 @@ defaults:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
-  test-jmodelica:
+  test-dymola-jmodelica:
     # Skip if the commit message contains "ci skip"
     if: "!contains(github.event.head_commit.message, 'ci skip')"
 
@@ -50,7 +50,12 @@ jobs:
       - name: "Update PATH"
         run: echo "${GITHUB_WORKSPACE}/BICEPS/Resources/Scripts/github-actions/jmodelica" >> $GITHUB_PATH
 
-      - name: "Run unit tests. This will take a while."
+      - name: "Run dymola unit tests. This will take a while."
         run: |
           export PYTHONPATH=${GITHUB_WORKSPACE}/BICEPS/Resources/Python-Sources
-          python3 ../bin/runUnitTests.py --batch --tool jmodelica --skip-verification
+          python3 ../bin/runUnitTests.py --batch --tool dymola --skip-verification
+
+      # - name: "Run jmodelica unit tests. This will take a while."
+        # run: |
+          # export PYTHONPATH=${GITHUB_WORKSPACE}/BICEPS/Resources/Python-Sources
+          # python3 ../bin/runUnitTests.py --batch --tool jmodelica --skip-verification
