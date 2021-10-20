@@ -48,7 +48,7 @@ jobs:
         run: docker pull michaelwetter/ubuntu-1804_jmodelica_trunk
 
       - name: "Update PATH"
-        run: echo "${GITHUB_WORKSPACE}/IBPSA/Resources/Scripts/github-actions/jmodelica" >> $GITHUB_PATH
+        run: echo "${GITHUB_WORKSPACE}/BICEPS/Resources/Scripts/github-actions/jmodelica" >> $GITHUB_PATH
 
       - name: "Run unit tests. This will take a while."
         run: |
