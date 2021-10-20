@@ -1,4 +1,5 @@
-# BICEPS: The Biomimetic Integrated Community Energy and Power System
+# BICEPS
+The Biomimetic Integrated Community Energy and Power System
 
 ## Description
 This repository contains a Modelica library for modeling heterogenous community energy systems -- 
