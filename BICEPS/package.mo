@@ -2,6 +2,10 @@ within ;
 package BICEPS "Modelica library for the Biomimetic Integrated Energy and Power System (BICEPS)"
   extends Modelica.Icons.Package;
 
+package UsersGuide "User's Guide"
+  extends ModelicaReference.Icons.Information;
+end UsersGuide;
+
   annotation (
  uses(Modelica(version="3.2.3"),Buildings(version="8.0.0")),
  Icon(graphics={Line(points={{-2,90}}, color={28,108,200}),
