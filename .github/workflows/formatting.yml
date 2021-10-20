@@ -41,7 +41,7 @@ jobs:
       - name: "Install sphinx and its dependencies"
         run: pip3 install \
           sphinx==2.1.2 \
-          sphinx-bootstrap-theme==0.7.1 \
+          sphinx-bootstrap-theme==0.8.0 \
           sphinxcontrib-bibtex==0.4.2 \
           sphinxcontrib-plantuml==0.17 \
           alabaster==0.7.12 \
