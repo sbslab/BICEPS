@@ -52,5 +52,5 @@ jobs:
 
       - name: "Run unit tests. This will take a while."
         run: |
-          export PYTHONPATH=${GITHUB_WORKSPACE}/IBPSA/Resources/Python-Sources
+          export PYTHONPATH=${GITHUB_WORKSPACE}/BICEPS/Resources/Python-Sources
           python3 ../bin/runUnitTests.py --batch --tool jmodelica --skip-verification
