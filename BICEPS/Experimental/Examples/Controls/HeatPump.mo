@@ -4,9 +4,6 @@ model HeatPump "Heat pump controller"
   parameter Real TMin=273.15+15 "Minimimum desired threshold for independent variable";
   parameter Real TMax=273.15+25 "Maximum desired threshold for independent variable";
   parameter Real T0=273.15+20 "Nominal value for independent variable";
-  parameter Real kappa(min=Modelica.Constants.small)=10
-    "Percentage penalty for deviating outside of min/max range. Smaller numbers
-    indicate a steeper penalty.";
  parameter Real a(min=0,max=1) = 0.5 "First weighting factor";
  parameter Real b(min=0,max=1) = 1 - a "First weighting factor";
   Modelica.Blocks.Interfaces.RealInput yEle
@@ -25,13 +22,16 @@ model HeatPump "Heat pump controller"
     final xMin=TMin,
     final xMax=TMax,
     final x0=T0,
-    final kappa=kappa,
     final ensureMonotonicity=true)
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   Modelica.Blocks.Math.Add add(k1=a, k2=b)
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   Modelica.Blocks.Math.Gain nor(k=1/(a + b)) "Normalized"
     annotation (Placement(transformation(extent={{-20,-10},{0,10}})));
+  Buildings.Controls.OBC.CDL.Continuous.Limiter lim(
+    final uMax=TMax,
+    final uMin=TMin)
+    annotation (Placement(transformation(extent={{60,-10},{80,10}})));
 equation
   connect(yEle, add.u1) annotation (Line(points={{-120,60},{-80,60},{-80,6},{-62,
           6}}, color={0,0,127}));
@@ -41,8 +41,10 @@ equation
     annotation (Line(points={{-39,0},{-22,0}}, color={0,0,127}));
   connect(nor.y, spl.y)
     annotation (Line(points={{1,0},{18,0}}, color={0,0,127}));
-  connect(spl.x, TSet)
-    annotation (Line(points={{41,0},{110,0}}, color={0,0,127}));
+  connect(spl.x, lim.u)
+    annotation (Line(points={{41,0},{58,0}}, color={0,0,127}));
+  connect(lim.y, TSet)
+    annotation (Line(points={{82,0},{110,0}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end HeatPump;

@@ -4,11 +4,11 @@ model CubicHermite "Block for cubic hermite spline function"
   parameter Real xMin=-1 "Minimimum desired threshold for independent variable";
   parameter Real xMax=1 "Maximum desired threshold for independent variable";
   parameter Real x0=0 "Nominal value for independent variable";
-  parameter Real kappa(min=Modelica.Constants.small)=10
+  parameter Real k(min=Modelica.Constants.small)=10
     "Percentage penalty for deviating outside of min/max range. Smaller numbers
     indicate a steeper penalty.";
   parameter Boolean ensureMonotonicity=true "Set to true if spline monoticity is ensured";
-  final parameter Real[5] xd={xMin*(1-kappa/100),xMin,x0,xMax,xMax*(1+kappa/100)} "Support points";
+  final parameter Real[5] xd={xMin*(1-k/100),xMin,x0,xMax,xMax*(1+k/100)} "Support points";
   final parameter Real[5] yd={-100,-1,0,1,100} "Support points";
   final parameter Real[5] d(each fixed=false)
     "Derivatives at the support points";

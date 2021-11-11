@@ -1,6 +1,201 @@
 within BICEPS.Experimental.Examples;
 package Subsystems "Collection of subsystem models"
   extends Modelica.Icons.VariantsPackage;
+  model Electrical
+    parameter Modelica.SIunits.Voltage V_nominal=208
+      "Nominal voltage of the line";
+    parameter Modelica.SIunits.Frequency f = 60 "Nominal grid frequency";
+    parameter Modelica.SIunits.Power PLoa_nominal = 152159
+      "Nominal power of a load";
+    parameter Modelica.SIunits.Power PWin = PLoa_nominal*4
+      "Nominal power of the wind turbine";
+    parameter Modelica.SIunits.Power PSun = PLoa_nominal*1.0
+      "Nominal power of the PV";
+    parameter Modelica.SIunits.Angle lat "Latitude"
+      annotation(Evaluate=true,Dialog(group="Orientation"));
+    parameter Modelica.SIunits.DensityOfHeatFlowRate W_m2_nominal = 1000
+      "Nominal solar power per unit area";
+    parameter Real eff_PV = 0.12*0.85*0.9
+      "Nominal solar power conversion efficiency (this should consider converion efficiency, area covered, AC/DC losses)";
+    parameter Modelica.SIunits.Area A_PV = PSun/eff_PV/W_m2_nominal
+      "Nominal area of a P installation";
+    parameter Modelica.SIunits.Power PBat = 1000
+      "Nominal power charge/discharge rate of the battery";
+      parameter Modelica.SIunits.Energy EBatMax = 10000
+      "Maximum energy capacity of the battery";
+    Modelica.Blocks.Interfaces.RealInput PHeaPum "Heat pump power"
+      annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
+    Modelica.Blocks.Interfaces.RealOutput yEle
+      "Electrical subsystem control signal "
+      annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+    Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linGri(
+      l=1500,
+      V_nominal=V_nominal)
+      "Grid power line"
+      annotation (Placement(transformation(extent={{-60,60},{-40,80}})));
+    Buildings.Electrical.AC.ThreePhasesBalanced.Storage.Battery bat(
+      redeclare package PhaseSystem =
+        Buildings.Electrical.PhaseSystems.ThreePhase_dq,
+      SOC_start=0.5,
+      EMax=EBatMax,
+      V_nominal=V_nominal)
+      annotation (Placement(transformation(extent={{-60,-40},{-80,-60}})));
+    Buildings.Electrical.AC.ThreePhasesBalanced.Loads.Inductive loa(
+      linearized=false,
+      mode=Buildings.Electrical.Types.Load.VariableZ_P_input)
+      annotation (Placement(transformation(extent={{-60,-10},{-80,10}})));
+    Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terminal
+      annotation (Placement(transformation(extent={{-120,60},{-100,80}}),
+                                iconTransformation(extent={{-10,-110},{10,-90}})));
+    Buildings.BoundaryConditions.WeatherData.Bus weaBus
+      "Weather data bus"
+      annotation (Placement(transformation(extent={{-20,80},{20,120}}),
+        iconTransformation(extent={{-10,90},{10,110}})));
+    Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linWin(
+      l=300,
+      V_nominal=V_nominal)
+      "Wind electrical line"
+      annotation (Placement(transformation(extent={{30,60},{10,80}})));
+    Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linPV(
+      l=300,
+      V_nominal=V_nominal)
+      "PV electrical line"
+      annotation (Placement(transformation(extent={{30,20},{10,40}})));
+    Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linHP(
+      l=10,
+      P_nominal=PLoa_nominal,
+      V_nominal=V_nominal)
+      "Heat pump electrical line"
+      annotation (Placement(transformation(extent={{-30,-10},{-10,10}})));
+    Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linBat(
+      l=10,
+      V_nominal=V_nominal)
+      "Battery electrical line"
+      annotation (Placement(transformation(extent={{-30,-60},{-10,-40}})));
+    Buildings.Electrical.AC.ThreePhasesBalanced.Sources.PVSimpleOriented pv(
+      eta_DCAC=0.89,
+      A=A_PV,
+      fAct=0.9,
+      eta=0.12,
+      linearized=false,
+      V_nominal=V_nominal,
+      pf=0.85,
+      lat=lat,
+      azi=Buildings.Types.Azimuth.S,
+      til=0.5235987755983) "PV"
+      annotation (Placement(transformation(extent={{62,20},{82,40}})));
+    Buildings.Electrical.AC.ThreePhasesBalanced.Sources.WindTurbine winTur(
+      V_nominal=V_nominal,
+      h=15,
+      hRef=10,
+      pf=0.94,
+      eta_DCAC=0.92,
+      nWin=0.4,
+      tableOnFile=false,
+      scale=PWin) "Wind turbine model"
+      annotation (Placement(transformation(extent={{60,60},{80,80}})));
+    Sensors.RelativeElectricalExergyPotential yLoa(v0=V_nominal)
+      "Control signal load"
+      annotation (Placement(transformation(extent={{-50,10},{-30,30}})));
+    Sensors.RelativeElectricalExergyPotential yBat(v0=V_nominal)
+      "Control signal battery"
+      annotation (Placement(transformation(extent={{-50,-40},{-30,-20}})));
+    Sensors.RelativeElectricalExergyPotential yPV(v0=V_nominal)
+      "Control signal pv"
+      annotation (Placement(transformation(extent={{50,20},{30,0}})));
+    Sensors.RelativeElectricalExergyPotential yWin(v0=V_nominal)
+      "Control signal wind turbine"
+      annotation (Placement(transformation(extent={{50,60},{30,40}})));
+    Sensors.RelativeElectricalExergyPotential yGri(v0=V_nominal)
+      "Control signal grid"
+      annotation (Placement(transformation(extent={{-90,60},{-70,40}})));
+    Controls.SubsystemElectrical conSubEle(n=5)
+      annotation (Placement(transformation(extent={{20,-40},{40,-20}})));
+    Controls.Battery conBat(EMax=EBatMax, P_nominal=PBat)
+      "Battery controller"
+      annotation (Placement(transformation(extent={{-40,-90},{-60,-70}})));
+  equation
+    connect(PHeaPum, loa.Pow)
+      annotation (Line(points={{-120,0},{-80,0}}, color={0,0,127}));
+    connect(terminal, linGri.terminal_n)
+      annotation (Line(points={{-110,70},{-60,70}}, color={0,120,120}));
+    connect(linGri.terminal_p, linWin.terminal_p)
+      annotation (Line(points={{-40,70},{10,70}}, color={0,120,120}));
+    connect(linGri.terminal_p, linBat.terminal_p) annotation (Line(points={{-40,70},
+            {0,70},{0,-50},{-10,-50}}, color={0,120,120}));
+    connect(linBat.terminal_n, bat.terminal)
+      annotation (Line(points={{-30,-50},{-60,-50}}, color={0,120,120}));
+    connect(linHP.terminal_n, loa.terminal)
+      annotation (Line(points={{-30,0},{-60,0}}, color={0,120,120}));
+    connect(linHP.terminal_p, linBat.terminal_p) annotation (Line(points={{-10,0},
+            {0,0},{0,-50},{-10,-50}}, color={0,120,120}));
+    connect(linPV.terminal_p, linBat.terminal_p) annotation (Line(points={{10,30},
+            {0,30},{0,-50},{-10,-50}}, color={0,120,120}));
+    connect(linPV.terminal_n, pv.terminal)
+      annotation (Line(points={{30,30},{62,30}}, color={0,120,120}));
+    connect(weaBus, pv.weaBus) annotation (Line(
+        points={{0,100},{0,90},{90,90},{90,50},{72,50},{72,39}},
+        color={255,204,51},
+        thickness=0.5), Text(
+        string="%first",
+        index=-1,
+        extent={{-3,6},{-3,6}},
+        horizontalAlignment=TextAlignment.Right));
+    connect(linWin.terminal_n, winTur.terminal)
+      annotation (Line(points={{30,70},{60,70}}, color={0,120,120}));
+    connect(weaBus.winSpe, winTur.vWin) annotation (Line(
+        points={{0,100},{0,90},{70,90},{70,82}},
+        color={255,204,51},
+        thickness=0.5), Text(
+        string="%first",
+        index=-1,
+        extent={{-3,6},{-3,6}},
+        horizontalAlignment=TextAlignment.Right));
+    connect(yLoa.terminal, loa.terminal)
+      annotation (Line(points={{-40,10},{-40,0},{-60,0}}, color={0,120,120}));
+    connect(yBat.terminal, bat.terminal) annotation (Line(points={{-40,-40},{-40,-50},
+            {-60,-50}}, color={0,120,120}));
+    connect(yPV.terminal, pv.terminal)
+      annotation (Line(points={{40,20},{40,30},{62,30}}, color={0,120,120}));
+    connect(yWin.terminal, winTur.terminal)
+      annotation (Line(points={{40,60},{40,70},{60,70}}, color={0,120,120}));
+    connect(yGri.terminal, linGri.terminal_n)
+      annotation (Line(points={{-80,60},{-80,70},{-60,70}}, color={0,120,120}));
+    connect(yBat.y, conSubEle.yIn) annotation (Line(points={{-29,-23},{6,-23},{6,-30},
+            {20.2,-30}}, color={0,0,127}));
+    connect(yPV.y, conSubEle.yIn) annotation (Line(points={{29,3},{6,3},{6,-30},{20.2,
+            -30}}, color={0,0,127}));
+    connect(yWin.y, conSubEle.yIn) annotation (Line(points={{29,43},{6,43},{6,-30},
+            {20.2,-30}}, color={0,0,127}));
+    connect(yGri.y, conSubEle.yIn) annotation (Line(points={{-69,43},{6,43},{6,-30},
+            {20.2,-30}}, color={0,0,127}));
+    connect(yLoa.y, conSubEle.yIn) annotation (Line(points={{-29,27},{6,27},{6,-30},
+            {20.2,-30}}, color={0,0,127}));
+    connect(conSubEle.yOut, yEle) annotation (Line(points={{41,-30},{90,-30},{90,0},
+            {110,0}}, color={0,0,127}));
+    connect(conSubEle.yOut, conBat.yEle) annotation (Line(points={{41,-30},{50,-30},
+            {50,-74},{-38,-74}}, color={0,0,127}));
+    connect(bat.SOC, conBat.soc) annotation (Line(points={{-81,-56},{-90,-56},{-90,
+            -96},{-30,-96},{-30,-86},{-38,-86}}, color={0,0,127}));
+    connect(conBat.P, bat.P)
+      annotation (Line(points={{-61,-80},{-70,-80},{-70,-60}}, color={0,0,127}));
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+          Rectangle(
+            extent={{-80,80},{80,-80}},
+            lineColor={0,0,0},
+            fillColor={0,140,72},
+            fillPattern=FillPattern.Solid),
+                               Polygon(
+          points={{-50,-76},{-34,-26},{0,-58},{-50,-76}},
+          lineColor={0,0,0},
+          smooth=Smooth.None,
+          fillPattern=FillPattern.Solid,
+          fillColor={0,0,0}),      Line(
+          points={{40,78},{-28,10},{32,10},{-50,-76},{-50,-76}},
+          color={0,0,0},
+          smooth=Smooth.None)}), Diagram(coordinateSystem(preserveAspectRatio=false)));
+  end Electrical;
+
   model ThermoFluid
     "Thermo-fluid subsystem (secondary) in the renewable supply heat pump example"
     extends Buildings.BaseClasses.BaseIconLow;
@@ -9,7 +204,7 @@ package Subsystems "Collection of subsystem models"
     parameter Modelica.SIunits.Temperature TMin=273.15+15 "Minimimum desired threshold for independent variable";
     parameter Modelica.SIunits.Temperature TMax=273.15+25 "Maximum desired threshold for independent variable";
     parameter Modelica.SIunits.Temperature T0=273.15+20 "Nominal value for independent variable";
-    parameter Real kappa(min=Modelica.Constants.small)=10
+    parameter Real k(min=Modelica.Constants.small)=10
       "Percentage penalty for deviating outside of min/max range. Smaller numbers
     indicate a steeper penalty.";
     parameter Modelica.SIunits.TemperatureDifference dTEva_nominal=-5
@@ -84,12 +279,11 @@ package Subsystems "Collection of subsystem models"
     Controls.HeatPump conHeaPum(
       TMin=TMin,
       TMax=TMax,
-      T0=T0,
-      kappa=kappa)
+      T0=T0)
       "Heat pump controller"
       annotation (Placement(transformation(extent={{-60,44},{-40,64}})));
     Sensors.RelativeInternalExergyPotential yHP(
-      kappa=kappa,
+      k=k,
       redeclare package Medium = Medium1,
       m_flow_nominal=m1_flow_nominal)
       annotation (Placement(transformation(extent={{-52,-4},{-32,16}})));
@@ -115,9 +309,8 @@ package Subsystems "Collection of subsystem models"
             {-20,9},{-12,9}}, color={0,0,127}));
     connect(conHeaPum.yEle, yEle)
       annotation (Line(points={{-62,60},{-120,60}}, color={0,0,127}));
-    connect(yHP.yh, conHeaPum.yHeaPum) annotation (Line(points={{-31,13},{-24,
-            13},{-24,40},{-70,40},{-70,48},{-62,48}},
-                                                  color={0,0,127}));
+    connect(yHP.y, conHeaPum.yHeaPum) annotation (Line(points={{-31,13},{-24,13},{
+            -24,40},{-70,40},{-70,48},{-62,48}}, color={0,0,127}));
     connect(souCon.ports[1], yHP.port_a)
       annotation (Line(points={{-60,6},{-52,6}}, color={0,127,255}));
     connect(yHP.port_b, heaPum.port_a1)
@@ -129,7 +322,13 @@ package Subsystems "Collection of subsystem models"
             extent={{-80,80},{80,-80}},
             lineColor={0,0,0},
             fillColor={28,108,200},
-            fillPattern=FillPattern.Solid)}),                      Diagram(
+            fillPattern=FillPattern.Solid),
+          Rectangle(
+            extent={{-18,50},{22,42}},
+            fillPattern=FillPattern.Solid),
+          Line(points={{2,42},{2,-10}}),
+          Polygon(points={{-70,26},{68,-44},{68,26},{2,-10},{-70,-42},{-70,26}})}),
+                                                                   Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end ThermoFluid;
 
