@@ -1,5 +1,6 @@
 within BICEPS.Experimental.Examples.Subsystems;
 model Electrical
+  extends Buildings.BaseClasses.BaseIconLow;
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
   parameter Real tol=0.05 "Tolerance allowed on nominal voltage control (5-10% typical)";
@@ -21,9 +22,10 @@ model Electrical
     "Nominal solar power conversion efficiency (this should consider converion efficiency, area covered, AC/DC losses)";
   parameter Modelica.SIunits.Area A_PV = PSun/eff_PV/W_m2_nominal
     "Nominal area of a P installation";
-  parameter Modelica.SIunits.Power PBat = 1000
+  parameter Modelica.SIunits.Power PBat = PLoa_nominal/10
     "Nominal power charge/discharge rate of the battery";
-    parameter Modelica.SIunits.Energy EBatMax = 750000
+  // 50 kWh
+  parameter Modelica.SIunits.Energy EBatMax = 180000000
     "Maximum energy capacity of the battery";
   Modelica.Blocks.Interfaces.RealInput PHeaPum(
     final quantity="Power",
@@ -125,12 +127,7 @@ model Electrical
     v0=V_nominal,
     k=k) "Control signal wind turbine"
     annotation (Placement(transformation(extent={{50,60},{30,40}})));
-  Sensors.RelativeElectricalExergyPotential senGri(
-    tol=tol,
-    v0=V_nominal,
-    k=k) "Control signal grid"
-    annotation (Placement(transformation(extent={{-90,60},{-70,40}})));
-  Controls.SubsystemElectrical conSubEle(n=5)
+  Controls.SubsystemElectrical conSubEle(n=4)
     annotation (Placement(transformation(extent={{20,-40},{40,-20}})));
   Controls.Battery conBat(EMax=EBatMax, P_nominal=PBat)
     "Battery controller"
@@ -170,8 +167,6 @@ equation
     annotation (Line(points={{40,20},{40,30},{62,30}}, color={0,120,120}));
   connect(senWin.terminal, winTur.terminal)
     annotation (Line(points={{40,60},{40,70},{60,70}}, color={0,120,120}));
-  connect(senGri.terminal, linGri.terminal_n)
-    annotation (Line(points={{-80,60},{-80,70},{-60,70}}, color={0,120,120}));
   connect(conSubEle.yOut, yEle) annotation (Line(points={{41,-30},{90,-30},{90,0},
           {110,0}}, color={0,0,127}));
   connect(conSubEle.yOut, conBat.yEle) annotation (Line(points={{41,-30},{50,-30},
@@ -180,16 +175,15 @@ equation
           -96},{-30,-96},{-30,-86},{-38,-86}}, color={0,0,127}));
   connect(conBat.P, bat.P)
     annotation (Line(points={{-61,-80},{-70,-80},{-70,-60}}, color={0,0,127}));
-  connect(senGri.y, conSubEle.yIn[1]) annotation (Line(points={{-69,43},{4,43},{
-          4,-31.6},{20.2,-31.6}}, color={0,0,127}));
   connect(senWin.y, conSubEle.yIn[2]) annotation (Line(points={{29,43},{4,43},{4,
-          -30.8},{20.2,-30.8}}, color={0,0,127}));
-  connect(senPV.y, conSubEle.yIn[3]) annotation (Line(points={{29,3},{4,3},{4,-30},
-          {20.2,-30}}, color={0,0,127}));
+          -30.5},{20.2,-30.5}}, color={0,0,127}));
+  connect(senPV.y, conSubEle.yIn[3]) annotation (Line(points={{29,3},{4,3},{4,-29.5},
+          {20.2,-29.5}},
+                       color={0,0,127}));
   connect(senBat.y, conSubEle.yIn[4]) annotation (Line(points={{-29,-23},{4,-23},
-          {4,-29.2},{20.2,-29.2}}, color={0,0,127}));
-  connect(senLoa.y, conSubEle.yIn[5]) annotation (Line(points={{-29,27},{4,27},{
-          4,-28.4},{20.2,-28.4}}, color={0,0,127}));
+          {4,-28.5},{20.2,-28.5}}, color={0,0,127}));
+  connect(senLoa.y, conSubEle.yIn[1]) annotation (Line(points={{-29,27},{4,27},{
+          4,-31.5},{20.2,-31.5}}, color={0,0,127}));
   connect(loa.terminal, linHP.terminal_p)
     annotation (Line(points={{-48,0},{-30,0}}, color={0,120,120}));
   connect(linPV.terminal_p, linGri.terminal_p) annotation (Line(points={{10,30},
@@ -204,7 +198,8 @@ equation
     annotation (Line(points={{-120,0},{-96,0}}, color={0,0,127}));
   connect(inv.y, loa.Pow)
     annotation (Line(points={{-73,0},{-68,0}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false),
+    graphics={
         Rectangle(
           extent={{-80,80},{80,-80}},
           lineColor={0,0,0},
@@ -218,6 +213,5 @@ equation
         fillColor={0,0,0}),      Line(
         points={{40,78},{-28,10},{32,10},{-50,-76},{-50,-76}},
         color={0,0,0},
-        smooth=Smooth.None)}), Diagram(coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=86400, __Dymola_Algorithm="Dassl"));
+        smooth=Smooth.None)}));
 end Electrical;

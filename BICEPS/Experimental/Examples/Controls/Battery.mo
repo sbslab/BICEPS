@@ -5,7 +5,7 @@ model Battery "Control for the battery energy storage system"
     "Maximum available charge";
   parameter Modelica.SIunits.Power P_nominal(min=0)
     "Nominal power charge/discharge rate";
-  parameter Modelica.SIunits.Time riseTime=30
+  parameter Modelica.SIunits.Time riseTime=1
     "Rise time of the filter (time to reach 99.6 % of the transition speed)"
     annotation(Dialog(tab="Dynamics", group="Filtered transition speed"));
   Modelica.Blocks.Interfaces.RealInput yEle
@@ -14,13 +14,11 @@ model Battery "Control for the battery energy storage system"
   Modelica.Blocks.Interfaces.RealInput soc "State of charge"
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
   Modelica.Blocks.Interfaces.RealOutput P(
+    start = 0,
     final quantity="Power",
     final unit="W",
     displayUnit="KW") "Battery power (negative for discharge)"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
-  Modelica.Blocks.Math.Sign sta
-    "State of charge or discharge (positive = charge)"
-    annotation (Placement(transformation(extent={{-80,50},{-60,70}})));
   Modelica.Blocks.Math.Gain staPow(k=P_nominal) "Power charge/discharge state"
     annotation (Placement(transformation(extent={{0,50},{20,70}})));
   Modelica.Blocks.Sources.Constant off(k=0)
@@ -31,9 +29,6 @@ model Battery "Control for the battery energy storage system"
     annotation (Placement(transformation(extent={{-80,-70},{-60,-50}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi
     annotation (Placement(transformation(extent={{70,20},{90,40}})));
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold callCha(h=P_nominal*10)
-    "Call for charge"
-    annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
   Buildings.Controls.OBC.CDL.Logical.And cha "Charge"
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
   Buildings.Controls.OBC.CDL.Logical.Not callDis "Call for discharge"
@@ -46,29 +41,28 @@ model Battery "Control for the battery energy storage system"
     analogFilter=Modelica.Blocks.Types.AnalogFilter.CriticalDamping,
     filterType=Modelica.Blocks.Types.FilterType.LowPass,
     order=2,
-    f_cut=5/(2*Modelica.Constants.pi*riseTime))
+    f_cut=5/(2*Modelica.Constants.pi*riseTime),
+    init=Modelica.Blocks.Types.Init.InitialOutput)
     "Second order filter to approximate battery transitions between charge/off/discharge/off/charge"
     annotation (Placement(transformation(extent={{70,-10},{90,10}})));
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold notEmp(t=0.05, h=0.025)
     "Not empty."
     annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis callCha(uLow=-0.1, uHigh=0)
+    "Call to charge with switching charge <> discharge controlled with a hysteresis to avoid chattering"
+    annotation (Placement(transformation(extent={{-90,50},{-70,70}})));
+  Modelica.Blocks.Math.BooleanToReal sta(realTrue=1, realFalse=-1) "State"
+    annotation (Placement(transformation(extent={{-30,50},{-10,70}})));
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(trueHoldDuration=
+        10*60) "Hold to avoid short cycling"
+    annotation (Placement(transformation(extent={{-60,50},{-40,70}})));
 equation
-  connect(yEle, sta.u)
-    annotation (Line(points={{-120,60},{-82,60}}, color={0,0,127}));
-  connect(sta.y, staPow.u)
-    annotation (Line(points={{-59,60},{-2,60}}, color={0,0,127}));
   connect(soc, belCap.u)
     annotation (Line(points={{-120,-60},{-82,-60}}, color={0,0,127}));
-  connect(sta.y, callCha.u) annotation (Line(points={{-59,60},{-50,60},{-50,30},
-          {-42,30}}, color={0,0,127}));
-  connect(callCha.y, cha.u1)
-    annotation (Line(points={{-18,30},{-2,30}}, color={255,0,255}));
   connect(cha.u2, belCap.y) annotation (Line(points={{-2,22},{-6,22},{-6,-60},{-58,
           -60}},     color={255,0,255}));
   connect(staPow.y, swi.u1) annotation (Line(points={{21,60},{60,60},{60,38},{
           68,38}}, color={0,0,127}));
-  connect(callCha.y, callDis.u) annotation (Line(points={{-18,30},{-12,30},{-12,
-          -10},{-2,-10}}, color={255,0,255}));
   connect(callDis.y, dis.u1)
     annotation (Line(points={{22,-10},{28,-10}}, color={255,0,255}));
   connect(cha.y, chaOrDis.u1)
@@ -86,6 +80,18 @@ equation
           {-82,-30}}, color={0,0,127}));
   connect(notEmp.y, dis.u2) annotation (Line(points={{-58,-30},{24,-30},{24,-18},
           {28,-18}}, color={255,0,255}));
+  connect(yEle, callCha.u)
+    annotation (Line(points={{-120,60},{-92,60}}, color={0,0,127}));
+  connect(sta.y, staPow.u)
+    annotation (Line(points={{-9,60},{-2,60}}, color={0,0,127}));
+  connect(callCha.y, truFalHol.u)
+    annotation (Line(points={{-68,60},{-62,60}}, color={255,0,255}));
+  connect(truFalHol.y, sta.u)
+    annotation (Line(points={{-38,60},{-32,60}}, color={255,0,255}));
+  connect(truFalHol.y, cha.u1) annotation (Line(points={{-38,60},{-36,60},{-36,
+          30},{-2,30}}, color={255,0,255}));
+  connect(callDis.u, truFalHol.y) annotation (Line(points={{-2,-10},{-36,-10},{
+          -36,60},{-38,60}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end Battery;
