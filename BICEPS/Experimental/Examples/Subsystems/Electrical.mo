@@ -7,7 +7,7 @@ model Electrical
     "Percentage penalty for deviating outside of min/max range. Smaller numbers
     indicate a steeper penalty.";
   parameter Modelica.SIunits.Frequency f = 60 "Nominal grid frequency";
-  parameter Modelica.SIunits.Power PLoa_nominal = 152159
+  parameter Modelica.SIunits.Power PLoa_nominal = 5000
     "Nominal power of a load";
   parameter Modelica.SIunits.Power PWin = PLoa_nominal*4
     "Nominal power of the wind turbine";
@@ -44,8 +44,9 @@ model Electrical
     redeclare package PhaseSystem =
       Buildings.Electrical.PhaseSystems.ThreePhase_dq,
     SOC_start=0.5,
-    EMax(displayUnit="J") = 750000,
-    V_nominal=V_nominal)
+    EMax(displayUnit="J") = EBatMax,
+    V_nominal=V_nominal,
+    initMode=Buildings.Electrical.Types.InitMode.zero_current)
     annotation (Placement(transformation(extent={{-60,-40},{-80,-60}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Loads.Inductive loa(
     linearized=false,

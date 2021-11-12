@@ -16,7 +16,7 @@ model Electrical "Example model for the electrical subsystem"
     V=480,
     phiSou=0) "Grid model that provides power to the system"
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
-  Modelica.Blocks.Sources.Constant PHeaPum(k=150000) "Heat pump power"
+  Modelica.Blocks.Sources.Constant PHeaPum(k=5000)   "Heat pump power"
     annotation (Placement(transformation(extent={{-80,-20},{-60,0}})));
 equation
   connect(weaDat.weaBus, electrical.weaBus) annotation (Line(

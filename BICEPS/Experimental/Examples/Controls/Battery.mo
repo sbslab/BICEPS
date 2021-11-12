@@ -26,8 +26,8 @@ model Battery "Control for the battery energy storage system"
   Modelica.Blocks.Sources.Constant off(k=0)
     "Battery state of charge is at its limit and cannot charge/discharge further"
     annotation (Placement(transformation(extent={{30,-60},{50,-40}})));
-  Buildings.Controls.OBC.CDL.Continuous.LessThreshold belCap(t=EMax, h=
-        P_nominal*10) "Below SOC capacity. Hysteresis set for 10s cycles"
+  Buildings.Controls.OBC.CDL.Continuous.LessThreshold belCap(t=1, h=0.05)
+    "Below SOC capacity. Hysteresis set for 10s cycles"
     annotation (Placement(transformation(extent={{-80,-70},{-60,-50}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi
     annotation (Placement(transformation(extent={{70,20},{90,40}})));
@@ -36,9 +36,6 @@ model Battery "Control for the battery energy storage system"
     annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
   Buildings.Controls.OBC.CDL.Logical.And cha "Charge"
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold emp(h=P_nominal*10)
-    "Empty battery"
-    annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
   Buildings.Controls.OBC.CDL.Logical.Not callDis "Call for discharge"
     annotation (Placement(transformation(extent={{0,-20},{20,0}})));
   Buildings.Controls.OBC.CDL.Logical.And dis "Discharge"
@@ -52,6 +49,9 @@ model Battery "Control for the battery energy storage system"
     f_cut=5/(2*Modelica.Constants.pi*riseTime))
     "Second order filter to approximate battery transitions between charge/off/discharge/off/charge"
     annotation (Placement(transformation(extent={{70,-10},{90,10}})));
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold notEmp(t=0.05, h=0.025)
+    "Not empty."
+    annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
 equation
   connect(yEle, sta.u)
     annotation (Line(points={{-120,60},{-82,60}}, color={0,0,127}));
@@ -67,14 +67,10 @@ equation
           -60}},     color={255,0,255}));
   connect(staPow.y, swi.u1) annotation (Line(points={{21,60},{60,60},{60,38},{
           68,38}}, color={0,0,127}));
-  connect(soc, emp.u) annotation (Line(points={{-120,-60},{-90,-60},{-90,-30},{-82,
-          -30}},     color={0,0,127}));
   connect(callCha.y, callDis.u) annotation (Line(points={{-18,30},{-12,30},{-12,
           -10},{-2,-10}}, color={255,0,255}));
   connect(callDis.y, dis.u1)
     annotation (Line(points={{22,-10},{28,-10}}, color={255,0,255}));
-  connect(emp.y, dis.u2) annotation (Line(points={{-58,-30},{24,-30},{24,-18},{28,
-          -18}},    color={255,0,255}));
   connect(cha.y, chaOrDis.u1)
     annotation (Line(points={{22,30},{28,30}}, color={255,0,255}));
   connect(dis.y, chaOrDis.u2) annotation (Line(points={{52,-10},{54,-10},{54,10},
@@ -86,6 +82,10 @@ equation
   connect(swi.y, fil.u) annotation (Line(points={{92,30},{94,30},{94,16},{64,16},
           {64,0},{68,0}}, color={0,0,127}));
   connect(fil.y, P) annotation (Line(points={{91,0},{110,0}}, color={0,0,127}));
+  connect(soc, notEmp.u) annotation (Line(points={{-120,-60},{-90,-60},{-90,-30},
+          {-82,-30}}, color={0,0,127}));
+  connect(notEmp.y, dis.u2) annotation (Line(points={{-58,-30},{24,-30},{24,-18},
+          {28,-18}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end Battery;
