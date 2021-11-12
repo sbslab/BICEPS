@@ -50,7 +50,7 @@ model Electrical
   Buildings.Electrical.AC.ThreePhasesBalanced.Loads.Inductive loa(
     linearized=false,
     mode=Buildings.Electrical.Types.Load.VariableZ_P_input)
-    annotation (Placement(transformation(extent={{-60,-10},{-80,10}})));
+    annotation (Placement(transformation(extent={{-48,-10},{-68,10}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terminal
     annotation (Placement(transformation(extent={{-120,60},{-100,80}}),
                               iconTransformation(extent={{-120,60},{-100,80}})));
@@ -75,13 +75,13 @@ model Electrical
     P_nominal=PLoa_nominal,
     V_nominal=V_nominal)
     "Heat pump electrical line"
-    annotation (Placement(transformation(extent={{-30,-10},{-10,10}})));
+    annotation (Placement(transformation(extent={{-10,-10},{-30,10}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linBat(
     l=10,
     P_nominal=PBat,
     V_nominal=V_nominal)
     "Battery electrical line"
-    annotation (Placement(transformation(extent={{-30,-60},{-10,-40}})));
+    annotation (Placement(transformation(extent={{-10,-60},{-30,-40}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Sources.PVSimpleOriented pv(
     eta_DCAC=0.89,
     A=A_PV,
@@ -134,23 +134,13 @@ model Electrical
   Controls.Battery conBat(EMax=EBatMax, P_nominal=PBat)
     "Battery controller"
     annotation (Placement(transformation(extent={{-40,-90},{-60,-70}})));
+  Modelica.Blocks.Math.Gain inv(k=-1) "Invert to be negative (consumption)"
+    annotation (Placement(transformation(extent={{-94,-10},{-74,10}})));
 equation
-  connect(PHeaPum, loa.Pow)
-    annotation (Line(points={{-120,0},{-80,0}}, color={0,0,127}));
   connect(terminal, linGri.terminal_n)
     annotation (Line(points={{-110,70},{-60,70}}, color={0,120,120}));
   connect(linGri.terminal_p, linWin.terminal_p)
     annotation (Line(points={{-40,70},{10,70}}, color={0,120,120}));
-  connect(linGri.terminal_p, linBat.terminal_p) annotation (Line(points={{-40,70},
-          {0,70},{0,-50},{-10,-50}}, color={0,120,120}));
-  connect(linBat.terminal_n, bat.terminal)
-    annotation (Line(points={{-30,-50},{-60,-50}}, color={0,120,120}));
-  connect(linHP.terminal_n, loa.terminal)
-    annotation (Line(points={{-30,0},{-60,0}}, color={0,120,120}));
-  connect(linHP.terminal_p, linBat.terminal_p) annotation (Line(points={{-10,0},
-          {0,0},{0,-50},{-10,-50}}, color={0,120,120}));
-  connect(linPV.terminal_p, linBat.terminal_p) annotation (Line(points={{10,30},
-          {0,30},{0,-50},{-10,-50}}, color={0,120,120}));
   connect(linPV.terminal_n, pv.terminal)
     annotation (Line(points={{30,30},{62,30}}, color={0,120,120}));
   connect(weaBus, pv.weaBus) annotation (Line(
@@ -172,7 +162,7 @@ equation
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
   connect(senLoa.terminal, loa.terminal)
-    annotation (Line(points={{-40,10},{-40,0},{-60,0}}, color={0,120,120}));
+    annotation (Line(points={{-40,10},{-40,0},{-48,0}}, color={0,120,120}));
   connect(senBat.terminal, bat.terminal) annotation (Line(points={{-40,-40},{-40,
           -50},{-60,-50}}, color={0,120,120}));
   connect(senPV.terminal, pv.terminal)
@@ -199,6 +189,20 @@ equation
           {4,-29.2},{20.2,-29.2}}, color={0,0,127}));
   connect(senLoa.y, conSubEle.yIn[5]) annotation (Line(points={{-29,27},{4,27},{
           4,-28.4},{20.2,-28.4}}, color={0,0,127}));
+  connect(loa.terminal, linHP.terminal_p)
+    annotation (Line(points={{-48,0},{-30,0}}, color={0,120,120}));
+  connect(linPV.terminal_p, linGri.terminal_p) annotation (Line(points={{10,30},
+          {0,30},{0,70},{-40,70}}, color={0,120,120}));
+  connect(linHP.terminal_n, linGri.terminal_p) annotation (Line(points={{-10,0},
+          {0,0},{0,70},{-40,70}}, color={0,120,120}));
+  connect(linBat.terminal_p, bat.terminal)
+    annotation (Line(points={{-30,-50},{-60,-50}}, color={0,120,120}));
+  connect(linBat.terminal_n, linGri.terminal_p) annotation (Line(points={{-10,
+          -50},{0,-50},{0,70},{-40,70}}, color={0,120,120}));
+  connect(PHeaPum, inv.u)
+    annotation (Line(points={{-120,0},{-96,0}}, color={0,0,127}));
+  connect(inv.y, loa.Pow)
+    annotation (Line(points={{-73,0},{-68,0}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-80,80},{80,-80}},
@@ -213,5 +217,6 @@ equation
         fillColor={0,0,0}),      Line(
         points={{40,78},{-28,10},{32,10},{-50,-76},{-50,-76}},
         color={0,0,0},
-        smooth=Smooth.None)}), Diagram(coordinateSystem(preserveAspectRatio=false)));
+        smooth=Smooth.None)}), Diagram(coordinateSystem(preserveAspectRatio=false)),
+    experiment(StopTime=86400, __Dymola_Algorithm="Dassl"));
 end Electrical;
