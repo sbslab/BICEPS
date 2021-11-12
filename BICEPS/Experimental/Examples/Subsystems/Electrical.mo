@@ -23,7 +23,7 @@ model Electrical
     "Nominal area of a P installation";
   parameter Modelica.SIunits.Power PBat = PLoa_nominal
     "Nominal power charge/discharge rate of the battery";
-    parameter Modelica.SIunits.Energy EBatMax = PLoa_nominal*3600
+    parameter Modelica.SIunits.Energy EBatMax = PLoa_nominal*10
     "Maximum energy capacity of the battery";
   Modelica.Blocks.Interfaces.RealInput PHeaPum(
     final quantity="Power",
@@ -197,8 +197,8 @@ equation
           {0,0},{0,70},{-40,70}}, color={0,120,120}));
   connect(linBat.terminal_p, bat.terminal)
     annotation (Line(points={{-30,-50},{-60,-50}}, color={0,120,120}));
-  connect(linBat.terminal_n, linGri.terminal_p) annotation (Line(points={{-10,
-          -50},{0,-50},{0,70},{-40,70}}, color={0,120,120}));
+  connect(linBat.terminal_n, linGri.terminal_p) annotation (Line(points={{-10,-50},
+          {0,-50},{0,70},{-40,70}}, color={0,120,120}));
   connect(PHeaPum, inv.u)
     annotation (Line(points={{-120,0},{-96,0}}, color={0,0,127}));
   connect(inv.y, loa.Pow)
