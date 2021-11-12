@@ -4,6 +4,10 @@ package Subsystems "Collection of subsystem models"
   model Electrical
     parameter Modelica.SIunits.Voltage V_nominal=208
       "Nominal voltage of the line";
+    parameter Real tol=0.05 "Tolerance allowed on nominal voltage control (5-10% typical)";
+    parameter Real k=50
+      "Percentage penalty for deviating outside of min/max range. Smaller numbers
+    indicate a steeper penalty.";
     parameter Modelica.SIunits.Frequency f = 60 "Nominal grid frequency";
     parameter Modelica.SIunits.Power PLoa_nominal = 152159
       "Nominal power of a load";
@@ -19,9 +23,9 @@ package Subsystems "Collection of subsystem models"
       "Nominal solar power conversion efficiency (this should consider converion efficiency, area covered, AC/DC losses)";
     parameter Modelica.SIunits.Area A_PV = PSun/eff_PV/W_m2_nominal
       "Nominal area of a P installation";
-    parameter Modelica.SIunits.Power PBat = 1000
+    parameter Modelica.SIunits.Power PBat = PLoa_nominal
       "Nominal power charge/discharge rate of the battery";
-      parameter Modelica.SIunits.Energy EBatMax = 10000
+      parameter Modelica.SIunits.Energy EBatMax = PLoa_nominal*3600*2
       "Maximum energy capacity of the battery";
     Modelica.Blocks.Interfaces.RealInput PHeaPum "Heat pump power"
       annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
@@ -30,6 +34,7 @@ package Subsystems "Collection of subsystem models"
       annotation (Placement(transformation(extent={{100,-10},{120,10}})));
     Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linGri(
       l=1500,
+      P_nominal=PWin + PSun + PBat + PLoa_nominal,
       V_nominal=V_nominal)
       "Grid power line"
       annotation (Placement(transformation(extent={{-60,60},{-40,80}})));
@@ -46,18 +51,20 @@ package Subsystems "Collection of subsystem models"
       annotation (Placement(transformation(extent={{-60,-10},{-80,10}})));
     Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terminal
       annotation (Placement(transformation(extent={{-120,60},{-100,80}}),
-                                iconTransformation(extent={{-10,-110},{10,-90}})));
+                                iconTransformation(extent={{-120,60},{-100,80}})));
     Buildings.BoundaryConditions.WeatherData.Bus weaBus
       "Weather data bus"
       annotation (Placement(transformation(extent={{-20,80},{20,120}}),
         iconTransformation(extent={{-10,90},{10,110}})));
     Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linWin(
       l=300,
+      P_nominal=PWin,
       V_nominal=V_nominal)
       "Wind electrical line"
       annotation (Placement(transformation(extent={{30,60},{10,80}})));
     Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linPV(
       l=300,
+      P_nominal=PSun,
       V_nominal=V_nominal)
       "PV electrical line"
       annotation (Placement(transformation(extent={{30,20},{10,40}})));
@@ -69,6 +76,7 @@ package Subsystems "Collection of subsystem models"
       annotation (Placement(transformation(extent={{-30,-10},{-10,10}})));
     Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linBat(
       l=10,
+      P_nominal=PBat,
       V_nominal=V_nominal)
       "Battery electrical line"
       annotation (Placement(transformation(extent={{-30,-60},{-10,-40}})));
@@ -94,20 +102,30 @@ package Subsystems "Collection of subsystem models"
       tableOnFile=false,
       scale=PWin) "Wind turbine model"
       annotation (Placement(transformation(extent={{60,60},{80,80}})));
-    Sensors.RelativeElectricalExergyPotential yLoa(v0=V_nominal)
-      "Control signal load"
+    Sensors.RelativeElectricalExergyPotential senLoa(
+      tol=tol,
+      v0=V_nominal,
+      k=k) "Control signal load"
       annotation (Placement(transformation(extent={{-50,10},{-30,30}})));
-    Sensors.RelativeElectricalExergyPotential yBat(v0=V_nominal)
-      "Control signal battery"
+    Sensors.RelativeElectricalExergyPotential senBat(
+      tol=tol,
+      v0=V_nominal,
+      k=k) "Control signal battery"
       annotation (Placement(transformation(extent={{-50,-40},{-30,-20}})));
-    Sensors.RelativeElectricalExergyPotential yPV(v0=V_nominal)
-      "Control signal pv"
+    Sensors.RelativeElectricalExergyPotential senPV(
+      tol=tol,
+      v0=V_nominal,
+      k=k) "Control signal pv"
       annotation (Placement(transformation(extent={{50,20},{30,0}})));
-    Sensors.RelativeElectricalExergyPotential yWin(v0=V_nominal)
-      "Control signal wind turbine"
+    Sensors.RelativeElectricalExergyPotential senWin(
+      tol=tol,
+      v0=V_nominal,
+      k=k) "Control signal wind turbine"
       annotation (Placement(transformation(extent={{50,60},{30,40}})));
-    Sensors.RelativeElectricalExergyPotential yGri(v0=V_nominal)
-      "Control signal grid"
+    Sensors.RelativeElectricalExergyPotential senGri(
+      tol=tol,
+      v0=V_nominal,
+      k=k) "Control signal grid"
       annotation (Placement(transformation(extent={{-90,60},{-70,40}})));
     Controls.SubsystemElectrical conSubEle(n=5)
       annotation (Placement(transformation(extent={{20,-40},{40,-20}})));
@@ -151,26 +169,16 @@ package Subsystems "Collection of subsystem models"
         index=-1,
         extent={{-3,6},{-3,6}},
         horizontalAlignment=TextAlignment.Right));
-    connect(yLoa.terminal, loa.terminal)
+    connect(senLoa.terminal, loa.terminal)
       annotation (Line(points={{-40,10},{-40,0},{-60,0}}, color={0,120,120}));
-    connect(yBat.terminal, bat.terminal) annotation (Line(points={{-40,-40},{-40,-50},
-            {-60,-50}}, color={0,120,120}));
-    connect(yPV.terminal, pv.terminal)
+    connect(senBat.terminal, bat.terminal) annotation (Line(points={{-40,-40},{
+            -40,-50},{-60,-50}}, color={0,120,120}));
+    connect(senPV.terminal, pv.terminal)
       annotation (Line(points={{40,20},{40,30},{62,30}}, color={0,120,120}));
-    connect(yWin.terminal, winTur.terminal)
+    connect(senWin.terminal, winTur.terminal)
       annotation (Line(points={{40,60},{40,70},{60,70}}, color={0,120,120}));
-    connect(yGri.terminal, linGri.terminal_n)
-      annotation (Line(points={{-80,60},{-80,70},{-60,70}}, color={0,120,120}));
-    connect(yBat.y, conSubEle.yIn) annotation (Line(points={{-29,-23},{6,-23},{6,-30},
-            {20.2,-30}}, color={0,0,127}));
-    connect(yPV.y, conSubEle.yIn) annotation (Line(points={{29,3},{6,3},{6,-30},{20.2,
-            -30}}, color={0,0,127}));
-    connect(yWin.y, conSubEle.yIn) annotation (Line(points={{29,43},{6,43},{6,-30},
-            {20.2,-30}}, color={0,0,127}));
-    connect(yGri.y, conSubEle.yIn) annotation (Line(points={{-69,43},{6,43},{6,-30},
-            {20.2,-30}}, color={0,0,127}));
-    connect(yLoa.y, conSubEle.yIn) annotation (Line(points={{-29,27},{6,27},{6,-30},
-            {20.2,-30}}, color={0,0,127}));
+    connect(senGri.terminal, linGri.terminal_n) annotation (Line(points={{-80,
+            60},{-80,70},{-60,70}}, color={0,120,120}));
     connect(conSubEle.yOut, yEle) annotation (Line(points={{41,-30},{90,-30},{90,0},
             {110,0}}, color={0,0,127}));
     connect(conSubEle.yOut, conBat.yEle) annotation (Line(points={{41,-30},{50,-30},
@@ -179,6 +187,16 @@ package Subsystems "Collection of subsystem models"
             -96},{-30,-96},{-30,-86},{-38,-86}}, color={0,0,127}));
     connect(conBat.P, bat.P)
       annotation (Line(points={{-61,-80},{-70,-80},{-70,-60}}, color={0,0,127}));
+    connect(senGri.y, conSubEle.yIn[1]) annotation (Line(points={{-69,43},{4,43},
+            {4,-31.6},{20.2,-31.6}}, color={0,0,127}));
+    connect(senWin.y, conSubEle.yIn[2]) annotation (Line(points={{29,43},{4,43},
+            {4,-30.8},{20.2,-30.8}}, color={0,0,127}));
+    connect(senPV.y, conSubEle.yIn[3]) annotation (Line(points={{29,3},{4,3},{4,
+            -30},{20.2,-30}}, color={0,0,127}));
+    connect(senBat.y, conSubEle.yIn[4]) annotation (Line(points={{-29,-23},{4,-23},
+            {4,-29.2},{20.2,-29.2}}, color={0,0,127}));
+    connect(senLoa.y, conSubEle.yIn[5]) annotation (Line(points={{-29,27},{4,27},
+            {4,-28.4},{20.2,-28.4}}, color={0,0,127}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
             extent={{-80,80},{80,-80}},
@@ -333,6 +351,43 @@ package Subsystems "Collection of subsystem models"
   end ThermoFluid;
 
   package Examples
+    model Electrical "Example model for the electrical subsystem"
+      extends Modelica.Icons.Example;
+      BICEPS.Experimental.Examples.Subsystems.Electrical electrical(
+        V_nominal=480,
+        tol=0.1,
+        k=100,
+        lat=weaDat.lat)
+        annotation (Placement(transformation(extent={{-20,0},{0,20}})));
+      Buildings.BoundaryConditions.WeatherData.ReaderTMY3
+                                                weaDat(
+          computeWetBulbTemperature=false, filNam=
+            Modelica.Utilities.Files.loadResource(
+            "modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
+        "Weather data model"
+        annotation (Placement(transformation(extent={{-40,60},{-20,80}})));
+      Buildings.Electrical.AC.ThreePhasesBalanced.Sources.Grid
+                                          gri(
+        f=60,
+        V=480,
+        phiSou=0) "Grid model that provides power to the system"
+        annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
+      Modelica.Blocks.Sources.Constant PHeaPum(k=150000) "Heat pump power"
+        annotation (Placement(transformation(extent={{-80,-20},{-60,0}})));
+    equation
+      connect(weaDat.weaBus, electrical.weaBus) annotation (Line(
+          points={{-20,70},{-10,70},{-10,20}},
+          color={255,204,51},
+          thickness=0.5));
+      connect(gri.terminal, electrical.terminal) annotation (Line(points={{-70,
+              60},{-70,17},{-21,17}}, color={0,120,120}));
+      connect(PHeaPum.y, electrical.PHeaPum) annotation (Line(points={{-59,-10},
+              {-30,-10},{-30,10},{-22,10}}, color={0,0,127}));
+      annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+            coordinateSystem(preserveAspectRatio=false)),
+        experiment(StopTime=86400, __Dymola_Algorithm="Dassl"));
+    end Electrical;
+
     model ThermoFluid "Example model for the thermofluid subsystem"
       extends Modelica.Icons.Example;
       BICEPS.Experimental.Examples.Subsystems.ThermoFluid staTF(

@@ -17,7 +17,8 @@ package Sensors "Package with sensors for biomimetic control"
       annotation (Placement(transformation(extent={{-10,-10},{10,10}},
           rotation=-90,
           origin={0,-100}),     iconTransformation(extent={{-10,-110},{10,-90}})));
-    Buildings.Electrical.AC.ThreePhasesBalanced.Sensors.Probe sen
+    Buildings.Electrical.AC.ThreePhasesBalanced.Sensors.Probe sen(V_nominal=v0,
+        perUnit=false)
       annotation (Placement(transformation(extent={{-10,20},{10,40}})));
     Modelica.Blocks.Interfaces.RealOutput y "Control signal"
       annotation (Placement(transformation(extent={{100,60},{120,80}})));
