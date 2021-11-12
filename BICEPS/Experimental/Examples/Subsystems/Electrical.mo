@@ -21,9 +21,9 @@ model Electrical
     "Nominal solar power conversion efficiency (this should consider converion efficiency, area covered, AC/DC losses)";
   parameter Modelica.SIunits.Area A_PV = PSun/eff_PV/W_m2_nominal
     "Nominal area of a P installation";
-  parameter Modelica.SIunits.Power PBat = PLoa_nominal
+  parameter Modelica.SIunits.Power PBat = 1000
     "Nominal power charge/discharge rate of the battery";
-    parameter Modelica.SIunits.Energy EBatMax = PLoa_nominal*10
+    parameter Modelica.SIunits.Energy EBatMax = 750000
     "Maximum energy capacity of the battery";
   Modelica.Blocks.Interfaces.RealInput PHeaPum(
     final quantity="Power",
@@ -43,8 +43,8 @@ model Electrical
   Buildings.Electrical.AC.ThreePhasesBalanced.Storage.Battery bat(
     redeclare package PhaseSystem =
       Buildings.Electrical.PhaseSystems.ThreePhase_dq,
-    SOC_start=0.25*EBatMax,
-    EMax=EBatMax,
+    SOC_start=0.5,
+    EMax(displayUnit="J") = 750000,
     V_nominal=V_nominal)
     annotation (Placement(transformation(extent={{-60,-40},{-80,-60}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Loads.Inductive loa(
