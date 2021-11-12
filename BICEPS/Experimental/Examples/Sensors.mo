@@ -17,8 +17,9 @@ package Sensors "Package with sensors for biomimetic control"
       annotation (Placement(transformation(extent={{-10,-10},{10,10}},
           rotation=-90,
           origin={0,-100}),     iconTransformation(extent={{-10,-110},{10,-90}})));
-    Buildings.Electrical.AC.ThreePhasesBalanced.Sensors.Probe sen(V_nominal=v0,
-        perUnit=false)
+    Buildings.Electrical.AC.ThreePhasesBalanced.Sensors.Probe sen(
+      final V_nominal=v0,
+      final perUnit=false)
       annotation (Placement(transformation(extent={{-10,20},{10,40}})));
     Modelica.Blocks.Interfaces.RealOutput y "Control signal"
       annotation (Placement(transformation(extent={{100,60},{120,80}})));
@@ -118,8 +119,9 @@ package Sensors "Package with sensors for biomimetic control"
     parameter Modelica.SIunits.MassFlowRate m_flow_nominal(min=0)
       "Nominal mass flow rate, used for regularization near zero flow"
       annotation(Dialog(group = "Nominal condition"));
-    Buildings.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium =
-          Medium, m_flow_nominal=m_flow_nominal)
+    Buildings.Fluid.Sensors.TemperatureTwoPort senTem(
+      redeclare package Medium = Medium,
+      m_flow_nominal=m_flow_nominal)
       annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
     Utilities.Math.CubicHermite spl(
       final xMin=TMin,

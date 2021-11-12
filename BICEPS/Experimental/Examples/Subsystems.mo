@@ -5,7 +5,7 @@ package Subsystems "Collection of subsystem models"
     parameter Modelica.SIunits.Voltage V_nominal=208
       "Nominal voltage of the line";
     parameter Real tol=0.05 "Tolerance allowed on nominal voltage control (5-10% typical)";
-    parameter Real k=50
+    parameter Real k=100
       "Percentage penalty for deviating outside of min/max range. Smaller numbers
     indicate a steeper penalty.";
     parameter Modelica.SIunits.Frequency f = 60 "Nominal grid frequency";
@@ -25,9 +25,13 @@ package Subsystems "Collection of subsystem models"
       "Nominal area of a P installation";
     parameter Modelica.SIunits.Power PBat = PLoa_nominal
       "Nominal power charge/discharge rate of the battery";
-      parameter Modelica.SIunits.Energy EBatMax = PLoa_nominal*3600*2
+      parameter Modelica.SIunits.Energy EBatMax = PLoa_nominal*3600
       "Maximum energy capacity of the battery";
-    Modelica.Blocks.Interfaces.RealInput PHeaPum "Heat pump power"
+    Modelica.Blocks.Interfaces.RealInput PHeaPum(
+      final quantity="Power",
+      final unit = "W",
+      min=0,
+      displayUnit = "kW") "Heat pump power"
       annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
     Modelica.Blocks.Interfaces.RealOutput yEle
       "Electrical subsystem control signal "
@@ -41,7 +45,7 @@ package Subsystems "Collection of subsystem models"
     Buildings.Electrical.AC.ThreePhasesBalanced.Storage.Battery bat(
       redeclare package PhaseSystem =
         Buildings.Electrical.PhaseSystems.ThreePhase_dq,
-      SOC_start=0.5,
+      SOC_start=0.25*EBatMax,
       EMax=EBatMax,
       V_nominal=V_nominal)
       annotation (Placement(transformation(extent={{-60,-40},{-80,-60}})));
@@ -171,14 +175,14 @@ package Subsystems "Collection of subsystem models"
         horizontalAlignment=TextAlignment.Right));
     connect(senLoa.terminal, loa.terminal)
       annotation (Line(points={{-40,10},{-40,0},{-60,0}}, color={0,120,120}));
-    connect(senBat.terminal, bat.terminal) annotation (Line(points={{-40,-40},{
-            -40,-50},{-60,-50}}, color={0,120,120}));
+    connect(senBat.terminal, bat.terminal) annotation (Line(points={{-40,-40},{-40,
+            -50},{-60,-50}}, color={0,120,120}));
     connect(senPV.terminal, pv.terminal)
       annotation (Line(points={{40,20},{40,30},{62,30}}, color={0,120,120}));
     connect(senWin.terminal, winTur.terminal)
       annotation (Line(points={{40,60},{40,70},{60,70}}, color={0,120,120}));
-    connect(senGri.terminal, linGri.terminal_n) annotation (Line(points={{-80,
-            60},{-80,70},{-60,70}}, color={0,120,120}));
+    connect(senGri.terminal, linGri.terminal_n)
+      annotation (Line(points={{-80,60},{-80,70},{-60,70}}, color={0,120,120}));
     connect(conSubEle.yOut, yEle) annotation (Line(points={{41,-30},{90,-30},{90,0},
             {110,0}}, color={0,0,127}));
     connect(conSubEle.yOut, conBat.yEle) annotation (Line(points={{41,-30},{50,-30},
@@ -187,16 +191,16 @@ package Subsystems "Collection of subsystem models"
             -96},{-30,-96},{-30,-86},{-38,-86}}, color={0,0,127}));
     connect(conBat.P, bat.P)
       annotation (Line(points={{-61,-80},{-70,-80},{-70,-60}}, color={0,0,127}));
-    connect(senGri.y, conSubEle.yIn[1]) annotation (Line(points={{-69,43},{4,43},
-            {4,-31.6},{20.2,-31.6}}, color={0,0,127}));
-    connect(senWin.y, conSubEle.yIn[2]) annotation (Line(points={{29,43},{4,43},
-            {4,-30.8},{20.2,-30.8}}, color={0,0,127}));
-    connect(senPV.y, conSubEle.yIn[3]) annotation (Line(points={{29,3},{4,3},{4,
-            -30},{20.2,-30}}, color={0,0,127}));
+    connect(senGri.y, conSubEle.yIn[1]) annotation (Line(points={{-69,43},{4,43},{
+            4,-31.6},{20.2,-31.6}}, color={0,0,127}));
+    connect(senWin.y, conSubEle.yIn[2]) annotation (Line(points={{29,43},{4,43},{4,
+            -30.8},{20.2,-30.8}}, color={0,0,127}));
+    connect(senPV.y, conSubEle.yIn[3]) annotation (Line(points={{29,3},{4,3},{4,-30},
+            {20.2,-30}}, color={0,0,127}));
     connect(senBat.y, conSubEle.yIn[4]) annotation (Line(points={{-29,-23},{4,-23},
             {4,-29.2},{20.2,-29.2}}, color={0,0,127}));
-    connect(senLoa.y, conSubEle.yIn[5]) annotation (Line(points={{-29,27},{4,27},
-            {4,-28.4},{20.2,-28.4}}, color={0,0,127}));
+    connect(senLoa.y, conSubEle.yIn[5]) annotation (Line(points={{-29,27},{4,27},{
+            4,-28.4},{20.2,-28.4}}, color={0,0,127}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
             extent={{-80,80},{80,-80}},
@@ -283,12 +287,17 @@ package Subsystems "Collection of subsystem models"
       nPorts=1)
       "Evaporator sink"
       annotation (Placement(transformation(extent={{-10,-10},{10,10}}, origin={-70,-60})));
-    Modelica.Blocks.Interfaces.RealOutput PHeaPum "Heat pump power"
+    Modelica.Blocks.Interfaces.RealOutput PHeaPum(
+      final quantity="Power",
+      final unit = "W",
+      min=0,
+      displayUnit = "kW") "Heat pump power"
       annotation (Placement(transformation(extent={{100,50},{120,70}})));
     Modelica.Blocks.Interfaces.RealInput yEle
       "Relative exergetic potential of electrical subsystem"
       annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
-    Modelica.Blocks.Sources.Constant TEvaIn(k=273.15 + 15)
+    Modelica.Blocks.Sources.Constant TEvaIn(
+      k=273.15 + 15)
       "Inlet temperature to the evaporator"
       annotation (Placement(transformation(extent={{90,-90},{70,-70}})));
     Modelica.Blocks.Math.Gain mEva_flow(k=1/cp2_default/dTEva_nominal)
@@ -353,11 +362,8 @@ package Subsystems "Collection of subsystem models"
   package Examples
     model Electrical "Example model for the electrical subsystem"
       extends Modelica.Icons.Example;
-      BICEPS.Experimental.Examples.Subsystems.Electrical electrical(
-        V_nominal=480,
-        tol=0.1,
-        k=100,
-        lat=weaDat.lat)
+      BICEPS.Experimental.Examples.Subsystems.Electrical electrical(V_nominal=
+            480, lat=weaDat.lat)
         annotation (Placement(transformation(extent={{-20,0},{0,20}})));
       Buildings.BoundaryConditions.WeatherData.ReaderTMY3
                                                 weaDat(

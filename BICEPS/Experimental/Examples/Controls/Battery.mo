@@ -8,7 +8,11 @@ model Battery "Control for the battery energy storage system"
   Modelica.Blocks.Interfaces.RealInput yEle
     "Electrical subsystem relative exergy potential"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
-  Modelica.Blocks.Interfaces.RealInput soc "State of charge"
+  Modelica.Blocks.Interfaces.RealInput soc(
+    final quantity="Energy",
+    final unit = "J",
+    min=0,
+    displayUnit = "kWh") "State of charge"
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
   Modelica.Blocks.Interfaces.RealOutput P(
     final quantity="Power",
