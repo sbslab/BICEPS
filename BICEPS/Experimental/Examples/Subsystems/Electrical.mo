@@ -10,9 +10,9 @@ model Electrical
   parameter Modelica.SIunits.Frequency f = 60 "Nominal grid frequency";
   parameter Modelica.SIunits.Power PLoa_nominal = 5000
     "Nominal power of a load";
-  parameter Modelica.SIunits.Power PWin = PLoa_nominal*4
+  parameter Modelica.SIunits.Power PWin = PLoa_nominal*1
     "Nominal power of the wind turbine";
-  parameter Modelica.SIunits.Power PSun = PLoa_nominal*1.0
+  parameter Modelica.SIunits.Power PSun = PLoa_nominal*1
     "Nominal power of the PV";
   parameter Modelica.SIunits.Angle lat "Latitude"
     annotation(Evaluate=true,Dialog(group="Orientation"));
