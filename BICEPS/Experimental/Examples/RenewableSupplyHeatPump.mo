@@ -2,7 +2,7 @@ within BICEPS.Experimental.Examples;
 model RenewableSupplyHeatPump
   extends Modelica.Icons.Example;
   Subsystems.ThermoFluid hyd "Hydronic subsystem"
-    annotation (Placement(transformation(extent={{-20,-60},{0,-40}})));
+    annotation (Placement(transformation(extent={{-20,-40},{0,-20}})));
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3
                                             weaDat(computeWetBulbTemperature=
         false, filNam=Modelica.Utilities.Files.loadResource(
@@ -15,8 +15,11 @@ model RenewableSupplyHeatPump
     V=208,
     phiSou=0) "Grid model that provides power to the system"
     annotation (Placement(transformation(extent={{-80,40},{-60,60}})));
-  Subsystems.Electrical ele(PLoa_nominal(displayUnit="kW") = 152000, lat=weaDat.lat)
-    "Electrical subsystem"
+  Subsystems.Electrical ele(
+    PLoa_nominal(displayUnit="kW") = 152000,
+    PWin=1,
+    PSun(displayUnit="kW") = 15000,
+    lat=weaDat.lat) "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,0},{0,20}})));
   Modelica.Blocks.Continuous.Integrator EGri "Grid energy"
     annotation (Placement(transformation(extent={{70,60},{90,80}})));
@@ -40,10 +43,10 @@ model RenewableSupplyHeatPump
   Modelica.Blocks.Sources.RealExpression PBat(y=ele.bat.P) "Battery power"
     annotation (Placement(transformation(extent={{30,-60},{50,-40}})));
 equation
-  connect(ele.yEle, hyd.yEle) annotation (Line(points={{1,10},{10,10},{10,-30},
-          {-30,-30},{-30,-44},{-22,-44}}, color={0,0,127}));
-  connect(hyd.PHeaPum, ele.PHeaPum) annotation (Line(points={{1,-44},{10,-44},{
-          10,-70},{-40,-70},{-40,10},{-22,10}}, color={0,0,127}));
+  connect(ele.yEle, hyd.yEle) annotation (Line(points={{1,10},{10,10},{10,-10},
+          {-30,-10},{-30,-24},{-22,-24}}, color={0,0,127}));
+  connect(hyd.PHeaPum, ele.PHeaPum) annotation (Line(points={{1,-24},{10,-24},{
+          10,-50},{-40,-50},{-40,10},{-22,10}}, color={0,0,127}));
   connect(gri.terminal, ele.terminal)
     annotation (Line(points={{-70,40},{-70,17},{-21,17}}, color={0,120,120}));
   connect(weaDat.weaBus, ele.weaBus) annotation (Line(
@@ -62,5 +65,5 @@ equation
     annotation (Line(points={{51,-50},{68,-50}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=86400, __Dymola_Algorithm="Dassl"));
+    experiment(StopTime=345600, __Dymola_Algorithm="Dassl"));
 end RenewableSupplyHeatPump;

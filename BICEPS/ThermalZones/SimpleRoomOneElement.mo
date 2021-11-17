@@ -1,4 +1,4 @@
-within BICEPS.Fluid.Consumers;
+within BICEPS.ThermalZones;
 model SimpleRoomOneElement
   "A thermal zone with one heat conduction element and control sensor"
   parameter Modelica.SIunits.Temperature TMin=273.15+15 "Minimimum desired threshold for independent variable";
@@ -121,7 +121,7 @@ model SimpleRoomOneElement
   Modelica.Fluid.Interfaces.FluidPort_b port_b(redeclare package Medium =
         Modelica.Media.Air.SimpleAir)
     annotation (Placement(transformation(extent={{90,-90},{110,-70}})));
-  Utilities.Math.CubicHermite spl(
+  BICEPS.Utilities.Math.CubicHermite spl(
     final xMin=TMin,
     final xMax=TMax,
     final x0=T0,
