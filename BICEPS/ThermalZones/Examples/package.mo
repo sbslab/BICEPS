@@ -1,4 +1,5 @@
-within BICEPS.Experimental.Examples.Subsystems;
+within BICEPS.ThermalZones;
 package Examples "Collection of models that illustrate model use and test models"
   extends Modelica.Icons.ExamplesPackage;
+
 end Examples;

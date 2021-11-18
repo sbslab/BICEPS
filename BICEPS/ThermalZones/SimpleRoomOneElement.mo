@@ -1,6 +1,7 @@
 within BICEPS.ThermalZones;
 model SimpleRoomOneElement
   "A thermal zone with one heat conduction element and control sensor"
+  extends Buildings.BaseClasses.BaseIconLow;
   parameter Modelica.SIunits.Temperature TMin=273.15+15 "Minimimum desired threshold for independent variable";
   parameter Modelica.SIunits.Temperature TMax=273.15+25 "Maximum desired threshold for independent variable";
   parameter Modelica.SIunits.Temperature T0=273.15+20 "Nominal value for independent variable";
