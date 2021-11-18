@@ -181,12 +181,9 @@ model HeatPump "Heat pump model"
   Modelica.Blocks.Interfaces.RealInput yHeaPum "Control signal" annotation (
       Placement(transformation(extent={{-180,60},{-140,100}}),
         iconTransformation(extent={{-120,50},{-100,70}})));
-  Buildings.Fluid.Sources.Boundary_pT refP(redeclare package Medium = Medium1,
+  Buildings.Fluid.Sources.Boundary_pT pRef(redeclare package Medium = Medium1,
       nPorts=1) "Reference pressure"
-    annotation (Placement(transformation(extent={{-20,-20},{-40,0}})));
-  Buildings.Fluid.Sources.Boundary_pT refPEva(redeclare package Medium =
-        Medium2, nPorts=1) "Reference pressure"
-    annotation (Placement(transformation(extent={{100,-140},{120,-120}})));
+    annotation (Placement(transformation(extent={{-20,-30},{-40,-10}})));
 equation
   connect(port_a1, port_a1)
     annotation (Line(points={{-140,20},{-140,20}}, color={0,127,255}));
@@ -256,14 +253,12 @@ equation
           110}}, color={0,0,127}));
   connect(addPum.y, PPum)
     annotation (Line(points={{132,70},{150,70}}, color={0,0,127}));
-  connect(refP.ports[1], pumCon.port_a) annotation (Line(points={{-40,-10},{-48,
-          -10},{-48,20},{-40,20}}, color={0,127,255}));
+  connect(pRef.ports[1], pumCon.port_a) annotation (Line(points={{-40,-20},{-48,
+          -20},{-48,20},{-40,20}}, color={0,127,255}));
   connect(port_b2, heaPum.port_b2) annotation (Line(points={{-140,-100},{0,-100},
-          {0,-36},{8,-36}}, color={0,127,255}));
+          {0,-36},{10,-36}},color={0,127,255}));
   connect(heaPum.port_a2, pumEva.port_b) annotation (Line(points={{30,-36},{40,
           -36},{40,-100},{100,-100}}, color={0,127,255}));
-  connect(refPEva.ports[1], pumEva.port_a) annotation (Line(points={{120,-130},
-          {128,-130},{128,-100},{120,-100}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false),
                          graphics={
         Rectangle(

@@ -143,10 +143,10 @@ model FanCoilWithDistributionPump
     h_outflow(start=Medium2.h_default, nominal=Medium2.h_default))
     "Fluid stream outlet port on the load side"
     annotation (Placement(transformation(extent={{-90,50},{-110,70}})));
-  Buildings.Fluid.Sources.Boundary_pT refP(redeclare package Medium = Medium2,
-      nPorts=1) "Reference pressure"
+  Buildings.Fluid.Sources.Boundary_pT pRefFan(redeclare package Medium =
+        Medium2, nPorts=1) "Reference pressure"
     annotation (Placement(transformation(extent={{80,10},{60,30}})));
-  Buildings.Fluid.Sources.Boundary_pT refPPum(redeclare package Medium =
+  Buildings.Fluid.Sources.Boundary_pT pRefPum(redeclare package Medium =
         Medium1, nPorts=1) "Reference pressure"
     annotation (Placement(transformation(extent={{-58,-90},{-78,-70}})));
 protected
@@ -175,9 +175,9 @@ equation
   connect(hex.port_b1, port_b1) annotation (Line(points={{10,4},{20,4},{20,-40},
           {100,-40},{100,-40}},
                               color={0,127,255}));
-  connect(refP.ports[1], fan.port_a) annotation (Line(points={{60,20},{54,20},{
-          54,60},{50,60}}, color={0,127,255}));
-  connect(refPPum.ports[1], pum.port_a) annotation (Line(points={{-78,-80},{-88,
+  connect(pRefFan.ports[1], fan.port_a) annotation (Line(points={{60,20},{54,20},
+          {54,60},{50,60}}, color={0,127,255}));
+  connect(pRefPum.ports[1], pum.port_a) annotation (Line(points={{-78,-80},{-88,
           -80},{-88,-40},{-80,-40}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
