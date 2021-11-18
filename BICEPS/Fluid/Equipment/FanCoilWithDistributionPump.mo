@@ -56,7 +56,7 @@ model FanCoilWithDistributionPump
     constrainedby Buildings.Fluid.Movers.Data.Generic
     "Record with performance data"
     annotation (choicesAllMatching=true,
-      Placement(transformation(extent={{70,-100},{90,-80}})));
+      Placement(transformation(extent={{60,-80},{80,-60}})));
   Buildings.Fluid.Movers.FlowControlled_m_flow pum(
     redeclare final package Medium = Medium1,
     per(
@@ -143,6 +143,12 @@ model FanCoilWithDistributionPump
     h_outflow(start=Medium2.h_default, nominal=Medium2.h_default))
     "Fluid stream outlet port on the load side"
     annotation (Placement(transformation(extent={{-90,50},{-110,70}})));
+  Buildings.Fluid.Sources.Boundary_pT refP(redeclare package Medium = Medium2,
+      nPorts=1) "Reference pressure"
+    annotation (Placement(transformation(extent={{80,10},{60,30}})));
+  Buildings.Fluid.Sources.Boundary_pT refPPum(redeclare package Medium =
+        Medium1, nPorts=1) "Reference pressure"
+    annotation (Placement(transformation(extent={{-58,-90},{-78,-70}})));
 protected
   parameter Medium1.ThermodynamicState sta1_default=Medium1.setState_pTX(
     T=Medium1.T_default,
@@ -157,7 +163,7 @@ equation
   connect(port_a2, resLoa.port_a)
     annotation (Line(points={{100,60},{80,60}}, color={0,127,255}));
   connect(resLoa.port_b, fan.port_a)
-    annotation (Line(points={{60,60},{52,60}}, color={0,127,255}));
+    annotation (Line(points={{60,60},{50,60}}, color={0,127,255}));
   connect(fan.port_b, hex.port_a2) annotation (Line(points={{30,60},{20,60},{20,
           16},{10,16}}, color={0,127,255}));
   connect(port_a1, pum.port_a)
@@ -167,7 +173,12 @@ equation
   connect(resDis.port_b, hex.port_a1) annotation (Line(points={{-28,-40},{-20,-40},
           {-20,4},{-10,4}}, color={0,127,255}));
   connect(hex.port_b1, port_b1) annotation (Line(points={{10,4},{20,4},{20,-40},
-          {96,-40},{96,-38}}, color={0,127,255}));
+          {100,-40},{100,-40}},
+                              color={0,127,255}));
+  connect(refP.ports[1], fan.port_a) annotation (Line(points={{60,20},{54,20},{
+          54,60},{50,60}}, color={0,127,255}));
+  connect(refPPum.ports[1], pum.port_a) annotation (Line(points={{-78,-80},{-88,
+          -80},{-88,-40},{-80,-40}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-60,60},{60,-60}},

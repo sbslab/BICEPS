@@ -22,6 +22,9 @@ model HeatPump "Heat pump model"
   parameter Modelica.SIunits.Temperature TEva_nominal
     "Evaporator outlet temperature used to compute COP_nominal"
     annotation (Dialog(group="Nominal condition"));
+  parameter Modelica.SIunits.Temperature THeaWatSup_nominal=313.15
+    "Heating water supply temperature"
+    annotation (Dialog(group="Nominal condition"));
   parameter Modelica.SIunits.HeatFlowRate Q1_flow_nominal(min=0)
     "Heating heat flow rate"
     annotation (Dialog(group="Nominal condition"));
@@ -132,16 +135,16 @@ model HeatPump "Heat pump model"
         transformation(extent={{130,10},{150,30}}),
         iconTransformation(extent={{90,10},{110,30}})));
   Controls.HeatPump heatPump
-    annotation (Placement(transformation(extent={{-80,-10},{-60,-30}})));
+    annotation (Placement(transformation(extent={{-80,-30},{-60,-50}})));
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold staPum[2](
     y(each start=false),
     t=1e-2 .* {m1_flow_nominal,m2_flow_nominal},
     h=0.5e-2 .* {m1_flow_nominal,m2_flow_nominal})
     "Pump return status"
-    annotation (Placement(transformation(extent={{-20,-80},{-40,-60}})));
+    annotation (Placement(transformation(extent={{-20,-90},{-40,-70}})));
   Buildings.Controls.OBC.CDL.Logical.And ena
     "Enable heat pump if pump return status on"
-    annotation (Placement(transformation(extent={{-62,-80},{-82,-60}})));
+    annotation (Placement(transformation(extent={{-62,-90},{-82,-70}})));
   Modelica.Blocks.Interfaces.BooleanInput u
     annotation (Placement(transformation(extent={{-180,100},{-140,140}}),
         iconTransformation(extent={{-120,90},{-100,110}})));
@@ -178,20 +181,22 @@ model HeatPump "Heat pump model"
   Modelica.Blocks.Interfaces.RealInput yHeaPum "Control signal" annotation (
       Placement(transformation(extent={{-180,60},{-140,100}}),
         iconTransformation(extent={{-120,50},{-100,70}})));
+  Buildings.Fluid.Sources.Boundary_pT refP(redeclare package Medium = Medium1,
+      nPorts=1) "Reference pressure"
+    annotation (Placement(transformation(extent={{-20,-20},{-40,0}})));
+  Buildings.Fluid.Sources.Boundary_pT refPEva(redeclare package Medium =
+        Medium2, nPorts=1) "Reference pressure"
+    annotation (Placement(transformation(extent={{100,-140},{120,-120}})));
 equation
   connect(port_a1, port_a1)
     annotation (Line(points={{-140,20},{-140,20}}, color={0,127,255}));
   connect(staPum[1].y,ena. u1)
-    annotation (Line(points={{-42,-70},{-60,-70}},     color={255,0,255}));
-  connect(staPum[2].y,ena. u2) annotation (Line(points={{-42,-70},{-52,-70},{-52,
-          -78},{-60,-78}},          color={255,0,255}));
-  connect(port_b2, heaPum.port_b2) annotation (Line(points={{-140,-100},{0,-100},
-          {0,-36},{10,-36}},  color={0,127,255}));
+    annotation (Line(points={{-42,-80},{-60,-80}},     color={255,0,255}));
+  connect(staPum[2].y,ena. u2) annotation (Line(points={{-42,-80},{-52,-80},{-52,
+          -88},{-60,-88}},          color={255,0,255}));
   connect(port_a2, pumEva.port_a)
     annotation (Line(points={{140,-100},{120,-100}},
                                                    color={0,127,255}));
-  connect(pumEva.port_b, heaPum.port_a2) annotation (Line(points={{100,-100},{40,
-          -100},{40,-36},{30,-36}},color={0,127,255}));
   connect(port_b1, senTConLea.port_b)
     annotation (Line(points={{140,20},{82,20}},  color={0,127,255}));
   connect(senTConLea.port_a, heaPum.port_b1) annotation (Line(points={{62,20},{40,
@@ -232,26 +237,33 @@ equation
   connect(conFloCon.m_flow, pumCon.m_flow_in) annotation (Line(points={{82,84},{
           86,84},{86,40},{-30,40},{-30,32}}, color={0,0,127}));
   connect(pumCon.m_flow_actual, staPum[1].u) annotation (Line(points={{-19,25},{
-          -10,25},{-10,-70},{-18,-70}}, color={0,0,127}));
+          -10,25},{-10,-80},{-18,-80}}, color={0,0,127}));
   connect(pumEva.m_flow_actual, staPum[2].u) annotation (Line(points={{99,-95},{
-          99,-94},{-10,-94},{-10,-70},{-18,-70}}, color={0,0,127}));
-  connect(ena.y, heatPump.uEna) annotation (Line(points={{-84,-70},{-90,-70},{-90,
-          -20},{-82,-20}}, color={255,0,255}));
+          99,-94},{-10,-94},{-10,-80},{-18,-80}}, color={0,0,127}));
+  connect(ena.y, heatPump.uEna) annotation (Line(points={{-84,-80},{-90,-80},{-90,
+          -40},{-82,-40}}, color={255,0,255}));
   connect(yHeaPum, heatPump.y) annotation (Line(points={{-160,80},{-130,80},{-130,
-          -26},{-82,-26}}, color={0,0,127}));
+          -46},{-82,-46}}, color={0,0,127}));
   connect(senTConEnt.T, heatPump.TConEnt) annotation (Line(points={{-70,31},{-70,
-          40},{-90,40},{-90,-14},{-82,-14}}, color={0,0,127}));
-  connect(pumEva.P, addPum.u2) annotation (Line(points={{99,-91},{98,-91},{98,
-          64},{108,64}},
-                     color={0,0,127}));
+          40},{-90,40},{-90,-34},{-82,-34}}, color={0,0,127}));
+  connect(pumEva.P, addPum.u2) annotation (Line(points={{99,-91},{98,-91},{98,64},
+          {108,64}}, color={0,0,127}));
   connect(pumCon.P, addPum.u1) annotation (Line(points={{-19,29},{94,29},{94,76},
           {108,76}}, color={0,0,127}));
-  connect(heatPump.TSet, heaPum.TSet) annotation (Line(points={{-59,-20},{6,-20},
-          {6,-22},{8,-22},{8,-21}}, color={0,0,127}));
+  connect(heatPump.TSet, heaPum.TSet) annotation (Line(points={{-59,-40},{-6,-40},
+          {-6,-22},{8,-22},{8,-21}},color={0,0,127}));
   connect(heaPum.P, PHea) annotation (Line(points={{31,-30},{36,-30},{36,110},{150,
           110}}, color={0,0,127}));
   connect(addPum.y, PPum)
     annotation (Line(points={{132,70},{150,70}}, color={0,0,127}));
+  connect(refP.ports[1], pumCon.port_a) annotation (Line(points={{-40,-10},{-48,
+          -10},{-48,20},{-40,20}}, color={0,127,255}));
+  connect(port_b2, heaPum.port_b2) annotation (Line(points={{-140,-100},{0,-100},
+          {0,-36},{8,-36}}, color={0,127,255}));
+  connect(heaPum.port_a2, pumEva.port_b) annotation (Line(points={{30,-36},{40,
+          -36},{40,-100},{100,-100}}, color={0,127,255}));
+  connect(refPEva.ports[1], pumEva.port_a) annotation (Line(points={{120,-130},
+          {128,-130},{128,-100},{120,-100}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false),
                          graphics={
         Rectangle(

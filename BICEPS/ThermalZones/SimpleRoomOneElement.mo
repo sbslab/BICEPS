@@ -2,6 +2,9 @@ within BICEPS.ThermalZones;
 model SimpleRoomOneElement
   "A thermal zone with one heat conduction element and control sensor"
   extends Buildings.BaseClasses.BaseIconLow;
+  replaceable package Medium=Buildings.Media.Air
+    constrainedby Modelica.Media.Interfaces.PartialMedium
+    "Load side medium";
   parameter Modelica.SIunits.Temperature TMin=273.15+15 "Minimimum desired threshold for independent variable";
   parameter Modelica.SIunits.Temperature TMax=273.15+25 "Maximum desired threshold for independent variable";
   parameter Modelica.SIunits.Temperature T0=273.15+20 "Nominal value for independent variable";
@@ -41,7 +44,7 @@ model SimpleRoomOneElement
     AWin={7,7},
     ATransparent={7,7},
     AExt={3.5,8},
-    redeclare package Medium = Modelica.Media.Air.SimpleAir,
+    redeclare package Medium = Medium,
     extWallRC(thermCapExt(each der_T(fixed=true))),
     energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     T_start=295.15,
@@ -117,10 +120,10 @@ model SimpleRoomOneElement
     origin={32,38})));
 
   Modelica.Fluid.Interfaces.FluidPort_a port_a(redeclare package Medium =
-        Modelica.Media.Air.SimpleAir)
+        Medium)
     annotation (Placement(transformation(extent={{-110,-90},{-90,-70}})));
   Modelica.Fluid.Interfaces.FluidPort_b port_b(redeclare package Medium =
-        Modelica.Media.Air.SimpleAir)
+        Medium)
     annotation (Placement(transformation(extent={{90,-90},{110,-70}})));
   BICEPS.Utilities.Math.CubicHermite spl(
     final xMin=TMin,
