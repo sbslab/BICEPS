@@ -14,7 +14,7 @@ model ThermoFluid4E "Test model for the thermofluid subsystem"
 
   BICEPS.Fluid.Subsystems.ThermoFluidFourElements thermoFluid(
     redeclare package MediumWat = Medium,
-    QHea_flow_nominal=5000,
+    QHea_flow_nominal=10000,
     COP_nominal=4,
     mLoaHea_flow_nominal=1)
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
@@ -51,7 +51,7 @@ equation
       file="modelica://BICEPS/Resources/Scripts/Dymola/Fluid/Subsystems/Examples/ThermoFluid1E.mos"
       "Simulate and plot"),
     experiment(
-      StopTime=2073600,
+      StopTime=6480000,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"),
     Diagram(

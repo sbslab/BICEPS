@@ -134,7 +134,7 @@ model HeatPump "Heat pump model"
     annotation (Placement(
         transformation(extent={{130,10},{150,30}}),
         iconTransformation(extent={{90,10},{110,30}})));
-  Controls.HeatPump heatPump(
+  Controls.HeatPump conHeaPum(
     TMin=273.15 + 28,
     TMax=273.15 + 48,
     T0=273.15 + 38)
@@ -178,8 +178,8 @@ model HeatPump "Heat pump model"
   Controls.PrimaryVariableFlow conFloCon(Q_flow_nominal=Q1_flow_nominal,
       dT_nominal=dT1_nominal)
     annotation (Placement(transformation(extent={{60,74},{80,94}})));
-  Controls.PrimaryVariableFlow conFlo1(Q_flow_nominal=-Q1_flow_nominal*(1 + 1/
-        COP_nominal), dT_nominal=dT2_nominal)
+  Controls.PrimaryVariableFlow conFloEva(Q_flow_nominal=-Q1_flow_nominal*(1 + 1
+        /COP_nominal), dT_nominal=dT2_nominal)
     annotation (Placement(transformation(extent={{110,-34},{130,-14}})));
   Modelica.Blocks.Interfaces.RealInput yHeaPum "Control signal" annotation (
       Placement(transformation(extent={{-180,60},{-140,100}}),
@@ -227,31 +227,30 @@ equation
     annotation (Line(points={{22,84},{58,84}}, color={0,0,127}));
   connect(u, conFloCon.u) annotation (Line(points={{-160,120},{50,120},{50,92},{
           58,92}}, color={255,0,255}));
-  connect(heaFloEvaHHW.y, conFlo1.loa)
+  connect(heaFloEvaHHW.y, conFloEva.loa)
     annotation (Line(points={{84,-24},{108,-24}}, color={0,0,127}));
-  connect(u, conFlo1.u) annotation (Line(points={{-160,120},{90,120},{90,-16},{
-          108,-16}},
-                 color={255,0,255}));
-  connect(conFlo1.m_flow, pumEva.m_flow_in) annotation (Line(points={{132,-24},{
-          136,-24},{136,-70},{110,-70},{110,-88}}, color={0,0,127}));
+  connect(u, conFloEva.u) annotation (Line(points={{-160,120},{90,120},{90,-16},
+          {108,-16}}, color={255,0,255}));
+  connect(conFloEva.m_flow, pumEva.m_flow_in) annotation (Line(points={{132,-24},
+          {136,-24},{136,-70},{110,-70},{110,-88}}, color={0,0,127}));
   connect(conFloCon.m_flow, pumCon.m_flow_in) annotation (Line(points={{82,84},{
           86,84},{86,40},{-30,40},{-30,32}}, color={0,0,127}));
   connect(pumCon.m_flow_actual, staPum[1].u) annotation (Line(points={{-19,25},{
           -10,25},{-10,-80},{-18,-80}}, color={0,0,127}));
   connect(pumEva.m_flow_actual, staPum[2].u) annotation (Line(points={{99,-95},{
           99,-94},{-10,-94},{-10,-80},{-18,-80}}, color={0,0,127}));
-  connect(ena.y, heatPump.uEna) annotation (Line(points={{-84,-80},{-90,-80},{-90,
-          -40},{-82,-40}}, color={255,0,255}));
-  connect(yHeaPum, heatPump.y) annotation (Line(points={{-160,80},{-130,80},{-130,
+  connect(ena.y, conHeaPum.uEna) annotation (Line(points={{-84,-80},{-90,-80},{
+          -90,-40},{-82,-40}}, color={255,0,255}));
+  connect(yHeaPum, conHeaPum.y) annotation (Line(points={{-160,80},{-130,80},{-130,
           -46},{-82,-46}}, color={0,0,127}));
-  connect(senTConEnt.T, heatPump.TConEnt) annotation (Line(points={{-70,31},{-70,
+  connect(senTConEnt.T, conHeaPum.TConEnt) annotation (Line(points={{-70,31},{-70,
           40},{-90,40},{-90,-34},{-82,-34}}, color={0,0,127}));
   connect(pumEva.P, addPum.u2) annotation (Line(points={{99,-91},{98,-91},{98,64},
           {108,64}}, color={0,0,127}));
   connect(pumCon.P, addPum.u1) annotation (Line(points={{-19,29},{94,29},{94,76},
           {108,76}}, color={0,0,127}));
-  connect(heatPump.TSet, heaPum.TSet) annotation (Line(points={{-59,-40},{-6,-40},
-          {-6,-22},{8,-22},{8,-21}},color={0,0,127}));
+  connect(conHeaPum.TSet, heaPum.TSet) annotation (Line(points={{-59,-40},{-6,-40},
+          {-6,-22},{8,-22},{8,-21}}, color={0,0,127}));
   connect(heaPum.P, PHea) annotation (Line(points={{31,-30},{36,-30},{36,110},{150,
           110}}, color={0,0,127}));
   connect(addPum.y, PPum)

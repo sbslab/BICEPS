@@ -12,7 +12,7 @@ model CubicHermiteWithInverse
     freqHz(displayUnit="Hz") = 1,
     offset=273.15 + 20) "Measured temperature"
     annotation (Placement(transformation(extent={{-40,0},{-20,20}})));
-  CubicHermiteInverse splInv(
+  .BICEPS.Utilities.Math.CubicHermiteInverse splInv(
     xMin=273.15 + 17,
     xMax=273.15 + 24,
     x0=273.15 + 20) "Inverse spline"

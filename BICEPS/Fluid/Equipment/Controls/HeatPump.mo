@@ -20,7 +20,8 @@ model HeatPump "Heat pump control"
     final xMin=TMin,
     final xMax=TMax,
     final x0=T0,
-    final ensureMonotonicity=true)
+    final ensureMonotonicity=true,
+    reverseActing=true)
     annotation (Placement(transformation(extent={{-80,50},{-60,70}})));
   Buildings.Controls.OBC.CDL.Continuous.Limiter lim(final uMax=TMax, final uMin=
        TMin)

@@ -7,6 +7,7 @@ model CubicHermiteInverse
   parameter Real xMax=1 "Maximum desired threshold for independent variable";
   parameter Real x0=0 "Nominal value for independent variable";
   parameter Boolean ensureMonotonicity=true "Set to true if spline monoticity is ensured";
+  parameter Boolean reverseActing=false "Set to true if xMin=-1 corresponds to yMax";
   final parameter Real[3] xd={xMin,x0,xMax} "Support points";
   final parameter Real[3] yd={-1,0,1} "Support points";
   final parameter Real[3] d(each fixed=false)
@@ -40,6 +41,11 @@ algorithm
     y2=xd[i + 1],
     y1d=d[i],
     y2d=d[i + 1]);
+  if reverseActing then
+    x := 2*x0 - x;
+  else
+    x := x;
+  end if;
   annotation (
     defaultComponentName="spl",
     Icon(coordinateSystem(preserveAspectRatio=false),
