@@ -1,5 +1,5 @@
 within BICEPS.Fluid.Subsystems;
-model ThermoFluid "Thermofluid subsystem"
+model ThermoFluidOneElement "Thermofluid subsystem"
   replaceable package MediumWat=Buildings.Media.Water
     constrainedby Modelica.Media.Interfaces.PartialMedium
     "Medium in the building distribution system";
@@ -94,7 +94,6 @@ model ThermoFluid "Thermofluid subsystem"
   Controls.ThermoFluid conFlu(n=2)
     annotation (Placement(transformation(extent={{40,20},{60,40}})));
 
-
   Modelica.Blocks.Logical.Hysteresis enaHea(uLow=1, uHigh=1.01)
     "Enable heating if less than 1 (TRoom < TMax)"
     annotation (Placement(transformation(extent={{60,-20},{40,0}})));
@@ -146,4 +145,4 @@ equation
         Rectangle(extent={{-40,22},{40,-58}}, lineColor={0,0,0}),
         Line(points={{-40,22},{0,62},{40,22}}, color={0,0,0})}),
       Diagram(coordinateSystem(preserveAspectRatio=false)));
-end ThermoFluid;
+end ThermoFluidOneElement;

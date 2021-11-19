@@ -134,7 +134,10 @@ model HeatPump "Heat pump model"
     annotation (Placement(
         transformation(extent={{130,10},{150,30}}),
         iconTransformation(extent={{90,10},{110,30}})));
-  Controls.HeatPump heatPump
+  Controls.HeatPump heatPump(
+    TMin=273.15 + 28,
+    TMax=273.15 + 48,
+    T0=273.15 + 38)
     annotation (Placement(transformation(extent={{-80,-30},{-60,-50}})));
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold staPum[2](
     y(each start=false),

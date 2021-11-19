@@ -12,79 +12,80 @@ model SimpleRoomFourElements
     "Percentage penalty for deviating outside of min/max range. Smaller numbers
     indicate a steeper penalty.";
 
-  Buildings.BoundaryConditions.SolarIrradiation.DiffusePerez HDifTil[2](
+  Buildings.BoundaryConditions.SolarIrradiation.DiffusePerez HDifTil[4](
     each outSkyCon=true,
     each outGroCon=true,
     each til=1.5707963267949,
     each lat=0.87266462599716,
-    azi={3.1415926535898,4.7123889803847})
+    azi={0,1.5707963267949,-1.5707963267949,3.1415926535898})
     "Calculates diffuse solar radiation on titled surface for both directions"
     annotation (Placement(transformation(extent={{-80,20},{-60,40}})));
-  Buildings.BoundaryConditions.SolarIrradiation.DirectTiltedSurface HDirTil[2](
+  Buildings.BoundaryConditions.SolarIrradiation.DirectTiltedSurface HDirTil[4](
     each til=1.5707963267949,
     each lat=0.87266462599716,
-    azi={3.1415926535898,4.7123889803847})
+    azi={0,1.5707963267949,-1.5707963267949,3.1415926535898})
     "Calculates direct solar radiation on titled surface for both directions"
     annotation (Placement(transformation(extent={{-80,52},{-60,72}})));
-  Buildings.ThermalZones.ReducedOrder.SolarGain.CorrectionGDoublePane corGDouPan(UWin=2.1,
-      n=2) "Correction factor for solar transmission"
+  Buildings.ThermalZones.ReducedOrder.SolarGain.CorrectionGDoublePane corGDouPan(UWin=
+        3.2013304230329482, n=4)
+           "Correction factor for solar transmission"
     annotation (Placement(transformation(extent={{-6,46},{14,66}})));
   Buildings.ThermalZones.ReducedOrder.RC.FourElements thermalZoneFourElements(
-    VAir=52.5,
-    hConExt=2.7,
-    hConWin=2.7,
-    gWin=1,
-    ratioWinConRad=0.09,
+    redeclare package Medium = Medium,
+    VAir=896.0,
+    hConExt=2.7000000000000006,
+    hConWin=2.6999999999999997,
+    gWin=0.75,
+    ratioWinConRad=0.020000000000000004,
     nExt=1,
-    RExt={0.00331421908725},
-    CExt={5259932.23},
-    hRad=5,
-    AInt=60.5,
-    hConInt=2.12,
+    RExt={0.0008021063023654048},
+    CExt={15781172.942087349},
+    hRad=5.0,
+    AInt=1120.0,
+    hConInt=2.366666666666667,
     nInt=1,
-    RInt={0.000668895639141},
-    CInt={12391363.86},
-    RWin=0.01642857143,
-    RExtRem=0.1265217391,
-    AFloor=11.5,
-    hConFloor=2.7,
+    RInt={5.442650676126846e-05},
+    CInt={125635177.70934124},
+    RWin=0.00257034632034632,
+    RExtRem=0.004013872608716416,
+    AFloor=140.56,
+    hConFloor=1.7,
     nFloor=1,
-    RFloor={0.00331421908725},
-    RFloorRem=0.1265217391,
-    CFloor={5259932.23},
-    ARoof=11.5,
-    hConRoof=2.7,
+    RFloor={0.0008581493217179539},
+    RFloorRem=0.011281792119451751,
+    CFloor={16601402.428875938},
+    ARoof=229.964,
+    hConRoof=1.7,
     nRoof=1,
-    RRoof={0.00331421908725},
-    RRoofRem=0.1265217391,
-    CRoof={5259932.23},
-    nOrientations=2,
-    AWin={7,7},
-    ATransparent={7,7},
-    AExt={3.5,8},
-    redeclare replaceable package Medium = Medium,
+    RRoof={0.00023598054412248774},
+    RRoofRem=0.011179589145164578,
+    CRoof={4400076.802438775},
     energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     extWallRC(thermCapExt(each der_T(fixed=true))),
     intWallRC(thermCapInt(each der_T(fixed=true))),
     floorRC(thermCapExt(each der_T(fixed=true))),
-    T_start=295.15,
     roofRC(thermCapExt(each der_T(fixed=true))),
-    nPorts=2)                                    "Thermal zone"
+    nOrientations=4,
+    AWin={13.860000000000001, 13.860000000000001, 13.860000000000001, 13.860000000000001},
+    ATransparent={13.860000000000001, 13.860000000000001, 13.860000000000001, 13.860000000000001},
+    AExt={98.63, 98.63, 98.63, 98.63},
+    nPorts=2)
+    "Thermal zone"
     annotation (Placement(transformation(extent={{32,-2},{80,34}})));
   Buildings.ThermalZones.ReducedOrder.EquivalentAirTemperature.VDI6007WithWindow
     eqAirTemp(
     wfGro=0,
     withLongwave=true,
-    aExt=0.7,
+    aExt=0.5,
     hConWallOut=20,
     hRad=5,
     hConWinOut=20,
-    n=2,
-    wfWall={0.3043478260869566,0.6956521739130435},
-    wfWin={0.5,0.5},
-    TGro=285.15) "Computes equivalent air temperature"
+    n=4,
+    wfWall={0.25,0.25,0.25,0.25},
+    wfWin={0.25,0.25,0.25,0.25},
+    TGro=286.15) "Computes equivalent air temperature"
     annotation (Placement(transformation(extent={{-36,-14},{-16,6}})));
-  Modelica.Blocks.Math.Add solRad[2]
+  Modelica.Blocks.Math.Add solRad[4]
     "Sums up solar radiation of both directions"
     annotation (Placement(transformation(extent={{-50,6},{-40,16}})));
   Buildings.HeatTransfer.Sources.PrescribedTemperature preTem
@@ -106,17 +107,21 @@ model SimpleRoomFourElements
     "Convective heat flow of persons"
     annotation (Placement(transformation(extent={{0,-60},{20,-40}})));
   Modelica.Blocks.Sources.CombiTimeTable intGai(
+    tableOnFile=true,
     table=[0,0,0,0; 3600,0,0,0; 7200,0,0,0; 10800,0,0,0; 14400,0,0,0; 18000,0,0,
         0; 21600,0,0,0; 25200,0,0,0; 25200,80,80,200; 28800,80,80,200; 32400,80,
         80,200; 36000,80,80,200; 39600,80,80,200; 43200,80,80,200; 46800,80,80,200;
         50400,80,80,200; 54000,80,80,200; 57600,80,80,200; 61200,80,80,200; 61200,
         0,0,0; 64800,0,0,0; 72000,0,0,0; 75600,0,0,0; 79200,0,0,0; 82800,0,0,0;
         86400,0,0,0],
+    tableName="Internals",
+    fileName=Modelica.Utilities.Files.loadResource(
+        "modelica://BICEPS/Resources/Data/ThermalZones/InternalGains_ResidentialBuildingTabulaSingleDwelling.txt"),
     columns={2,3,4},
     extrapolation=Modelica.Blocks.Types.Extrapolation.Periodic) "Table with profiles for persons (radiative and convective) and machines
     (convective)"
     annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
-  Modelica.Blocks.Sources.Constant const[2](each k=0)
+  Modelica.Blocks.Sources.Constant const[4](each k=0)
     "Sets sunblind signal to zero (open)"
     annotation (Placement(transformation(extent={{-36,14},{-30,20}})));
   Buildings.BoundaryConditions.WeatherData.Bus weaBus "Weather data bus"
@@ -142,10 +147,10 @@ model SimpleRoomFourElements
     annotation (Placement(transformation(extent={{4,-4},{-4,4}},
     rotation=180,origin={40,-22})));
   Buildings.ThermalZones.ReducedOrder.EquivalentAirTemperature.VDI6007 eqAirTempVDI(
-    aExt=0.7,
-    n=1,
-    wfWall={1},
-    wfWin={0},
+    aExt=0.5,
+    n=2,
+    wfWall={0.5,0.5},
+    wfWin={0,0},
     wfGro=0,
     hConWallOut=20,
     hRad=5,
@@ -162,7 +167,7 @@ model SimpleRoomFourElements
   Modelica.Blocks.Sources.Constant hConRoof(k=25*11.5)
     "Outdoor coefficient of heat transfer for roof"
     annotation (Placement(transformation(extent={{4,-4},{-4,4}},origin={74,47})));
-  Modelica.Blocks.Sources.Constant const1(k=0)
+  Modelica.Blocks.Sources.Constant const1[2](each k=0)
     "Sets sunblind signal to zero (open)"
     annotation (Placement(transformation(extent={{56,90},{50,96}})));
 
@@ -280,7 +285,7 @@ equation
     color={255,204,51},
       thickness=0.5));
   connect(eqAirTempVDI.HSol[1], weaBus.HGloHor)
-    annotation (Line(points={{16,90},{4,90},{4,100},{-1,100}},
+    annotation (Line(points={{16,89},{4,89},{4,100},{-1,100}},
     color={255,204,51},
       thickness=0.5),Text(
     textString="%second",
@@ -289,9 +294,6 @@ equation
   connect(HDirTil.inc, corGDouPan.inc)
     annotation (Line(points={{-59,58},{-22,58},{-22,50},{-8,50}},
     color={0,0,127}));
-  connect(const1.y, eqAirTempVDI.sunblind[1])
-    annotation (Line(points={{49.7,93},{44,93},{44,98},{28,98},{28,96}},
-                                      color={0,0,127}));
   connect(corGDouPan.solarRadWinTrans, thermalZoneFourElements.solRad)
     annotation (Line(points={{15,56},{28,56},{28,31},{31,31}}, color={0,0,127}));
   connect(thermalZoneFourElements.TAir, spl.x) annotation (Line(points={{81,32},
@@ -328,6 +330,48 @@ equation
       horizontalAlignment=TextAlignment.Right));
   connect(weaBus, HDifTil[2].weaBus) annotation (Line(
       points={{-1,100},{-8,100},{-8,94},{-96,94},{-96,30},{-80,30}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(const1.y, eqAirTempVDI.sunblind) annotation (Line(points={{49.7,93},{40,
+          93},{40,100},{28,100},{28,96}}, color={0,0,127}));
+  connect(weaBus, HDirTil[3].weaBus) annotation (Line(
+      points={{-1,100},{-8,100},{-8,94},{-96,94},{-96,62},{-80,62}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(weaBus, HDirTil[4].weaBus) annotation (Line(
+      points={{-1,100},{-8,100},{-8,94},{-96,94},{-96,62},{-80,62}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(weaBus, HDifTil[3].weaBus) annotation (Line(
+      points={{-1,100},{-8,100},{-8,94},{-96,94},{-96,30},{-80,30}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(weaBus, HDifTil[4].weaBus) annotation (Line(
+      points={{-1,100},{-8,100},{-8,94},{-96,94},{-96,30},{-80,30}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(weaBus.HGloHor, eqAirTempVDI.HSol[2]) annotation (Line(
+      points={{-1,100},{-1,96},{4,96},{4,90},{16,90},{16,91}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",

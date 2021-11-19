@@ -1,5 +1,5 @@
 within BICEPS.Fluid.Subsystems.Examples;
-model ThermoFluid "Test model for the thermofluid subsystem"
+model ThermoFluid4E "Test model for the thermofluid subsystem"
   extends Modelica.Icons.Example;
   package Medium=Buildings.Media.Water
     "Medium in the building distribution system";
@@ -7,14 +7,16 @@ model ThermoFluid "Test model for the thermofluid subsystem"
                                             weaDat(
     calTSky=Buildings.BoundaryConditions.Types.SkyTemperatureCalculation.HorizontalRadiation,
     computeWetBulbTemperature=false,
-    filNam=Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
+    filNam=ModelicaServices.ExternalReferences.loadResource(
+        "modelica://BICEPS/Resources/weatherdata/DEU_BW_Mannheim_107290_TRY2010_12_Jahr_BBSR.mos"))
     "Weather data reader"
     annotation (Placement(transformation(extent={{-40,60},{-20,80}})));
 
-  BICEPS.Fluid.Subsystems.ThermoFluid thermoFluid(
-    redeclare package MediumWat = Medium,         QHea_flow_nominal=261700,
-      COP_nominal=4,
-    mLoaHea_flow_nominal=10)
+  BICEPS.Fluid.Subsystems.ThermoFluidFourElements thermoFluid(
+    redeclare package MediumWat = Medium,
+    QHea_flow_nominal=5000,
+    COP_nominal=4,
+    mLoaHea_flow_nominal=1)
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
   Modelica.Blocks.Sources.Constant idealElecSig(k=0) "Ideal electrical signal"
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
@@ -25,6 +27,10 @@ model ThermoFluid "Test model for the thermofluid subsystem"
   Buildings.Fluid.Sources.Boundary_pT sin(redeclare package Medium = Medium,
       nPorts=1) "Sink"
     annotation (Placement(transformation(extent={{62,0},{42,20}})));
+  Modelica.Blocks.Continuous.Integrator EPum "Pump energy"
+    annotation (Placement(transformation(extent={{60,60},{80,80}})));
+  Modelica.Blocks.Continuous.Integrator EHeaPum "Heat Pump energy"
+    annotation (Placement(transformation(extent={{60,30},{80,50}})));
 equation
   connect(weaDat.weaBus, thermoFluid.weaBus) annotation (Line(
       points={{-20,70},{10,70},{10,40}},
@@ -36,14 +42,18 @@ equation
           10},{-10,24},{0,24}}, color={0,127,255}));
   connect(thermoFluid.port_b, sin.ports[1]) annotation (Line(points={{20,24},{30,
           24},{30,10},{42,10}}, color={0,127,255}));
+  connect(thermoFluid.PHeaPum, EHeaPum.u) annotation (Line(points={{21,35},{40,
+          35},{40,40},{58,40}}, color={0,0,127}));
+  connect(thermoFluid.PPum, EPum.u) annotation (Line(points={{22,39},{30,39},{
+          30,70},{58,70}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)),
     __Dymola_Commands(
-      file="modelica://BICEPS/Resources/Scripts/Dymola/Fluid/Subsystems/Examples/ThermoFluid.mos"
+      file="modelica://BICEPS/Resources/Scripts/Dymola/Fluid/Subsystems/Examples/ThermoFluid1E.mos"
       "Simulate and plot"),
     experiment(
-      StopTime=86400,
+      StopTime=2073600,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"),
     Diagram(
         coordinateSystem(preserveAspectRatio=false)));
-end ThermoFluid;
+end ThermoFluid4E;

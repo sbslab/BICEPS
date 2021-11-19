@@ -1,12 +1,12 @@
 ﻿// Simulate
-simulateModel("BICEPS.Fluid.Subsystems.Examples.ThermoFluid", stopTime=86400, resultFile="ThermoFluid");
+simulateModel("BICEPS.Fluid.Subsystems.Examples.ThermoFluid1E", stopTime=86400, resultFile="ThermoFluid1E");
 // Plot
 createPlot(id=1, position={15, 15, 1116, 534}, 
   y={"thermoFluid.zon.thermalZoneOneElement.TAir", "thermoFluid.zon.TMin", "thermoFluid.zon.TMax", "thermoFluid.zon.T0", "weaDat.weaBus.TDryBul"}, 
   range={0.0, 32000000.0, -40.0, 40.0}, 
   erase=false, 
   grid=true, 
-  filename="ThermoFluid.mat", 
+  filename="ThermoFluid1E.mat", 
   colors={{28,108,200}, {0,0,0}, {0,0,0}, {0,0,0}, {238,46,47}}, 
   patterns={LinePattern.Solid, LinePattern.Dot, LinePattern.Dot, LinePattern.Dot, LinePattern.Solid}, 
   thicknesses={0.5, 0.25, 0.25, 0.25, 0.25}, 

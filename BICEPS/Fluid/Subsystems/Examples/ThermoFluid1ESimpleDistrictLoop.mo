@@ -1,5 +1,6 @@
 within BICEPS.Fluid.Subsystems.Examples;
-model ThermoFluidSimpleDistrictLoop "Test model for the thermofluid subsystem"
+model ThermoFluid1ESimpleDistrictLoop
+  "Test model for the thermofluid subsystem"
   extends Modelica.Icons.Example;
   package Medium=Buildings.Media.Water
     "Medium in the building distribution system";
@@ -11,9 +12,10 @@ model ThermoFluidSimpleDistrictLoop "Test model for the thermofluid subsystem"
     "Weather data reader"
     annotation (Placement(transformation(extent={{-40,60},{-20,80}})));
 
-  BICEPS.Fluid.Subsystems.ThermoFluid thermoFluid(
-    redeclare package MediumWat = Medium,         QHea_flow_nominal=261700,
-      COP_nominal=4,
+  BICEPS.Fluid.Subsystems.ThermoFluidOneElement thermoFluid(
+    redeclare package MediumWat = Medium,
+    QHea_flow_nominal=261700,
+    COP_nominal=4,
     mLoaHea_flow_nominal=10)
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
   Modelica.Blocks.Sources.Constant ideal(k=0)
@@ -95,4 +97,4 @@ equation
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     experiment(StopTime=31536000, __Dymola_Algorithm="Dassl"));
-end ThermoFluidSimpleDistrictLoop;
+end ThermoFluid1ESimpleDistrictLoop;
