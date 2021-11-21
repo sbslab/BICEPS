@@ -104,14 +104,18 @@ equation
     annotation (Line(points={{-100,-60},{-30,-60}}, color={0,127,255}));
   connect(heaPum.port_b2, port_b)
     annotation (Line(points={{-10,-60},{100,-60}}, color={0,127,255}));
-  connect(heaPum.port_b1, fcu.port_a1) annotation (Line(points={{-30,-48},{-40,-48},
-          {-40,-14},{-30,-14}}, color={0,127,255}));
-  connect(fcu.port_b1, heaPum.port_a1) annotation (Line(points={{-10,-14},{0,-14},
-          {0,-48},{-10,-48}}, color={0,127,255}));
-  connect(fcu.port_b2, zon.port_a) annotation (Line(points={{-30,-4},{-40,-4},{-40,
-          22},{-30,22}}, color={0,127,255}));
-  connect(zon.port_b, fcu.port_a2) annotation (Line(points={{-10,22},{0,22},{0,-4},
-          {-10,-4}}, color={0,127,255}));
+  connect(heaPum.port_b1, fcu.port_a1) annotation (Line(points={{-30,-48},{-40,
+          -48},{-40,-16},{-30,-16}},
+                                color={0,127,255}));
+  connect(fcu.port_b1, heaPum.port_a1) annotation (Line(points={{-10,-16},{0,
+          -16},{0,-48},{-10,-48}},
+                              color={0,127,255}));
+  connect(fcu.port_b2, zon.port_a) annotation (Line(points={{-30,-6},{-40,-6},{
+          -40,22},{-30,22}},
+                         color={0,127,255}));
+  connect(zon.port_b, fcu.port_a2) annotation (Line(points={{-10,22},{0,22},{0,
+          -6},{-10,-6}},
+                     color={0,127,255}));
   connect(weaBus, zon.weaBus) annotation (Line(
       points={{0,100},{0,88},{-20,88},{-20,40}},
       color={255,204,51},
@@ -130,12 +134,14 @@ equation
           {40,30},{40,31}}, color={0,0,127}));
   connect(conFlu.yOut, heaPum.yHeaPum) annotation (Line(points={{61,30},{80,30},
           {80,-44},{-9,-44}}, color={0,0,127}));
-  connect(zon.y, enaHea.u) annotation (Line(points={{-9,37},{20,37},{20,10},{70,
-          10},{70,-10},{62,-10}}, color={0,0,127}));
+  connect(zon.y, enaHea.u) annotation (Line(points={{-9,37},{20,37},{20,16},{70,
+          16},{70,-10},{62,-10}}, color={0,0,127}));
   connect(enaHea.y, not1.u)
     annotation (Line(points={{39,-10},{32,-10}}, color={255,0,255}));
   connect(not1.y, heaPum.u) annotation (Line(points={{9,-10},{4,-10},{4,-40},{-9,
           -40}}, color={255,0,255}));
+  connect(conFlu.yOut, fcu.y) annotation (Line(points={{61,30},{80,30},{80,10},
+          {-48,10},{-48,-2},{-32,-2}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
           extent={{-80,80},{80,-80}},

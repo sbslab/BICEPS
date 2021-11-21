@@ -104,14 +104,18 @@ equation
     annotation (Line(points={{-100,-60},{-30,-60}}, color={0,127,255}));
   connect(heaPum.port_b2, port_b)
     annotation (Line(points={{-10,-60},{100,-60}}, color={0,127,255}));
-  connect(heaPum.port_b1, fcu.port_a1) annotation (Line(points={{-30,-48},{-40,-48},
-          {-40,-14},{-30,-14}}, color={0,127,255}));
-  connect(fcu.port_b1, heaPum.port_a1) annotation (Line(points={{-10,-14},{0,-14},
-          {0,-48},{-10,-48}}, color={0,127,255}));
-  connect(fcu.port_b2, zon.port_a) annotation (Line(points={{-30,-4},{-40,-4},{-40,
-          22},{-30,22}}, color={0,127,255}));
-  connect(zon.port_b, fcu.port_a2) annotation (Line(points={{-10,22},{0,22},{0,-4},
-          {-10,-4}}, color={0,127,255}));
+  connect(heaPum.port_b1, fcu.port_a1) annotation (Line(points={{-30,-48},{-40,
+          -48},{-40,-16},{-30,-16}},
+                                color={0,127,255}));
+  connect(fcu.port_b1, heaPum.port_a1) annotation (Line(points={{-10,-16},{0,
+          -16},{0,-48},{-10,-48}},
+                              color={0,127,255}));
+  connect(fcu.port_b2, zon.port_a) annotation (Line(points={{-30,-6},{-40,-6},{
+          -40,22},{-30,22}},
+                         color={0,127,255}));
+  connect(zon.port_b, fcu.port_a2) annotation (Line(points={{-10,22},{0,22},{0,
+          -6},{-10,-6}},
+                     color={0,127,255}));
   connect(weaBus, zon.weaBus) annotation (Line(
       points={{0,100},{0,88},{-20,88},{-20,40}},
       color={255,204,51},
