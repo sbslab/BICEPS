@@ -188,6 +188,7 @@ model SimpleRoomFourElements
     final xMax=TMax,
     final x0=T0,
     final k=k,
+    reverseActing=true,
     final ensureMonotonicity=true)
     annotation (Placement(transformation(extent={{76,70},{96,90}})));
 equation

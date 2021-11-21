@@ -7,6 +7,7 @@ model CubicHermite "Block for cubic hermite spline function"
   parameter Real k(min=Modelica.Constants.small)=10
     "Percentage penalty for deviating outside of min/max range. Smaller numbers
     indicate a steeper penalty.";
+  parameter Boolean reverseActing=false "Set to true if xMin=-1 corresponds to yMax";
   parameter Boolean ensureMonotonicity=true "Set to true if spline monoticity is ensured";
   final parameter Real[5] xd={xMin*(1-k/100),xMin,x0,xMax,xMax*(1+k/100)} "Support points";
   final parameter Real[5] yd={-100,-1,0,1,100} "Support points";
@@ -41,6 +42,11 @@ algorithm
     y2=yd[i + 1],
     y1d=d[i],
     y2d=d[i + 1]);
+  if reverseActing then
+    y := - y;
+  else
+    y := y;
+  end if;
   annotation (
     defaultComponentName="spl",
     Icon(coordinateSystem(preserveAspectRatio=false),

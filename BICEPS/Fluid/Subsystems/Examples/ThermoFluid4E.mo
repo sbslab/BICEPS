@@ -18,7 +18,7 @@ model ThermoFluid4E "Test model for the thermofluid subsystem"
     COP_nominal=4,
     mLoaHea_flow_nominal=1)
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
-  Modelica.Blocks.Sources.Constant idealElecSig(k=0) "Ideal electrical signal"
+  Modelica.Blocks.Sources.Constant idealElecSig(k=1) "Ideal electrical signal"
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
   Buildings.Fluid.Sources.Boundary_pT sou(redeclare package Medium = Medium,
     T=thermoFluid.TDisWatMin,
@@ -48,10 +48,10 @@ equation
           30,70},{58,70}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)),
     __Dymola_Commands(
-      file="modelica://BICEPS/Resources/Scripts/Dymola/Fluid/Subsystems/Examples/ThermoFluid1E.mos"
+      file="modelica://BICEPS/Resources/Scripts/Dymola/Fluid/Subsystems/Examples/ThermoFluid4E.mos"
       "Simulate and plot"),
     experiment(
-      StopTime=6480000,
+      StopTime=1296000,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"),
     Diagram(

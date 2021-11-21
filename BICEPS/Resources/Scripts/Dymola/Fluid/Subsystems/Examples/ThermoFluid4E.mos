@@ -1,0 +1,41 @@
+﻿// Simulate
+simulateModel("BICEPS.Fluid.Subsystems.Examples.ThermoFluid4E", stopTime=86400, tolerance=1e-06, resultFile="ThermoFluid4E");
+// Plot
+createPlot(id=1, position={35, 35, 1349, 632}, 
+  y={"thermoFluid.zon.thermalZoneFourElements.TAir", "weaDat.weaBus.TDryBul", "thermoFluid.zon.TMin", "thermoFluid.zon.TMax", "thermoFluid.zon.T0"}, 
+  range={0.0, 15.0, -20.0, 30.0}, 
+  erase=false, 
+  grid=true, 
+  filename="ThermoFluid4E.mat", 
+  colors={{28,108,200}, {238,46,47}, {0,0,0}, {0,0,0}, {0,0,0}}, 
+  patterns={LinePattern.Solid, LinePattern.Solid, LinePattern.Dot, LinePattern.Dot, LinePattern.Dot}, 
+  timeUnit="d", 
+  displayUnits={"degC", "degC", "degC", "degC", "degC"});
+createPlot(id=1, position={35, 35, 1349, 632}, 
+  y={"thermoFluid.conFlu.yIn[1]", "thermoFluid.conFlu.yIn[2]", "thermoFluid.conFlu.yOut"}, 
+  range={0.0, 15.0, -0.4, 0.1}, 
+  erase=false, 
+  grid=true, 
+  subPlot=201,
+  colors={{28,108,200}, {238,46,47}, {0,140,72}}, 
+  patterns={LinePattern.Dash, LinePattern.Dash, LinePattern.Solid}, 
+  thicknesses={0.25, 0.25, 0.5}, 
+  timeUnit="d");
+createPlot(id=1, position={35, 35, 1349, 632}, 
+  y={"thermoFluid.heaPum.conHeaPum.TSet", "thermoFluid.heaPum.conHeaPum.TMin", "thermoFluid.heaPum.conHeaPum.TMax", "thermoFluid.heaPum.conHeaPum.T0"}, 
+  range={0.0, 15.0, 300.0, 325.0}, 
+  erase=false, 
+  grid=true, 
+  subPlot=102, 
+  colors={{28,108,200}, {0,0,0}, {0,0,0}, {0,0,0}}, 
+  patterns={LinePattern.Solid, LinePattern.Dot, LinePattern.Dot, LinePattern.Dot}, 
+  timeUnit="d");
+createPlot(id=1, position={35, 35, 1349, 632}, 
+  y={"EHeaPum.y", "EPum.y"}, 
+  range={0.0, 15.0, -500000000.0, 2500000000.0}, 
+  erase=false, 
+  grid=true, 
+  subPlot=202, 
+  colors={{28,108,200}, {238,46,47}}, 
+  timeUnit="d");
+
