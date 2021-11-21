@@ -191,6 +191,13 @@ model SimpleRoomFourElements
     reverseActing=true,
     final ensureMonotonicity=true)
     annotation (Placement(transformation(extent={{76,70},{96,90}})));
+  Modelica.Blocks.Interfaces.RealOutput QAct_flow
+    "Actual heat flow rate into air zone" annotation (Placement(transformation(
+          extent={{100,30},{120,50}}), iconTransformation(extent={{100,30},{120,
+            50}})));
+  Modelica.Blocks.Sources.RealExpression QFloHeaPor(y=thermalZoneFourElements.volAir.heatPort.Q_flow)
+    "Heat flow rate at the air volume heat port"
+    annotation (Placement(transformation(extent={{86,30},{96,50}})));
 equation
   connect(eqAirTemp.TEqAirWin, preTem1.T)
     annotation (Line(points={{-15,-0.2},{-12,-0.2},{-12,20},{-5.2,20}},
@@ -298,7 +305,7 @@ equation
   connect(corGDouPan.solarRadWinTrans, thermalZoneFourElements.solRad)
     annotation (Line(points={{15,56},{28,56},{28,31},{31,31}}, color={0,0,127}));
   connect(thermalZoneFourElements.TAir, spl.x) annotation (Line(points={{81,32},
-          {90,32},{90,60},{66,60},{66,80},{74,80}}, color={0,0,127}));
+          {84,32},{84,60},{66,60},{66,80},{74,80}}, color={0,0,127}));
   connect(spl.y, y)
     annotation (Line(points={{97,80},{110,80}}, color={0,0,127}));
   connect(port_a, thermalZoneFourElements.ports[1]) annotation (Line(points={{-100,
@@ -379,6 +386,8 @@ equation
       index=-1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
+  connect(QFloHeaPor.y, QAct_flow)
+    annotation (Line(points={{96.5,40},{110,40}}, color={0,0,127}));
   annotation ( Documentation(info="<html>
   <p>This example shows the application of
   <a href=\"Buildings.ThermalZones.ReducedOrder.RC.FourElements\">

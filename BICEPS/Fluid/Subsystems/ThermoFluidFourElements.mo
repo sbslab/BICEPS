@@ -94,11 +94,11 @@ model ThermoFluidFourElements "Thermofluid subsystem"
   Controls.ThermoFluid conFlu(n=2)
     annotation (Placement(transformation(extent={{40,20},{60,40}})));
 
-  Modelica.Blocks.Logical.Hysteresis enaHea(uLow=1, uHigh=1.01)
+  Modelica.Blocks.Logical.Hysteresis noHea(uLow=-300, uHigh=0)
     "Enable heating if less than 1 (TRoom < TMax)"
-    annotation (Placement(transformation(extent={{60,-20},{40,0}})));
-  Modelica.Blocks.Logical.Not not1 "Invert"
-    annotation (Placement(transformation(extent={{30,-20},{10,0}})));
+    annotation (Placement(transformation(extent={{60,-40},{40,-20}})));
+  Modelica.Blocks.Logical.Not enaHea "Heating enabled"
+    annotation (Placement(transformation(extent={{28,-40},{8,-20}})));
 equation
   connect(port_a, heaPum.port_a2)
     annotation (Line(points={{-100,-60},{-30,-60}}, color={0,127,255}));
@@ -134,14 +134,14 @@ equation
           {40,30},{40,31}}, color={0,0,127}));
   connect(conFlu.yOut, heaPum.yHeaPum) annotation (Line(points={{61,30},{80,30},
           {80,-44},{-9,-44}}, color={0,0,127}));
-  connect(zon.y, enaHea.u) annotation (Line(points={{-9,37},{20,37},{20,16},{70,
-          16},{70,-10},{62,-10}}, color={0,0,127}));
-  connect(enaHea.y, not1.u)
-    annotation (Line(points={{39,-10},{32,-10}}, color={255,0,255}));
-  connect(not1.y, heaPum.u) annotation (Line(points={{9,-10},{4,-10},{4,-40},{-9,
-          -40}}, color={255,0,255}));
-  connect(conFlu.yOut, fcu.y) annotation (Line(points={{61,30},{80,30},{80,10},
-          {-48,10},{-48,-2},{-32,-2}}, color={0,0,127}));
+  connect(conFlu.yOut, fcu.y) annotation (Line(points={{61,30},{80,30},{80,4},{
+          -36,4},{-36,-2},{-32,-2}},   color={0,0,127}));
+  connect(zon.QAct_flow, noHea.u) annotation (Line(points={{-9,34},{18,34},{18,
+          28},{38,28},{38,18},{78,18},{78,-30},{62,-30}}, color={0,0,127}));
+  connect(noHea.y, enaHea.u)
+    annotation (Line(points={{39,-30},{30,-30}}, color={255,0,255}));
+  connect(enaHea.y, heaPum.u) annotation (Line(points={{7,-30},{4,-30},{4,-40},
+          {-9,-40}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
           extent={{-80,80},{80,-80}},
