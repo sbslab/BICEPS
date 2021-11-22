@@ -27,48 +27,48 @@ model SimpleRoomFourElements
     "Calculates direct solar radiation on titled surface for both directions"
     annotation (Placement(transformation(extent={{-80,52},{-60,72}})));
   Buildings.ThermalZones.ReducedOrder.SolarGain.CorrectionGDoublePane corGDouPan(UWin=
-        3.2013304230329482, n=4)
+        1.4002545917439533, n=4)
            "Correction factor for solar transmission"
     annotation (Placement(transformation(extent={{-6,46},{14,66}})));
   Buildings.ThermalZones.ReducedOrder.RC.FourElements thermalZoneFourElements(
     redeclare package Medium = Medium,
-    VAir=896.0,
-    hConExt=2.7000000000000006,
-    hConWin=2.6999999999999997,
-    gWin=0.75,
-    ratioWinConRad=0.020000000000000004,
+    VAir=366.3,
+    hConExt=2.7,
+    hConWin=2.7,
+    gWin=0.6,
+    ratioWinConRad=0.019999999999999997,
     nExt=1,
-    RExt={0.0008021063023654048},
-    CExt={15781172.942087349},
+    RExt={0.00029535925449573306},
+    CExt={33932211.77253235},
     hRad=5.0,
-    AInt=1120.0,
-    hConInt=2.366666666666667,
+    AInt=451.77,
+    hConInt=2.375675675675676,
     nInt=1,
-    RInt={5.442650676126846e-05},
-    CInt={125635177.70934124},
-    RWin=0.00257034632034632,
-    RExtRem=0.004013872608716416,
-    AFloor=140.56,
+    RInt={0.00014898377258981284},
+    CInt={51799465.24399839},
+    RWin=0.01929742189482449,
+    RExtRem=0.015417680135418976,
+    AFloor=79.56036000000002,
     hConFloor=1.7,
     nFloor=1,
-    RFloor={0.0008581493217179539},
-    RFloorRem=0.011281792119451751,
-    CFloor={16601402.428875938},
-    ARoof=229.964,
-    hConRoof=1.7,
+    RFloor={0.0015452964217915787},
+    RFloorRem=0.03785826582380714,
+    CFloor={9285656.485114116},
+    ARoof=85.61896200000001,
+    hConRoof=1.6999999999999997,
     nRoof=1,
-    RRoof={0.00023598054412248774},
-    RRoofRem=0.011179589145164578,
-    CRoof={4400076.802438775},
+    RRoof={0.0007090222334459756},
+    RRoofRem=0.039486473229807306,
+    CRoof={1669857.3545976095},
     energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     extWallRC(thermCapExt(each der_T(fixed=true))),
     intWallRC(thermCapInt(each der_T(fixed=true))),
     floorRC(thermCapExt(each der_T(fixed=true))),
     roofRC(thermCapExt(each der_T(fixed=true))),
     nOrientations=4,
-    AWin={13.860000000000001, 13.860000000000001, 13.860000000000001, 13.860000000000001},
-    ATransparent={13.860000000000001, 13.860000000000001, 13.860000000000001, 13.860000000000001},
-    AExt={98.63, 98.63, 98.63, 98.63},
+    AWin={7.051275,7.051275,7.051275,7.051275},
+    ATransparent={7.051275,7.051275,7.051275,7.051275},
+    AExt={47.06955,47.06955,47.06955,47.06955},
     nPorts=2)
     "Thermal zone"
     annotation (Placement(transformation(extent={{32,-2},{80,34}})));
@@ -116,7 +116,7 @@ model SimpleRoomFourElements
         86400,0,0,0],
     tableName="Internals",
     fileName=Modelica.Utilities.Files.loadResource(
-        "modelica://BICEPS/Resources/Data/ThermalZones/InternalGains_ResidentialBuildingTabulaSingleDwelling.txt"),
+        "modelica://BICEPS/Resources/Data/ThermalZones/InternalGains_DE.N.SFH.10.Gen.ReEx.001.001.txt"),
     columns={2,3,4},
     extrapolation=Modelica.Blocks.Types.Extrapolation.Periodic) "Table with profiles for persons (radiative and convective) and machines
     (convective)"
@@ -130,11 +130,11 @@ model SimpleRoomFourElements
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow macConv
     "Convective heat flow of machines"
     annotation (Placement(transformation(extent={{0,-80},{20,-60}})));
-  Modelica.Blocks.Sources.Constant hConWall(k=25*11.5)
+  Modelica.Blocks.Sources.Constant hConWall(k=25.0*188.2782)
     "Outdoor coefficient of heat transfer for walls"
     annotation (Placement(transformation(extent={{-4,-4},{4,4}}, rotation=90,
     origin={20,-16})));
-  Modelica.Blocks.Sources.Constant hConWin(k=20*14)
+  Modelica.Blocks.Sources.Constant hConWin(k=24.999999999999996*28.2051)
     "Outdoor coefficient of heat transfer for windows"
     annotation (Placement(transformation(extent={{4,-4},{-4,4}},
     rotation=90,origin={20,38})));
@@ -142,7 +142,7 @@ model SimpleRoomFourElements
     "Prescribed temperature for floor plate outdoor surface temperature"
     annotation (Placement(transformation(extent={{-6,-6},{6,6}},
     rotation=90,origin={57,-12})));
-  Modelica.Blocks.Sources.Constant TSoil(k=283.15)
+  Modelica.Blocks.Sources.Constant TSoil(k=286.15)
     "Outdoor surface temperature for floor plate"
     annotation (Placement(transformation(extent={{4,-4},{-4,4}},
     rotation=180,origin={40,-22})));
@@ -164,7 +164,7 @@ model SimpleRoomFourElements
     "Outdoor convective heat transfer of roof"
     annotation (Placement(transformation(extent={{5,-5},{-5,5}},rotation=-90,
     origin={55,47})));
-  Modelica.Blocks.Sources.Constant hConRoof(k=25*11.5)
+  Modelica.Blocks.Sources.Constant hConRoof(k=2140.47405)
     "Outdoor coefficient of heat transfer for roof"
     annotation (Placement(transformation(extent={{4,-4},{-4,4}},origin={74,47})));
   Modelica.Blocks.Sources.Constant const1[2](each k=0)
