@@ -24,7 +24,8 @@ model Battery "Control for the battery energy storage system"
   Modelica.Blocks.Sources.Constant off(k=0)
     "Battery state of charge is at its limit and cannot charge/discharge further"
     annotation (Placement(transformation(extent={{30,-60},{50,-40}})));
-  Buildings.Controls.OBC.CDL.Continuous.LessThreshold belCap(t=1, h=0.05)
+  Buildings.Controls.OBC.CDL.Continuous.LessThreshold belCap(t=0.95,
+                                                                  h=0.05)
     "Below SOC capacity. Hysteresis set for 10s cycles"
     annotation (Placement(transformation(extent={{-80,-70},{-60,-50}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi
@@ -48,7 +49,7 @@ model Battery "Control for the battery energy storage system"
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold notEmp(t=0.05, h=0.025)
     "Not empty."
     annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis callCha(uLow=-0.1, uHigh=0)
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis callCha(uLow=-0.5, uHigh=0.5)
     "Call to charge with switching charge <> discharge controlled with a hysteresis to avoid chattering"
     annotation (Placement(transformation(extent={{-90,50},{-70,70}})));
   Modelica.Blocks.Math.BooleanToReal sta(realTrue=1, realFalse=-1) "State"

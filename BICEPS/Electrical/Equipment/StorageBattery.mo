@@ -49,12 +49,12 @@ equation
     annotation (Line(points={{0,42},{0,-104},{-4,-104}}, color={0,120,120}));
   connect(bat.terminal, terminal) annotation (Line(points={{10,-10},{0,-10},{0,-104},
           {-4,-104}}, color={0,120,120}));
-  connect(senBat.y, yOut) annotation (Line(points={{11,60},{110,60}},
-                color={0,0,127}));
   connect(con.P, bat.P)
     annotation (Line(points={{-39,20},{20,20},{20,0}}, color={0,0,127}));
   connect(bat.SOC, con.soc) annotation (Line(points={{31,-4},{40,-4},{40,-20},{-70,
           -20},{-70,14},{-62,14}}, color={0,0,127}));
+  connect(senBat.y, yOut)
+    annotation (Line(points={{11,60},{102,60}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(
           extent={{-54,-74},{56,38}},

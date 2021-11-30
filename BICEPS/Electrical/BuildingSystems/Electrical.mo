@@ -9,11 +9,11 @@ model Electrical "Model of a building's electrical system"
   parameter Real k=100 "Percentage penalty for deviating outside of min/max range. Smaller numbers
     indicate a steeper penalty.";
   parameter Modelica.SIunits.Angle lat "Latitude";
-  parameter Modelica.SIunits.Power PCon_nominal[nCon] = fill(0,nCon)
+  parameter Modelica.SIunits.Power PCon_nominal
     "Nominal power for consumer loads";
-  parameter Modelica.SIunits.Power PPro_nominal[nPro] = fill(0,nPro)
+  parameter Modelica.SIunits.Power PPro_nominal
     "Nominal power for producer loads";
-  parameter Modelica.SIunits.Power PSto_nominal[nSto] = fill(0,nSto)
+  parameter Modelica.SIunits.Power PSto_nominal
     "Nominal power for storage loads";
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
@@ -37,8 +37,8 @@ model Electrical "Model of a building's electrical system"
     V_nominal=V_nominal,
     tol=tol,
     k=k,
-    PSun=PPro_nominal[1],
-    PBat=PSto_nominal[1])
+    PSun=PPro_nominal,
+    PBat=PSto_nominal)
     annotation (Placement(transformation(extent={{10,-40},{-10,-20}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linGri(
     l=LGri,
@@ -49,7 +49,7 @@ model Electrical "Model of a building's electrical system"
         origin={0,60})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linCon[nCon](
     l=LCon,
-    P_nominal=PCon_nominal,
+    P_nominal=fill(PCon_nominal, nCon),
     each final V_nominal=V_nominal) "Consumer power lines" annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
@@ -57,7 +57,7 @@ model Electrical "Model of a building's electrical system"
         origin={10,0})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linSto[nSto](
     l=LSto,
-    final P_nominal=PSto_nominal,
+    final P_nominal=fill(PSto_nominal, nSto),
     each final V_nominal=V_nominal) "Storage  power lines" annotation (Placement(
         transformation(
         extent={{10,-10},{-10,10}},
@@ -65,7 +65,7 @@ model Electrical "Model of a building's electrical system"
         origin={0,0})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linPro[nPro](
     l=LPro,
-    P_nominal=PPro_nominal,
+    P_nominal=fill(PPro_nominal, nPro),
     each final V_nominal=V_nominal) "Producer power lines" annotation (Placement(
         transformation(
         extent={{10,-10},{-10,10}},
@@ -73,15 +73,17 @@ model Electrical "Model of a building's electrical system"
         origin={-10,0})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terminal
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
-        rotation=-90,
-        origin={0,110}),      iconTransformation(extent={{-120,60},{-100,80}})));
+        rotation=0,
+        origin={-110,80}),    iconTransformation(extent={{-120,60},{-100,80}})));
   Modelica.Blocks.Interfaces.RealInput PCon[nCon] "Power of consumers"
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
   Buildings.BoundaryConditions.WeatherData.Bus weaBus
     "Weather data bus"
-    annotation (Placement(transformation(extent={{60,80},{100,120}}),
+    annotation (Placement(transformation(extent={{-20,82},{20,122}}),
       iconTransformation(extent={{-10,90},{10,110}})));
 
+  Modelica.Blocks.Interfaces.RealOutput yOut "Output control signal"
+    annotation (Placement(transformation(extent={{100,70},{120,90}})));
 equation
   connect(P1.terCon, linCon.terminal_n) annotation (Line(points={{4,19},{4,14},{
           10,14},{10,10}}, color={0,120,120}));
@@ -98,7 +100,8 @@ equation
   connect(linGri.terminal_p, P1.terGri)
     annotation (Line(points={{0,50},{0,41}}, color={0,120,120}));
   connect(terminal, linGri.terminal_n)
-    annotation (Line(points={{0,110},{0,70}}, color={0,120,120}));
+    annotation (Line(points={{-110,80},{0,80},{0,70}},
+                                              color={0,120,120}));
   connect(PCon, dev.PCon) annotation (Line(points={{-120,-60},{30,-60},{30,-36},
           {12,-36}}, color={0,0,127}));
   connect(P1.yOut, dev.yIn) annotation (Line(points={{11,36},{30,36},{30,-24},{12,
@@ -110,13 +113,15 @@ equation
   connect(dev.yCon, P1.yCon) annotation (Line(points={{-11,-30},{-30,-30},{-30,38},
           {-12,38}}, color={0,0,127}));
   connect(weaBus, dev.weaBus) annotation (Line(
-      points={{80,100},{80,-20},{9,-20}},
+      points={{0,102},{0,88},{40,88},{40,-20},{8,-20}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
       index=-1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
+  connect(P1.yOut, yOut) annotation (Line(points={{11,36},{30,36},{30,80},{104,80}},
+        color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-80,80},{80,-80}},
