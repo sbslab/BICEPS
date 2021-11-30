@@ -1,5 +1,5 @@
 ﻿// Simulate
-simulateModel("BICEPS.Fluid.Subsystems.Examples.ThermoFluid4E", stopTime=86400, tolerance=1e-06, resultFile="ThermoFluid4E");
+simulateModel("BICEPS.Fluid.BuildingSystems.Examples.ThermoFluid4E", stopTime=86400, tolerance=1e-06, resultFile="ThermoFluid4E");
 // Plot
 createPlot(id=1, position={35, 35, 1349, 632}, 
   y={"thermoFluid.zon.thermalZoneFourElements.TAir", "weaDat.weaBus.TDryBul", "thermoFluid.zon.TMin", "thermoFluid.zon.TMax", "thermoFluid.zon.T0"}, 
