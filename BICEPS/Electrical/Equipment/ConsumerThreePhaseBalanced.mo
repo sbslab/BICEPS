@@ -18,11 +18,11 @@ model ConsumerThreePhaseBalanced
     annotation (Placement(transformation(extent={{-10,20},{10,40}})));
   Modelica.Blocks.Math.Gain inv(k=-1) "Invert to be negative (consumption)"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
-  Modelica.Blocks.Interfaces.RealInput PHeaPum(
+  Modelica.Blocks.Interfaces.RealInput P(
     final quantity="Power",
     final unit="W",
     min=0,
-    displayUnit="kW")   "Heat pump power"
+    displayUnit="kW") "Consumer power (positive value)"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_n terminal
     "Generalized electric terminal"
@@ -31,7 +31,7 @@ model ConsumerThreePhaseBalanced
   Modelica.Blocks.Interfaces.RealOutput y "Control signal"
     annotation (Placement(transformation(extent={{100,50},{120,70}})));
 equation
-  connect(PHeaPum,inv. u)
+  connect(P, inv.u)
     annotation (Line(points={{-120,0},{-82,0}}, color={0,0,127}));
   connect(inv.y,loa. Pow)
     annotation (Line(points={{-59,0},{-40,0}}, color={0,0,127}));
@@ -58,24 +58,6 @@ equation
         Ellipse(extent={{-10,-10},{10,10}},
           origin={-30,0},
           rotation=360),
-        Ellipse(extent={{162,44},{182,64}}),
-        Ellipse(extent={{182,44},{202,64}}),
-        Ellipse(extent={{182,96},{202,116}}),
-        Ellipse(extent={{162,96},{182,116}}),
-        Ellipse(extent={{162,146},{182,166}}),
-        Ellipse(extent={{180,146},{200,166}}),
-          Line(points={{-6.85214e-44,-8.39117e-60},{26,3.18398e-15}},
-                                         color={0,0,0},
-          origin={226,108},
-          rotation=180),
-          Line(points={{-6.85214e-44,-8.39117e-60},{10,1.22461e-15}},
-                                         color={0,0,0},
-          origin={210,54},
-          rotation=180),
-        Line(
-          points={{210,156},{226,106},{210,54}},
-          color={0,0,0},
-          smooth=Smooth.None),
         Rectangle(
           extent={{-10,20},{10,-20}},
           lineColor={0,0,0},
@@ -176,5 +158,8 @@ equation
           Line(points={{-6.85214e-44,-8.39117e-60},{-30,8}},
                                          color={0,0,0},
           origin={0,68},
-          rotation=180)}), Diagram(coordinateSystem(preserveAspectRatio=false)));
+          rotation=180),
+        Line(points={{-100,0},{-80,0}}, color={0,0,127}),
+        Line(points={{100,60},{98,60},{80,60},{56,42}}, color={0,0,127})}),
+                           Diagram(coordinateSystem(preserveAspectRatio=false)));
 end ConsumerThreePhaseBalanced;

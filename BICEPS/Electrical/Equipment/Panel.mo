@@ -23,9 +23,8 @@ model Panel "Generic model for an electrical panel"
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={60,-110}), iconTransformation(extent={{30,-120},{50,-100}})));
-  Modelica.Blocks.Interfaces.RealInput yIn[nPro + nSto + nCon]
-    "Input control signal"
-    annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
+  Modelica.Blocks.Interfaces.RealInput yCon[nCon] "Consumer control signal(s)"
+    annotation (Placement(transformation(extent={{-140,60},{-100,100}})));
   Modelica.Blocks.Interfaces.RealOutput yOut "Output control signal"
     annotation (Placement(transformation(extent={{100,50},{120,70}})));
   Buildings.Electrical.AC.OnePhase.Sensors.GeneralizedSensor met "Main meter"
@@ -35,29 +34,42 @@ model Panel "Generic model for an electrical panel"
         origin={0,30})));
   Controls.Panel con(n=nPro + nSto + nCon) "Controller"
     annotation (Placement(transformation(extent={{-60,50},{-40,70}})));
+  Modelica.Blocks.Interfaces.RealInput ySto[nSto] "Storage control signal(s)"
+    annotation (Placement(transformation(extent={{-140,20},{-100,60}})));
+  Modelica.Blocks.Interfaces.RealInput yPro[nPro] "Producer control signal(s)"
+    annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
 equation
   connect(terGri, met.terminal_n)
     annotation (Line(points={{0,110},{0,40},{1.77636e-15,40}},
                                               color={0,120,120}));
   for i in 1:nPro loop
     connect(met.terminal_p, terPro[i])
-     annotation (Line(points={{-1.77636e-15,20},{-1.77636e-15,-40},{-60,-40},{
-            -60,-110}},                                             color={0,120,120}));
+     annotation (Line(points={
+       {-1.77636e-15,20},{-1.77636e-15,-40},{-60,-40},{-60,-110}},
+       color={0,120,120}));
+    connect(yPro[i], con.yIn[i])
+     annotation (Line(
+       points={{-120,0},{-70,0},{-70,60},{-59.8,60}},
+       color={0,0,127}));
   end for;
   for i in 1:nSto loop
     connect(met.terminal_p, terSto[i])
       annotation (Line(points={{-1.77636e-15,20},{-1.77636e-15,-110},{0,-110}},
                                                           color={0,120,120}));
+     connect(ySto[i], con.yIn[i+nPro])
+       annotation (Line(points={{-120,40},{-70,40},{-70,60},{-59.8,60}},
+         color={0,0,127}));
   end for;
   for i in 1:nCon loop
     connect(met.terminal_p, terCon[i])
-     annotation (Line(points={{-1.77636e-15,20},{-1.77636e-15,-40},{60,-40},{60,
-            -110}},                                               color={0,120,120}));
+     annotation (Line(points={{-1.77636e-15,20},{-1.77636e-15,-40},{60,-40},{60,-110}},
+        color={0,120,120}));
+    connect(yCon[i], con.yIn[i+nPro+nSto])
+      annotation (Line(points={{-120,80},{-70,80},{-70,60},{-59.8,60}}, color={0,0,127}));
   end for;
-  connect(yIn, con.yIn)
-    annotation (Line(points={{-120,60},{-59.8,60}}, color={0,0,127}));
   connect(con.yOut, yOut)
     annotation (Line(points={{-39,60},{110,60}}, color={0,0,127}));
+
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Line(points={{0,-24},{0,-32}}, color={0,0,0}),
           Rectangle(

@@ -83,12 +83,16 @@ equation
     annotation (Line(points={{0,50},{0,41}}, color={0,120,120}));
   connect(terminal, linGri.terminal_n)
     annotation (Line(points={{0,110},{0,70}}, color={0,120,120}));
-  connect(PCon, dev.PCon) annotation (Line(points={{-120,-60},{28,-60},{28,-36},
+  connect(PCon, dev.PCon) annotation (Line(points={{-120,-60},{30,-60},{30,-36},
           {12,-36}}, color={0,0,127}));
   connect(P1.yOut, dev.yIn) annotation (Line(points={{11,36},{30,36},{30,-24},{12,
           -24}}, color={0,0,127}));
-  connect(dev.yOut, P1.yIn) annotation (Line(points={{-11,-24},{-30,-24},{-30,36},
-          {-12,36}}, color={0,0,127}));
+  connect(dev.yPro, P1.yPro) annotation (Line(points={{-10.8,-22},{-22,-22},{
+          -22,30},{-12,30}}, color={0,0,127}));
+  connect(dev.ySto, P1.ySto) annotation (Line(points={{-11,-26},{-26,-26},{-26,
+          34},{-12,34}}, color={0,0,127}));
+  connect(dev.yCon, P1.yCon) annotation (Line(points={{-11,-30},{-30,-30},{-30,
+          38},{-12,38}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-80,80},{80,-80}},
