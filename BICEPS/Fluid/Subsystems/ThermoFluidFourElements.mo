@@ -94,8 +94,7 @@ model ThermoFluidFourElements "Thermofluid subsystem"
   Controls.ThermoFluid conFlu(n=2)
     annotation (Placement(transformation(extent={{40,20},{60,40}})));
 
-  Modelica.Blocks.Logical.Hysteresis noHea(uLow=-300, uHigh=0)
-    "Enable heating if less than 1 (TRoom < TMax)"
+  Modelica.Blocks.Logical.Hysteresis noHea(uLow=-300, uHigh=0) "Enable heating"
     annotation (Placement(transformation(extent={{60,-40},{40,-20}})));
   Modelica.Blocks.Logical.Not enaHea "Heating enabled"
     annotation (Placement(transformation(extent={{28,-40},{8,-20}})));

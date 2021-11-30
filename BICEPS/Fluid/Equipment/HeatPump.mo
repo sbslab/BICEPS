@@ -109,7 +109,7 @@ model HeatPump "Heat pump model"
     "Fluid port for leaving evaporator water"
     annotation (Placement(
         transformation(extent={{-150,-110},{-130,-90}}),
-        iconTransformation(extent={{-110,-110},{-90,-90}})));
+        iconTransformation(extent={{-110,-90},{-90,-70}})));
   Modelica.Fluid.Interfaces.FluidPort_a port_a2(
     redeclare final package Medium = Medium2,
     m_flow(min=if allowFlowReversal2 then -Modelica.Constants.inf else 0),
@@ -117,7 +117,7 @@ model HeatPump "Heat pump model"
     "Fluid port for entering evaporator water"
     annotation (Placement(
         transformation(extent={{130,-110},{150,-90}}),
-        iconTransformation(extent={{90,-110},{110,-90}})));
+        iconTransformation(extent={{90,-90},{110,-70}})));
   Modelica.Fluid.Interfaces.FluidPort_a port_a1(
     redeclare final package Medium = Medium1,
     m_flow(min=if allowFlowReversal1 then -Modelica.Constants.inf else 0),
@@ -261,10 +261,21 @@ equation
           {0,-36},{10,-36}},color={0,127,255}));
   connect(heaPum.port_a2, pumEva.port_b) annotation (Line(points={{30,-36},{40,
           -36},{40,-100},{100,-100}}, color={0,127,255}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false),
-                         graphics={
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
-          extent={{-60,60},{60,-60}},
+          extent={{-100,14},{100,26}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-100,-86},{100,-74}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-72,40},{72,-100}},
           lineColor={27,0,55},
           fillColor={170,213,255},
           fillPattern=FillPattern.Solid)}),                      Diagram(
