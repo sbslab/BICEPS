@@ -39,8 +39,7 @@ model Electrical
   Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linGri(
     l=1500,
     P_nominal=PWin + PSun + PBat + PLoa_nominal,
-    V_nominal=V_nominal)
-    "Grid power line"
+    V_nominal=V_nominal) "Grid power line"
     annotation (Placement(transformation(extent={{-60,60},{-40,80}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Storage.Battery bat(
     redeclare package PhaseSystem =
@@ -175,15 +174,16 @@ equation
           -96},{-30,-96},{-30,-86},{-38,-86}}, color={0,0,127}));
   connect(conBat.P, bat.P)
     annotation (Line(points={{-61,-80},{-70,-80},{-70,-60}}, color={0,0,127}));
-  connect(senWin.y, conSubEle.yIn[2]) annotation (Line(points={{29,43},{4,43},{4,
-          -30.5},{20.2,-30.5}}, color={0,0,127}));
-  connect(senPV.y, conSubEle.yIn[3]) annotation (Line(points={{29,3},{4,3},{4,-29.5},
-          {20.2,-29.5}},
+  connect(senWin.y, conSubEle.yIn[2]) annotation (Line(points={{29,42},{4,42},{
+          4,-30.5},{20.2,-30.5}},
+                                color={0,0,127}));
+  connect(senPV.y, conSubEle.yIn[3]) annotation (Line(points={{29,2},{4,2},{4,
+          -29.5},{20.2,-29.5}},
                        color={0,0,127}));
-  connect(senBat.y, conSubEle.yIn[4]) annotation (Line(points={{-29,-23},{4,-23},
+  connect(senBat.y, conSubEle.yIn[4]) annotation (Line(points={{-29,-22},{4,-22},
           {4,-28.5},{20.2,-28.5}}, color={0,0,127}));
-  connect(senLoa.y, conSubEle.yIn[1]) annotation (Line(points={{-29,27},{4,27},{
-          4,-31.5},{20.2,-31.5}}, color={0,0,127}));
+  connect(senLoa.y, conSubEle.yIn[1]) annotation (Line(points={{-29,28},{4,28},
+          {4,-31.5},{20.2,-31.5}},color={0,0,127}));
   connect(loa.terminal, linHP.terminal_p)
     annotation (Line(points={{-48,0},{-30,0}}, color={0,120,120}));
   connect(linPV.terminal_p, linGri.terminal_p) annotation (Line(points={{10,30},

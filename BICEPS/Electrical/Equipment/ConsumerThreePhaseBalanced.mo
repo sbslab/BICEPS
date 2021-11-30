@@ -15,7 +15,7 @@ model ConsumerThreePhaseBalanced
     tol=tol,
     v0=V_nominal,
     k=k) "Control signal load"
-    annotation (Placement(transformation(extent={{-10,20},{10,40}})));
+    annotation (Placement(transformation(extent={{-10,42},{10,62}})));
   Modelica.Blocks.Math.Gain inv(k=-1) "Invert to be negative (consumption)"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
   Modelica.Blocks.Interfaces.RealInput P(
@@ -38,8 +38,8 @@ equation
   connect(loa.terminal, terminal) annotation (Line(points={{-20,0},{0,0},{0,-104},
           {4,-104}}, color={0,120,120}));
   connect(senV.terminal, terminal)
-    annotation (Line(points={{0,20},{0,-104},{4,-104}}, color={0,120,120}));
-  connect(senV.y, y) annotation (Line(points={{11,37},{40,37},{40,60},{110,60}},
+    annotation (Line(points={{0,42},{0,-104},{4,-104}}, color={0,120,120}));
+  connect(senV.y, y) annotation (Line(points={{11,60},{110,60}},
         color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Polygon(

@@ -27,7 +27,8 @@ model RelativeFlowExergyPotential "Sensor for relative flow exergy"
     final ensureMonotonicity=true)
     annotation (Placement(transformation(extent={{60,60},{80,80}})));
   Modelica.Blocks.Interfaces.RealOutput y "Control signal"
-    annotation (Placement(transformation(extent={{100,60},{120,80}})));
+    annotation (Placement(transformation(extent={{100,70},{120,90}}),
+        iconTransformation(extent={{100,70},{120,90}})));
   Buildings.Fluid.Sensors.Pressure senPre(redeclare package Medium = Medium)
     annotation (Placement(transformation(extent={{-10,0},{10,20}})));
   Modelica.Fluid.Interfaces.FluidPort_a port(redeclare package Medium = Medium,
@@ -47,8 +48,11 @@ equation
         Text(
           extent={{62,-6},{-58,-56}},
           lineColor={0,0,0},
-          textString="p"), Line(points={{100,70},{22,70}},
-                                                         color={0,0,0}),
-        Line(points={{18,58},{22,70}}, color={0,0,0})}),         Diagram(
+          textString="p"),
+        Line(points={{18,58},{24,80}}, color={0,0,0}),
+        Line(points={{0,-70},{0,-90}}, color={28,108,200}),
+                           Line(points={{100,80},{24,80}},
+                                                         color={0,0,0})}),
+                                                                 Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end RelativeFlowExergyPotential;

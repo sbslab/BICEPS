@@ -26,7 +26,7 @@ model RelativeInternalExergyPotential
   Modelica.Blocks.Interfaces.RealOutput y "Control signal"
     annotation (Placement(transformation(extent={{0,100},{20,120}}),
         iconTransformation(
-        extent={{100,60},{120,80}})));
+        extent={{100,70},{120,90}})));
 equation
   connect(port_a, senTem.port_a)
     annotation (Line(points={{-100,0},{-60,0}}, color={0,127,255}));
@@ -44,8 +44,8 @@ equation
           extent={{60,-18},{-60,-68}},
           lineColor={0,0,0},
           textString="T"),
-        Line(points={{18,58},{22,70}}, color={0,0,0}),
-                           Line(points={{100,70},{22,70}},
+        Line(points={{18,58},{24,80}}, color={0,0,0}),
+                           Line(points={{100,80},{24,80}},
                                                          color={0,0,0})}),
                                                                  Diagram(
         coordinateSystem(preserveAspectRatio=false)));

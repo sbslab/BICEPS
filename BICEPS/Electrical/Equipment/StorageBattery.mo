@@ -1,7 +1,7 @@
 within BICEPS.Electrical.Equipment;
 model StorageBattery
   "Model for a chemical battery for the electrical system"
-  extends Buildings.BaseClasses.BaseIcon;
+  extends Buildings.BaseClasses.BaseIconLow;
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
   parameter Real tol=0.05 "Tolerance allowed on nominal voltage control (5-10% typical)";
@@ -23,7 +23,7 @@ model StorageBattery
     v0=V_nominal,
     k=k)
     "Control signal battery"
-    annotation (Placement(transformation(extent={{-10,40},{10,60}})));
+    annotation (Placement(transformation(extent={{-10,42},{10,62}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Storage.Battery bat(
     redeclare package PhaseSystem = PhaseSystem,
     SOC_start=SOC_start,
@@ -37,7 +37,7 @@ model StorageBattery
   Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terminal
     "Generalized electric terminal"
     annotation (Placement(transformation(extent={{-12,-112},{4,-96}}),
-        iconTransformation(extent={{-8,-116},{8,-100}})));
+        iconTransformation(extent={{-8,100},{8,116}})));
   Modelica.Blocks.Interfaces.RealInput yIn
     "Input control signal"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
@@ -46,11 +46,11 @@ equation
   connect(yIn, con.yEle) annotation (Line(points={{-120,60},{-70,60},{-70,26},{-62,
           26}}, color={0,0,127}));
   connect(senBat.terminal, terminal)
-    annotation (Line(points={{0,40},{0,-104},{-4,-104}}, color={0,120,120}));
+    annotation (Line(points={{0,42},{0,-104},{-4,-104}}, color={0,120,120}));
   connect(bat.terminal, terminal) annotation (Line(points={{10,-10},{0,-10},{0,-104},
           {-4,-104}}, color={0,120,120}));
-  connect(senBat.y, yOut) annotation (Line(points={{11,57},{80,57},{80,60},{110,
-          60}}, color={0,0,127}));
+  connect(senBat.y, yOut) annotation (Line(points={{11,60},{110,60}},
+                color={0,0,127}));
   connect(con.P, bat.P)
     annotation (Line(points={{-39,20},{20,20},{20,0}}, color={0,0,127}));
   connect(bat.SOC, con.soc) annotation (Line(points={{31,-4},{40,-4},{40,-20},{-70,
@@ -90,32 +90,22 @@ equation
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid),
         Rectangle(
-          extent={{24,-2},{36,-40}},
+          extent={{20,-2},{36,-40}},
           lineColor={0,140,72},
           fillColor={0,140,72},
           fillPattern=FillPattern.Solid,
           radius=1),
         Rectangle(
-          extent={{8,-2},{20,-40}},
-          lineColor={0,140,72},
-          fillColor={0,140,72},
-          fillPattern=FillPattern.Solid,
-          radius=1),
-        Rectangle(
-          extent={{-8,-2},{4,-40}},
+          extent={{-26,-2},{-10,-40}},
           lineColor={0,140,72},
           radius=1),
-        Rectangle(
-          extent={{-24,-2},{-12,-40}},
-          lineColor={0,140,72},
-          radius=1),
-        Polygon(
-          points={{-8,-40},{4,-2},{4,-40},{-8,-40}},
-          lineColor={0,140,72},
-          fillColor={0,140,72},
-          fillPattern=FillPattern.Solid),
         Line(points={{100,60},{70,60},{34,30}}, color={0,0,127}),
-        Line(points={{0,-100},{0,-98},{0,-46}}, color={0,0,0}),
-        Line(points={{-100,60},{-84,60},{-70,60},{-32,30}}, color={0,0,127})}),
-                            Diagram(coordinateSystem(preserveAspectRatio=false)));
+        Line(points={{0,4},{0,100}},            color={0,0,0}),
+        Line(points={{-100,60},{-84,60},{-70,60},{-32,30}}, color={0,0,127}),
+        Rectangle(
+          extent={{-4,-2},{12,-40}},
+          lineColor={0,140,72},
+          fillColor={0,140,72},
+          fillPattern=FillPattern.Solid,
+          radius=1)}),      Diagram(coordinateSystem(preserveAspectRatio=false)));
 end StorageBattery;

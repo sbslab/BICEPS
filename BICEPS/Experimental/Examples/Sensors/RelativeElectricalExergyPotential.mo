@@ -19,32 +19,32 @@ model RelativeElectricalExergyPotential
     final perUnit=false)
     annotation (Placement(transformation(extent={{-10,20},{10,40}})));
   Modelica.Blocks.Interfaces.RealOutput y "Control signal"
-    annotation (Placement(transformation(extent={{100,60},{120,80}})));
+    annotation (Placement(transformation(extent={{100,70},{120,90}})));
   Utilities.Math.CubicHermite spl(
     final xMin=vMin,
     final xMax=vMax,
     final x0=v0,
     final k=k,
     final ensureMonotonicity=true)
-    annotation (Placement(transformation(extent={{60,60},{80,80}})));
+    annotation (Placement(transformation(extent={{60,70},{80,90}})));
 equation
   connect(terminal, terminal)
     annotation (Line(points={{0,-100},{0,-100}},
                                                color={0,120,120}));
   connect(terminal, sen.term)
     annotation (Line(points={{0,-100},{0,21}},          color={0,120,120}));
-  connect(sen.V, spl.x) annotation (Line(points={{7,33},{50,33},{50,70},{58,70}},
+  connect(sen.V, spl.x) annotation (Line(points={{7,33},{50,33},{50,80},{58,80}},
         color={0,0,127}));
   connect(spl.y, y)
-    annotation (Line(points={{81,70},{110,70}}, color={0,0,127}));
+    annotation (Line(points={{81,80},{110,80}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Text(
           extent={{60,-16},{-60,-66}},
           lineColor={0,0,0},
           textString="V"),
-        Line(points={{18,58},{22,70}}, color={0,0,0}),
-                           Line(points={{100,70},{22,70}},
-                                                         color={0,0,0})}),
-                                                                 Diagram(
+        Line(points={{18,58},{26,80}}, color={0,0,0}),
+                           Line(points={{100,80},{26,80}},
+                                                         color={0,0,0}),
+        Line(points={{0,-70},{0,-90}}, color={0,0,0})}),         Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end RelativeElectricalExergyPotential;
