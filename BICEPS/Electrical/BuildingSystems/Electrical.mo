@@ -9,12 +9,14 @@ model Electrical "Model of a building's electrical system"
   parameter Real k=100 "Percentage penalty for deviating outside of min/max range. Smaller numbers
     indicate a steeper penalty.";
   parameter Modelica.SIunits.Angle lat "Latitude";
-  parameter Modelica.SIunits.Power PCon_nominal
+  parameter Modelica.SIunits.Power PCon_nominal[nCon]
     "Nominal power for consumer loads";
   parameter Modelica.SIunits.Power PPro_nominal
     "Nominal power for producer loads";
   parameter Modelica.SIunits.Power PSto_nominal
     "Nominal power for storage loads";
+  parameter Modelica.SIunits.Energy EBatMax=180000000
+    "Maximum energy capacity of the battery";
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
   parameter Modelica.SIunits.Length LGri=1500 "Length of the grid line";
@@ -38,7 +40,8 @@ model Electrical "Model of a building's electrical system"
     tol=tol,
     k=k,
     PSun=PPro_nominal,
-    PBat=PSto_nominal)
+    PBat=PSto_nominal,
+    EBatMax=EBatMax)
     annotation (Placement(transformation(extent={{10,-40},{-10,-20}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linGri(
     l=LGri,
@@ -49,7 +52,7 @@ model Electrical "Model of a building's electrical system"
         origin={0,60})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linCon[nCon](
     l=LCon,
-    P_nominal=fill(PCon_nominal, nCon),
+    P_nominal=PCon_nominal,
     each final V_nominal=V_nominal) "Consumer power lines" annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},

@@ -1,5 +1,6 @@
 within BICEPS.Fluid.BuildingSystems;
 model ThermoFluidFourElements "Thermofluid subsystem"
+  extends Buildings.BaseClasses.BaseIconLow;
   replaceable package MediumWat=Buildings.Media.Water
     constrainedby Modelica.Media.Interfaces.PartialMedium
     "Medium in the building distribution system";
@@ -70,12 +71,8 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     final quantity="Power",
     final unit="W",
     min=0,
-    displayUnit="kW")   "Heat pump power"
+    displayUnit="kW") "Heat pump power"
     annotation (Placement(transformation(extent={{100,40},{120,60}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput PPum(final unit="W")
-    "Pump power"
-    annotation (Placement(transformation(extent={{100,70},{120,90}}),
-    iconTransformation(extent={{100,70},{140,110}})));
   Modelica.Fluid.Interfaces.FluidPort_a port_a(
     redeclare final package Medium = MediumWat,
     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0),
@@ -98,6 +95,12 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     annotation (Placement(transformation(extent={{60,-40},{40,-20}})));
   Modelica.Blocks.Logical.Not enaHea "Heating enabled"
     annotation (Placement(transformation(extent={{28,-40},{8,-20}})));
+  Modelica.Blocks.Interfaces.RealOutput PPum(
+    final quantity="Power",
+    final unit="W",
+    min=0,
+    displayUnit="kW") "Pump power"
+    annotation (Placement(transformation(extent={{100,70},{120,90}})));
 equation
   connect(port_a, heaPum.port_a2)
     annotation (Line(points={{-100,-60},{-30,-60}}, color={0,127,255}));
@@ -126,9 +129,6 @@ equation
   connect(heaPum.PHea, PHeaPum) annotation (Line(points={{-32,-42},{-60,-42},{
           -60,50},{110,50}},
                          color={0,0,127}));
-  connect(heaPum.PPum, PPum) annotation (Line(points={{-32,-46},{-64,-46},{-64,
-          80},{110,80}},
-                     color={0,0,127}));
   connect(yEle, conFlu.yIn[1]) annotation (Line(points={{-120,70},{34,70},{34,32},
           {40,32},{40,29}}, color={0,0,127}));
   connect(zon.y, conFlu.yIn[2]) annotation (Line(points={{-9,37},{20,37},{20,30},
@@ -143,6 +143,8 @@ equation
     annotation (Line(points={{39,-30},{30,-30}}, color={255,0,255}));
   connect(enaHea.y, heaPum.u) annotation (Line(points={{7,-30},{4,-30},{4,-42},
           {-9,-42}}, color={255,0,255}));
+  connect(heaPum.PPum, PPum) annotation (Line(points={{-32,-46},{-70,-46},{-70,
+          80},{110,80}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
           extent={{-80,80},{80,-80}},

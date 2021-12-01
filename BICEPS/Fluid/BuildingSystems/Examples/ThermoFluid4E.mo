@@ -45,7 +45,7 @@ equation
           24},{30,10},{42,10}}, color={0,127,255}));
   connect(thermoFluid.PHeaPum, EHeaPum.u) annotation (Line(points={{21,35},{40,
           35},{40,40},{58,40}}, color={0,0,127}));
-  connect(thermoFluid.PPum, EPum.u) annotation (Line(points={{22,39},{30,39},{
+  connect(thermoFluid.PPum, EPum.u) annotation (Line(points={{21,38},{30,38},{
           30,70},{58,70}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)),
     __Dymola_Commands(

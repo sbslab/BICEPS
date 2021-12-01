@@ -4,7 +4,7 @@ model Electrical
   extends Modelica.Icons.Example;
   BICEPS.Electrical.BuildingSystems.Electrical ele(
     lat=weaDat.lat,
-    PCon_nominal=PHeaPum.k,
+    PCon_nominal={PHeaPum.k},
     PPro_nominal=4000,
     PSto_nominal=1000)         "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,0},{0,20}})));

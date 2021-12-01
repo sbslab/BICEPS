@@ -54,9 +54,11 @@ model Panel "Generic model for an electrical panel"
   Modelica.Blocks.Math.Add PNet(k1=+1, k2=-1)
                                 "Net power supply/demand only"
     annotation (Placement(transformation(extent={{40,10},{60,30}})));
-  Modelica.Blocks.Math.Sum PPro "Producer power"
+  Modelica.Blocks.Math.Sum PPro(nin=nPro)
+                                "Producer power"
     annotation (Placement(transformation(extent={{-40,-22},{-20,0}})));
-  Modelica.Blocks.Math.Sum PCon "Consumer power"
+  Modelica.Blocks.Math.Sum PCon(nin=nCon)
+                                "Consumer power"
     annotation (Placement(transformation(extent={{40,-22},{20,0}})));
   Buildings.Controls.OBC.CDL.Continuous.Limiter lim(uMax=1, uMin=-1)
     annotation (Placement(transformation(extent={{70,10},{90,30}})));
