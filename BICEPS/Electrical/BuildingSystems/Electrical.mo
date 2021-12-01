@@ -104,8 +104,6 @@ equation
                                               color={0,120,120}));
   connect(PCon, dev.PCon) annotation (Line(points={{-120,-60},{30,-60},{30,-36},
           {12,-36}}, color={0,0,127}));
-  connect(P1.yOut, dev.yIn) annotation (Line(points={{11,36},{30,36},{30,-24},{12,
-          -24}}, color={0,0,127}));
   connect(dev.yPro, P1.yPro) annotation (Line(points={{-10.8,-22},{-22,-22},{-22,
           30},{-12,30}}, color={0,0,127}));
   connect(dev.ySto, P1.ySto) annotation (Line(points={{-11,-26},{-26,-26},{-26,34},
@@ -113,15 +111,18 @@ equation
   connect(dev.yCon, P1.yCon) annotation (Line(points={{-11,-30},{-30,-30},{-30,38},
           {-12,38}}, color={0,0,127}));
   connect(weaBus, dev.weaBus) annotation (Line(
-      points={{0,102},{0,88},{40,88},{40,-20},{8,-20}},
+      points={{0,102},{0,88},{40,88},{40,-20},{9,-20}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
       index=-1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(P1.yOut, yOut) annotation (Line(points={{11,36},{30,36},{30,80},{104,80}},
+  connect(P1.yOut, yOut) annotation (Line(points={{11,36},{30,36},{30,80},{110,
+          80}},
         color={0,0,127}));
+  connect(P1.yNetPow, dev.yNetPow) annotation (Line(points={{11,32},{30,32},{30,
+          -24},{12,-24}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-80,80},{80,-80}},

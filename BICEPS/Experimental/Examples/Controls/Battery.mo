@@ -8,8 +8,8 @@ model Battery "Control for the battery energy storage system"
   parameter Modelica.SIunits.Time riseTime=1
     "Rise time of the filter (time to reach 99.6 % of the transition speed)"
     annotation(Dialog(tab="Dynamics", group="Filtered transition speed"));
-  Modelica.Blocks.Interfaces.RealInput yEle
-    "Electrical subsystem relative exergy potential"
+  Modelica.Blocks.Interfaces.RealInput yNetPow
+    "Net power signal (supply/demand)"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
   Modelica.Blocks.Interfaces.RealInput soc "State of charge"
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
@@ -24,8 +24,7 @@ model Battery "Control for the battery energy storage system"
   Modelica.Blocks.Sources.Constant off(k=0)
     "Battery state of charge is at its limit and cannot charge/discharge further"
     annotation (Placement(transformation(extent={{30,-60},{50,-40}})));
-  Buildings.Controls.OBC.CDL.Continuous.LessThreshold belCap(t=0.95,
-                                                                  h=0.05)
+  Buildings.Controls.OBC.CDL.Continuous.LessThreshold belCap(t=0.95, h=0.04)
     "Below SOC capacity. Hysteresis set for 10s cycles"
     annotation (Placement(transformation(extent={{-80,-70},{-60,-50}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi
@@ -46,17 +45,12 @@ model Battery "Control for the battery energy storage system"
     init=Modelica.Blocks.Types.Init.InitialOutput)
     "Second order filter to approximate battery transitions between charge/off/discharge/off/charge"
     annotation (Placement(transformation(extent={{70,-10},{90,10}})));
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold notEmp(t=0.05, h=0.025)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold notEmp(t=0.05, h=0.04)
     "Not empty."
     annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis callCha(uLow=-0.5, uHigh=0.5)
-    "Call to charge with switching charge <> discharge controlled with a hysteresis to avoid chattering"
-    annotation (Placement(transformation(extent={{-90,50},{-70,70}})));
-  Modelica.Blocks.Math.BooleanToReal sta(realTrue=1, realFalse=-1) "State"
-    annotation (Placement(transformation(extent={{-30,50},{-10,70}})));
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(trueHoldDuration=
-        10*60) "Hold to avoid short cycling"
-    annotation (Placement(transformation(extent={{-60,50},{-40,70}})));
+  Modelica.Blocks.Math.RealToBoolean netSup(threshold=0)
+    "Net supply state if greater than 0"
+    annotation (Placement(transformation(extent={{-80,20},{-60,40}})));
 equation
   connect(soc, belCap.u)
     annotation (Line(points={{-120,-60},{-82,-60}}, color={0,0,127}));
@@ -81,18 +75,14 @@ equation
           {-82,-30}}, color={0,0,127}));
   connect(notEmp.y, dis.u2) annotation (Line(points={{-58,-30},{24,-30},{24,-18},
           {28,-18}}, color={255,0,255}));
-  connect(yEle, callCha.u)
-    annotation (Line(points={{-120,60},{-92,60}}, color={0,0,127}));
-  connect(sta.y, staPow.u)
-    annotation (Line(points={{-9,60},{-2,60}}, color={0,0,127}));
-  connect(callCha.y, truFalHol.u)
-    annotation (Line(points={{-68,60},{-62,60}}, color={255,0,255}));
-  connect(truFalHol.y, sta.u)
-    annotation (Line(points={{-38,60},{-32,60}}, color={255,0,255}));
-  connect(truFalHol.y, cha.u1) annotation (Line(points={{-38,60},{-36,60},{-36,
-          30},{-2,30}}, color={255,0,255}));
-  connect(callDis.u, truFalHol.y) annotation (Line(points={{-2,-10},{-36,-10},{
-          -36,60},{-38,60}}, color={255,0,255}));
+  connect(yNetPow, netSup.u) annotation (Line(points={{-120,60},{-90,60},{-90,
+          30},{-82,30}}, color={0,0,127}));
+  connect(netSup.y, cha.u1)
+    annotation (Line(points={{-59,30},{-2,30},{-2,30}}, color={255,0,255}));
+  connect(netSup.y, callDis.u) annotation (Line(points={{-59,30},{-20,30},{-20,
+          -10},{-2,-10}}, color={255,0,255}));
+  connect(staPow.u, yNetPow)
+    annotation (Line(points={{-2,60},{-120,60}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end Battery;

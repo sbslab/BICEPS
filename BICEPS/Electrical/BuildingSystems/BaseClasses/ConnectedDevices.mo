@@ -47,7 +47,8 @@ model ConnectedDevices
         origin={-40,110}), iconTransformation(extent={{-50,100},{-30,120}})));
   Modelica.Blocks.Interfaces.RealOutput yCon[nCon] "Consumer control signal(s)"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
-  Modelica.Blocks.Interfaces.RealInput yIn "Input control signal"
+  Modelica.Blocks.Interfaces.RealInput yNetPow
+    "Net power signal (supply/demand)"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
   Modelica.Blocks.Interfaces.RealInput PCon[nCon] "Power of consumers"
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
@@ -91,9 +92,8 @@ equation
   connect(con.y, yCon) annotation (Line(points={{-29,-66},{80,-66},{80,0},{110,0}},
         color={0,0,127}));
   for i in 1:nSto loop
-    connect(yIn, bat[i].yIn) annotation (Line(points={{-120,60},{-80,60},{-80,16},
-            {-12,16}},
-                   color={0,0,127}));
+    connect(yNetPow, bat[i].yNetPow) annotation (Line(points={{-120,60},{-80,60},
+            {-80,16},{-12,16}}, color={0,0,127}));
   end for;
   connect(bat.terminal, terSto)
     annotation (Line(points={{0,20.8},{0,110},{0,110}}, color={0,120,120}));
@@ -109,8 +109,10 @@ equation
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
   connect(terPro, pv.terminal)
-    annotation (Line(points={{60,110},{60,60}}, color={0,120,120}));
-  connect(pv.yOut, yPro) annotation (Line(points={{71,44},{80,44},{80,80},{98,80}},
+    annotation (Line(points={{60,110},{60,86},{60,60.4},{59.6,60.4}},
+                                                color={0,120,120}));
+  connect(pv.yOut, yPro) annotation (Line(points={{71,44},{80,44},{80,80},{108,
+          80}},
         color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(

@@ -74,25 +74,110 @@ equation
           pattern=LinePattern.None),
         Polygon(
           points={{-72,-10},{-12,-10},{8,20},{-52,20},{-72,-10}},
-          lineThickness=0.5,
-          lineColor={0,0,0}),
+          lineColor={0,0,0},
+          fillColor={205,203,203},
+          fillPattern=FillPattern.Solid),
         Polygon(
           points={{-8,-10},{52,-10},{72,20},{12,20},{-8,-10}},
-          lineThickness=0.5,
-          lineColor={0,0,0}),
+          lineColor={0,0,0},
+          fillColor={205,203,203},
+          fillPattern=FillPattern.Solid),
         Polygon(
           points={{-30,-44},{30,-44},{50,-14},{-10,-14},{-30,-44}},
-          lineThickness=0.5,
-          lineColor={0,0,0}),
+          lineColor={0,0,0},
+          fillColor={205,203,203},
+          fillPattern=FillPattern.Solid),
         Polygon(
           points={{-80,-44},{-36,-44},{-16,-14},{-76,-14},{-79.3789,-19.0684},{-79.9957,
               -19.9936},{-80,-44}},
-          lineThickness=0.5,
-          lineColor={0,0,0}),
+          lineColor={0,0,0},
+          fillColor={205,203,203},
+          fillPattern=FillPattern.Solid),
         Line(
           points={{40,40},{8,40},{-80,40},{-80,-60},{40,-60}},
           color={0,140,72},
           thickness=0.5),
-        Line(points={{0,-60},{0,-76},{0,-100}}, color={0,0,0})}),
+        Line(points={{0,-60},{0,-76},{0,-100}}, color={0,0,0}),
+        Polygon(
+          points={{34,6},{58,6},{66,18},{42,18},{34,6}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{6,6},{30,6},{38,18},{14,18},{6,6}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{24,-8},{48,-8},{56,4},{32,4},{24,-8}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-4,-8},{20,-8},{28,4},{4,4},{-4,-8}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-26,-42},{-2,-42},{6,-30},{-18,-30},{-26,-42}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-16,-28},{8,-28},{16,-16},{-8,-16},{-16,-28}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{12,-28},{36,-28},{44,-16},{20,-16},{12,-28}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{2,-42},{26,-42},{34,-30},{10,-30},{2,-42}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-66,-8},{-42,-8},{-34,4},{-58,4},{-66,-8}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-56,6},{-32,6},{-24,18},{-48,18},{-56,6}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-30,6},{-6,6},{2,18},{-22,18},{-30,6}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-40,-8},{-16,-8},{-8,4},{-32,4},{-40,-8}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-80,-42},{-68,-42},{-60,-30},{-80,-30},{-80,-42}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-80,-28},{-58,-28},{-50,-16},{-74,-16},{-79.9844,-24.9766},{
+              -80,-28}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-54,-28},{-30,-28},{-22,-16},{-46,-16},{-54,-28}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-64,-42},{-40,-42},{-32,-30},{-56,-30},{-64,-42}},
+          lineColor={0,0,0},
+          fillColor={6,13,150},
+          fillPattern=FillPattern.Solid)}),
                             Diagram(coordinateSystem(preserveAspectRatio=false)));
 end ProducerPV;

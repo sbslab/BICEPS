@@ -456,9 +456,9 @@ equation
           fillColor={95,95,95}),
         Rectangle(
           extent={{-100,-84},{-60,-74}},
-          lineColor={0,0,255},
+          lineColor={0,0,0},
           pattern=LinePattern.None,
-          fillColor={255,0,0},
+          fillColor={0,0,0},
           fillPattern=FillPattern.Solid),
         Rectangle(
           extent={{20,-16},{40,4}},
@@ -477,8 +477,8 @@ equation
           fillPattern=FillPattern.Solid),
         Rectangle(
           extent={{60,-84},{100,-74}},
-          lineColor={0,0,255},
+          lineColor={0,0,0},
           pattern=LinePattern.None,
-          fillColor={0,0,255},
+          fillColor={0,0,0},
           fillPattern=FillPattern.Solid)}));
 end SimpleRoomFourElements;

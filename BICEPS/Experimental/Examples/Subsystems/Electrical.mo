@@ -168,8 +168,8 @@ equation
     annotation (Line(points={{40,60},{40,70},{60,70}}, color={0,120,120}));
   connect(conSubEle.yOut, yEle) annotation (Line(points={{41,-30},{90,-30},{90,0},
           {110,0}}, color={0,0,127}));
-  connect(conSubEle.yOut, conBat.yEle) annotation (Line(points={{41,-30},{50,-30},
-          {50,-74},{-38,-74}}, color={0,0,127}));
+  connect(conSubEle.yOut, conBat.yNetPow) annotation (Line(points={{41,-30},{50,
+          -30},{50,-74},{-38,-74}}, color={0,0,127}));
   connect(bat.SOC, conBat.soc) annotation (Line(points={{-81,-56},{-90,-56},{-90,
           -96},{-30,-96},{-30,-86},{-38,-86}}, color={0,0,127}));
   connect(conBat.P, bat.P)

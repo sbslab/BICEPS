@@ -38,13 +38,13 @@ model StorageBattery
     "Generalized electric terminal"
     annotation (Placement(transformation(extent={{-12,-112},{4,-96}}),
         iconTransformation(extent={{-8,100},{8,116}})));
-  Modelica.Blocks.Interfaces.RealInput yIn
-    "Input control signal"
+  Modelica.Blocks.Interfaces.RealInput yNetPow
+    "Net power signal (supply/demand)"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
 
 equation
-  connect(yIn, con.yEle) annotation (Line(points={{-120,60},{-70,60},{-70,26},{-62,
-          26}}, color={0,0,127}));
+  connect(yNetPow, con.yNetPow) annotation (Line(points={{-120,60},{-70,60},{-70,
+          26},{-62,26}}, color={0,0,127}));
   connect(senBat.terminal, terminal)
     annotation (Line(points={{0,42},{0,-104},{-4,-104}}, color={0,120,120}));
   connect(bat.terminal, terminal) annotation (Line(points={{10,-10},{0,-10},{0,-104},
@@ -54,7 +54,7 @@ equation
   connect(bat.SOC, con.soc) annotation (Line(points={{31,-4},{40,-4},{40,-20},{-70,
           -20},{-70,14},{-62,14}}, color={0,0,127}));
   connect(senBat.y, yOut)
-    annotation (Line(points={{11,60},{102,60}}, color={0,0,127}));
+    annotation (Line(points={{11,60},{110,60}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(
           extent={{-54,-74},{56,38}},
@@ -91,21 +91,21 @@ equation
           fillPattern=FillPattern.Solid),
         Rectangle(
           extent={{20,-2},{36,-40}},
-          lineColor={0,140,72},
-          fillColor={0,140,72},
+          lineColor={6,13,150},
+          fillColor={6,13,150},
           fillPattern=FillPattern.Solid,
           radius=1),
         Rectangle(
           extent={{-26,-2},{-10,-40}},
-          lineColor={0,140,72},
+          lineColor={6,13,150},
           radius=1),
         Line(points={{100,60},{70,60},{34,30}}, color={0,0,127}),
         Line(points={{0,4},{0,100}},            color={0,0,0}),
         Line(points={{-100,60},{-84,60},{-70,60},{-32,30}}, color={0,0,127}),
         Rectangle(
           extent={{-4,-2},{12,-40}},
-          lineColor={0,140,72},
-          fillColor={0,140,72},
+          lineColor={6,13,150},
+          fillColor={6,13,150},
           fillPattern=FillPattern.Solid,
           radius=1)}),      Diagram(coordinateSystem(preserveAspectRatio=false)));
 end StorageBattery;
