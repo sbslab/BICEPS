@@ -153,5 +153,6 @@ equation
           fillPattern=FillPattern.Solid),
         Rectangle(extent={{-40,22},{40,-58}}, lineColor={0,0,0}),
         Line(points={{-40,22},{0,62},{40,22}}, color={0,0,0})}),
-      Diagram(coordinateSystem(preserveAspectRatio=false)));
+      Diagram(coordinateSystem(preserveAspectRatio=false)),
+    experiment(StopTime=604800, __Dymola_Algorithm="Dassl"));
 end ThermoFluidFourElements;

@@ -5,7 +5,8 @@ model SingleFamilyResidentialBuilding
   package Medium=Buildings.Media.Water
     "Medium in the building distribution system";
   BICEPS.Combined.ElectricalAndFluid.SingleFamilyResidentialBuilding bld(
-      redeclare package MediumWat = Medium, lat=weaDat.lat) "Building"
+      redeclare package MediumWat = Medium, lat=weaDat.lat,
+    POth_nominal=1000)                                      "Building"
     annotation (Placement(transformation(extent={{-20,-60},{0,-40}})));
   Buildings.Fluid.Sources.Boundary_pT sin(
     redeclare package Medium = Medium,
@@ -58,12 +59,12 @@ model SingleFamilyResidentialBuilding
     "Other loads power"
     annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
 equation
-  connect(gri.terminal, bld.terminal) annotation (Line(points={{-70,-20},{-70,
-          -43},{-21,-43}}, color={0,120,120}));
+  connect(gri.terminal, bld.terminal) annotation (Line(points={{-70,-20},{-70,-43},
+          {-21,-43}}, color={0,120,120}));
   connect(sin.ports[1], bld.port_b) annotation (Line(points={{-60,-70},{-40,-70},
           {-40,-56},{-20,-56}}, color={0,127,255}));
-  connect(bld.port_a, sou.ports[1]) annotation (Line(points={{0,-56},{20,-56},{
-          20,-70},{40,-70}}, color={0,127,255}));
+  connect(bld.port_a, sou.ports[1]) annotation (Line(points={{0,-56},{20,-56},{20,
+          -70},{40,-70}}, color={0,127,255}));
   connect(weaDat.weaBus, bld.weaBus) annotation (Line(
       points={{-20,10},{-10,10},{-10,-40}},
       color={255,204,51},
@@ -82,5 +83,8 @@ equation
     annotation (Line(points={{-39,50},{-22,50}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
+    __Dymola_Commands(
+      file="modelica://BICEPS/Resources/Scripts/Dymola/Combined/ElectricalAndFluid/Examples/SingleFamilyResidentialBuilding.mos"
+      "Simulate and plot"),
     experiment(StopTime=86400, __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;

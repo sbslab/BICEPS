@@ -1,0 +1,47 @@
+﻿// Simulate
+simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.SingleFamilyResidentialBuilding", stopTime=86400, resultFile="SingleFamilyResidentialBuilding");
+// Plot commands
+createPlot(id=1, position={35, 35, 1349, 632}, 
+  y={"bld.mec.zon.thermalZoneFourElements.TAir", "weaDat.weaBus.TDryBul", "bld.mec.zon.TMin", "bld.mec.zon.TMax", "bld.mec.zon.T0"}, 
+  range={0.0, 1.0, 0.0, 30.0}, 
+  erase=false, 
+  grid=true, 
+  filename="SingleFamilyResidentialBuilding.mat", 
+  colors={{28,108,200}, {238,46,47}, {0,0,0}, {0,0,0}, {0,0,0}}, 
+  patterns={LinePattern.Solid, LinePattern.Solid, LinePattern.Dash, LinePattern.Dash, LinePattern.Dash}, 
+  timeUnit="d", 
+  displayUnits={"degC", "degC", "degC", "degC", "degC"});
+createPlot(id=1, position={35, 35, 1349, 632}, 
+  y={"PGriRea.y", "Ppv.y", "PBat.y", "PHeaPum.y", "PPum.y", "POth.y"}, 
+  range={0.0, 1.0, -15000.0, 20000.0}, 
+  erase=false, 
+  grid=true, 
+  subPlot=201, 
+  colors={{28,108,200}, {238,46,47}, {0,140,72}, {217,67,180}, {0,0,0}, {162,29,33}}, 
+  timeUnit="d");
+createPlot(id=1, position={35, 35, 1349, 632}, 
+  y={"bld.mec.heaPum.heaPum.TSet", "bld.mec.heaPum.conHeaPum.TMin", "bld.mec.heaPum.conHeaPum.TMax", "bld.mec.heaPum.conHeaPum.T0"}, 
+  range={0.0, 1.0, 290.0, 325.0}, 
+  erase=false, 
+  grid=true, 
+  subPlot=102, 
+  colors={{28,108,200}, {0,0,0}, {0,0,0}, {0,0,0}}, 
+  patterns={LinePattern.Solid, LinePattern.Dash, LinePattern.Dash, LinePattern.Dash}, 
+  timeUnit="d", 
+  displayUnits={"K", "", "", ""});
+createPlot(id=1, position={35, 35, 1349, 632}, 
+  y={"EGri.y", "Epv.y", "EBat.y", "EHeaPum.y", "EPum.y", "EOth.y"}, 
+  range={0.0, 1.0, -1000000000.0, 1500000000.0}, 
+  erase=false, 
+  grid=true, 
+  subPlot=202, 
+  colors={{28,108,200}, {238,46,47}, {0,140,72}, {217,67,180}, {0,0,0}, {162,29,33}}, 
+  timeUnit="d");
+createPlot(id=2, position={908, 418, 474, 293}, 
+  y={"bld.mec.yEle", "bld.mec.conFlu.yOut"}, 
+  range={0.0, 1.0, -18.0, -2.0}, 
+  erase=false, 
+  grid=true, 
+  colors={{0,140,72}, {28,108,200}}, 
+  timeUnit="d");
+

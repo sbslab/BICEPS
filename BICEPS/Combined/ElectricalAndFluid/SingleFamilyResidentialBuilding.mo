@@ -62,7 +62,8 @@ model SingleFamilyResidentialBuilding
     "Fluid port outlet" annotation (Placement(transformation(extent={{-110,-70},
             {-90,-50}}),
                     iconTransformation(extent={{-110,-70},{-90,-50}})));
-  Modelica.Blocks.Sources.Constant loaOth(k=10000) "Other loads"
+  Modelica.Blocks.Sources.Constant loaOth(k=POth_nominal)
+                                                   "Other loads"
     annotation (Placement(transformation(extent={{-80,16},{-60,36}})));
 equation
   connect(terminal, ele.terminal) annotation (Line(points={{-110,80},{-40,80},{-40,
