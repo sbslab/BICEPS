@@ -1,6 +1,7 @@
 within BICEPS.Combined.ElectricalAndFluid;
 model SingleFamilyResidentialBuilding
   "Combined thermofluid and electrical models for a single family residential building"
+  extends Buildings.BaseClasses.BaseIconLow;
   replaceable package MediumWat=Buildings.Media.Water
     constrainedby Modelica.Media.Interfaces.PartialMedium
     "Medium in the building distribution system";
@@ -97,6 +98,92 @@ equation
   connect(loaOth.y, ele.PCon[3]) annotation (Line(points={{-59,26},{-24,26},{
           -24,24},{-22,24},{-22,25.3333}},
                                        color={0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+        Polygon(
+          points={{0,70},{-60,40},{60,40},{0,70}},
+          lineColor={95,95,95},
+          smooth=Smooth.None,
+          fillPattern=FillPattern.Solid,
+          fillColor={95,95,95}),
+        Rectangle(
+          extent={{-60,40},{60,-80}},
+          lineColor={150,150,150},
+          fillPattern=FillPattern.Sphere,
+          fillColor={255,255,255}),
+        Rectangle(
+          extent={{20,2},{40,22}},
+          lineColor={255,255,255},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-38,0},{-18,20}},
+          lineColor={255,255,255},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-38,-60},{-18,-40}},
+          lineColor={255,255,255},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{20,-60},{40,-40}},
+          lineColor={255,255,255},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{60,-66},{100,-56}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-100,-66},{-60,-56}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-60,-40},{-68,-12}},
+          lineColor={0,0,0},
+          fillColor={0,140,72},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-60,-12},{-62,16}},
+          lineColor={0,0,0},
+          fillColor={0,140,72},
+          fillPattern=FillPattern.Solid),
+        Ellipse(
+          extent={{-62,12},{-68,16}},
+          lineColor={0,0,0},
+          fillColor={0,140,72},
+          fillPattern=FillPattern.Solid),
+        Line(points={{-66,16}}, color={0,0,0}),
+        Polygon(
+          points={{-66,16},{-64,12},{-70,10},{-70,18},{-66,16}},
+          lineColor={0,0,0},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Line(points={{-66,16},{-64,12}}, color={0,0,0}),
+        Line(
+          points={{-100,70},{-80,70},{-80,14},{-78,14},{-62,14}},
+          color={0,140,72},
+          thickness=0.5),
+        Text(
+          extent={{-94,64},{-46,40}},
+          lineColor={0,140,72},
+          pattern=LinePattern.None,
+          lineThickness=0.5,
+          fillPattern=FillPattern.Sphere,
+          fillColor={0,140,72},
+          textString="E"),
+        Text(
+          extent={{-98,-68},{-50,-92}},
+          lineColor={28,108,200},
+          pattern=LinePattern.None,
+          lineThickness=0.5,
+          fillPattern=FillPattern.Sphere,
+          fillColor={0,140,72},
+          textString="M")}),                                     Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end SingleFamilyResidentialBuilding;
