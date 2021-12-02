@@ -22,6 +22,8 @@ model SingleFamilyResidentialBuilding
     "Nominal power for PV";
   parameter Modelica.SIunits.Power PBat_nominal=5800
     "Nominal power for battery";
+  parameter Modelica.SIunits.Energy EBatMax(displayUnit="kWh")
+    "Maximum energy capacity of the battery";
   parameter String filNam
     "File name with thermal loads as time series";
   parameter Boolean allowFlowReversal=false
@@ -33,7 +35,7 @@ model SingleFamilyResidentialBuilding
     PCon_nominal=PCon_nominal,
     PPro_nominal=PPV_nominal,
     PSto_nominal=PBat_nominal,
-    EBatMax(displayUnit="kWh") = 48600000)          "Electrical subsystem"
+    EBatMax(displayUnit="kWh") = EBatMax)           "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,20},{0,40}})));
   Fluid.BuildingSystems.ThermoFluidFourElements mec(
     redeclare package MediumWat = MediumWat,
@@ -74,6 +76,7 @@ model SingleFamilyResidentialBuilding
     smoothness=Modelica.Blocks.Types.Smoothness.MonotoneContinuousDerivative1)
     "Reader for other electrical loads (combined lighting, devices, refrigerator, etc.)"
     annotation (Placement(transformation(extent={{-80,20},{-60,40}})));
+
 equation
   connect(terminal, ele.terminal) annotation (Line(points={{-110,80},{-40,80},{-40,
           37},{-21,37}}, color={0,120,120}));
@@ -106,7 +109,7 @@ equation
   connect(mec.PPum, ele.PCon[2]) annotation (Line(points={{-1,-22},{-38,-22},{-38,
           22},{-24,22},{-24,24},{-22,24}}, color={0,0,127}));
   connect(loaOth.y[1], ele.PCon[3]) annotation (Line(points={{-59,30},{-40,30},
-          {-40,25.3333},{-22,25.3333}}, color={0,0,127}));
+          {-40,25.3333},{-22,25.3333}},color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Polygon(
           points={{0,70},{-60,40},{60,40},{0,70}},

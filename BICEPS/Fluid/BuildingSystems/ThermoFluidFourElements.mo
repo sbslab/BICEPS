@@ -101,6 +101,9 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     min=0,
     displayUnit="kW") "Pump power"
     annotation (Placement(transformation(extent={{100,70},{120,90}})));
+  Modelica.Blocks.Sources.BooleanConstant heaPumOn(k=true)
+    "Set heat pump to always on (for heating-season only simulation)"
+    annotation (Placement(transformation(extent={{40,-90},{20,-70}})));
 equation
   connect(port_a, heaPum.port_a2)
     annotation (Line(points={{-100,-60},{-30,-60}}, color={0,127,255}));
@@ -141,10 +144,10 @@ equation
           28},{38,28},{38,18},{78,18},{78,-30},{62,-30}}, color={0,0,127}));
   connect(noHea.y, enaHea.u)
     annotation (Line(points={{39,-30},{30,-30}}, color={255,0,255}));
-  connect(enaHea.y, heaPum.u) annotation (Line(points={{7,-30},{4,-30},{4,-42},
-          {-9,-42}}, color={255,0,255}));
   connect(heaPum.PPum, PPum) annotation (Line(points={{-32,-46},{-70,-46},{-70,
           80},{110,80}}, color={0,0,127}));
+  connect(heaPumOn.y, heaPum.u) annotation (Line(points={{19,-80},{2,-80},{2,
+          -42},{-9,-42}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
           extent={{-80,80},{80,-80}},

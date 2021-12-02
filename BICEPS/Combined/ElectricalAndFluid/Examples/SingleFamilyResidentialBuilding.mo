@@ -9,7 +9,9 @@ model SingleFamilyResidentialBuilding
     "Library path of the files with other electrical loads as time series";
   BICEPS.Combined.ElectricalAndFluid.SingleFamilyResidentialBuilding bld(
       redeclare package MediumWat = Medium, lat=weaDat.lat,
-    POth_nominal=13907,
+    POth_nominal=9653,
+    PPV_nominal=25000,
+    EBatMax=144000000,
     filNam=filNam)                                          "Building"
     annotation (Placement(transformation(extent={{-20,-60},{0,-40}})));
   Buildings.Fluid.Sources.Boundary_pT sin(
@@ -90,5 +92,8 @@ equation
     __Dymola_Commands(
       file="modelica://BICEPS/Resources/Scripts/Dymola/Combined/ElectricalAndFluid/Examples/SingleFamilyResidentialBuilding.mos"
       "Simulate and plot"),
-    experiment(StopTime=259200, __Dymola_Algorithm="Dassl"));
+    experiment(
+      StartTime=86400,
+      StopTime=172800,
+      __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;
