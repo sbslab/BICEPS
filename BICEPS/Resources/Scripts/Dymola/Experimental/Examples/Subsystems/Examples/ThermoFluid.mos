@@ -1,5 +1,5 @@
 ﻿// Simulate
-simulateModel("BICEPS.Experimental.Examples.Subsystems.Examples.ThermoFluid", resultFile="ThermoFluid");
+simulateModel("BICEPS.Experimental.Examples.Subsystems.Examples.ThermoFluid", tolerance=1e-06, stopTime=1, resultFile="ThermoFluid");
 // Plot 
 createPlot(id=1, position={20, 15, 1029, 658}, 
   filename="ThermoFluid.mat", 
