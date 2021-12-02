@@ -67,5 +67,6 @@ equation
     experiment(
       StartTime=8640000,
       StopTime=8726400,
+      Tolerance=1e-6,
       __Dymola_Algorithm="Dassl"));
 end Electrical;

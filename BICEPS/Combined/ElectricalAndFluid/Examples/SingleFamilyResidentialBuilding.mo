@@ -95,5 +95,6 @@ equation
     experiment(
       StartTime=86400,
       StopTime=172800,
+      Tolerance=1e-6,
       __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;

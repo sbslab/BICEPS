@@ -62,7 +62,7 @@ equation
         __Dymola_Commands(
       file="modelica://BICEPS/Resources/Scripts/Dymola/Experimental/Examples/Subsystems/Examples/Electrical.mos"
       "Simulate and plot"),
-    experiment(StopTime=86400, __Dymola_Algorithm="Radau"),
+    experiment(StopTime=86400, Tolerance=1e-6, __Dymola_Algorithm="Radau"),
     Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end Electrical;

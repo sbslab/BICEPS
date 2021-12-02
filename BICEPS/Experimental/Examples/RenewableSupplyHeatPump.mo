@@ -65,5 +65,5 @@ equation
     annotation (Line(points={{51,-50},{68,-50}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=345600, __Dymola_Algorithm="Dassl"));
+    experiment(StopTime=345600, Tolerance=1e-6, __Dymola_Algorithm="Dassl"));
 end RenewableSupplyHeatPump;

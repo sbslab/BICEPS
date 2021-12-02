@@ -96,5 +96,5 @@ equation
           -62},{22,-62}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=86400, __Dymola_Algorithm="Dassl"));
+    experiment(StopTime=86400, Tolerance=1e-6, __Dymola_Algorithm="Dassl"));
 end ThermoFluid1ESimpleDistrictLoop;
