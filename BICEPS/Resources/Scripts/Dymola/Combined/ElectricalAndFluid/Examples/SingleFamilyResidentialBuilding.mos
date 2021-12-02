@@ -1,5 +1,5 @@
 ﻿// Simulate
-simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.SingleFamilyResidentialBuilding", startTime=86400, stopTime=172800, resultFile="SingleFamilyResidentialBuilding");
+simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.SingleFamilyResidentialBuilding", startTime=86400, stopTime=172800, tolerance=1e-6, resultFile="SingleFamilyResidentialBuilding");
 // Plot commands
 createPlot(id=1, position={35, 35, 1349, 632}, 
   y={"bld.mec.zon.thermalZoneFourElements.TAir", "weaDat.weaBus.TDryBul", "bld.mec.zon.TMin", "bld.mec.zon.TMax", "bld.mec.zon.T0"}, 
