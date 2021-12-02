@@ -52,7 +52,7 @@ equation
       file="modelica://BICEPS/Resources/Scripts/Dymola/Fluid/BuildingSystems/Examples/ThermoFluid4E.mos"
       "Simulate and plot"),
     experiment(
-      StopTime=31536000,
+      StopTime=86400,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"),
     Diagram(
