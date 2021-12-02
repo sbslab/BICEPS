@@ -22,6 +22,8 @@ model SingleFamilyResidentialBuilding
     "Nominal power for PV";
   parameter Modelica.SIunits.Power PBat_nominal=5800
     "Nominal power for battery";
+  parameter String filNam
+    "File name with thermal loads as time series";
   parameter Boolean allowFlowReversal=false
     "Set to true to allow flow reversal on condenser side"
     annotation (Dialog(tab="Assumptions"), Evaluate=true);
@@ -62,9 +64,16 @@ model SingleFamilyResidentialBuilding
     "Fluid port outlet" annotation (Placement(transformation(extent={{-110,-70},
             {-90,-50}}),
                     iconTransformation(extent={{-110,-70},{-90,-50}})));
-  Modelica.Blocks.Sources.Constant loaOth(k=POth_nominal)
-                                                   "Other loads"
-    annotation (Placement(transformation(extent={{-80,16},{-60,36}})));
+  Modelica.Blocks.Sources.CombiTimeTable loaOth(
+    tableOnFile=true,
+    tableName="tab",
+    fileName=Modelica.Utilities.Files.loadResource(filNam),
+    extrapolation=Modelica.Blocks.Types.Extrapolation.Periodic,
+    y(each unit="W"),
+    columns={2},
+    smoothness=Modelica.Blocks.Types.Smoothness.MonotoneContinuousDerivative1)
+    "Reader for other electrical loads (combined lighting, devices, refrigerator, etc.)"
+    annotation (Placement(transformation(extent={{-80,20},{-60,40}})));
 equation
   connect(terminal, ele.terminal) annotation (Line(points={{-110,80},{-40,80},{-40,
           37},{-21,37}}, color={0,120,120}));
@@ -96,9 +105,8 @@ equation
           {-40,24},{-22,24},{-22,22.6667}}, color={0,0,127}));
   connect(mec.PPum, ele.PCon[2]) annotation (Line(points={{-1,-22},{-38,-22},{-38,
           22},{-24,22},{-24,24},{-22,24}}, color={0,0,127}));
-  connect(loaOth.y, ele.PCon[3]) annotation (Line(points={{-59,26},{-24,26},{
-          -24,24},{-22,24},{-22,25.3333}},
-                                       color={0,0,127}));
+  connect(loaOth.y[1], ele.PCon[3]) annotation (Line(points={{-59,30},{-40,30},
+          {-40,25.3333},{-22,25.3333}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Polygon(
           points={{0,70},{-60,40},{60,40},{0,70}},

@@ -4,9 +4,13 @@ model SingleFamilyResidentialBuilding
   extends Modelica.Icons.Example;
   package Medium=Buildings.Media.Water
     "Medium in the building distribution system";
+  parameter String filNam=
+    "modelica://BICEPS/Resources/Data/Combined/ElectricalAndFluid/SingleFamilyBuildingElectricity.mos"
+    "Library path of the files with other electrical loads as time series";
   BICEPS.Combined.ElectricalAndFluid.SingleFamilyResidentialBuilding bld(
       redeclare package MediumWat = Medium, lat=weaDat.lat,
-    POth_nominal=1000)                                      "Building"
+    POth_nominal=13907,
+    filNam=filNam)                                          "Building"
     annotation (Placement(transformation(extent={{-20,-60},{0,-40}})));
   Buildings.Fluid.Sources.Boundary_pT sin(
     redeclare package Medium = Medium,
@@ -29,19 +33,19 @@ model SingleFamilyResidentialBuilding
     phiSou=0) "Grid model that provides power to the system"
     annotation (Placement(transformation(extent={{-80,-20},{-60,0}})));
   Modelica.Blocks.Continuous.Integrator EGri "Grid energy"
-    annotation (Placement(transformation(extent={{62,70},{82,90}})));
+    annotation (Placement(transformation(extent={{60,70},{80,90}})));
   Modelica.Blocks.Sources.RealExpression PGriRea(y=gri.P.real)
     "Real grid power"
-    annotation (Placement(transformation(extent={{22,70},{42,90}})));
+    annotation (Placement(transformation(extent={{20,70},{40,90}})));
   Modelica.Blocks.Continuous.Integrator Epv "PV energy"
-    annotation (Placement(transformation(extent={{62,40},{82,60}})));
+    annotation (Placement(transformation(extent={{60,40},{80,60}})));
   Modelica.Blocks.Continuous.Integrator EHeaPum "Heat pump energy"
     annotation (Placement(transformation(extent={{60,-20},{80,0}})));
   Modelica.Blocks.Continuous.Integrator EBat "Battery energy"
     annotation (Placement(transformation(extent={{60,10},{80,30}})));
   Modelica.Blocks.Sources.RealExpression Ppv(y=bld.ele.dev.pv[1].pv.P)
                                                          "PV power"
-    annotation (Placement(transformation(extent={{22,40},{42,60}})));
+    annotation (Placement(transformation(extent={{20,40},{40,60}})));
   Modelica.Blocks.Sources.RealExpression PHeaPum(y=bld.ele.dev.con[1].loa.P)
     "Heat pump power"
     annotation (Placement(transformation(extent={{20,-20},{40,0}})));
@@ -70,9 +74,9 @@ equation
       color={255,204,51},
       thickness=0.5));
   connect(PGriRea.y,EGri. u)
-    annotation (Line(points={{43,80},{60,80}}, color={0,0,127}));
+    annotation (Line(points={{41,80},{58,80}}, color={0,0,127}));
   connect(Ppv.y,Epv. u)
-    annotation (Line(points={{43,50},{60,50}}, color={0,0,127}));
+    annotation (Line(points={{41,50},{58,50}}, color={0,0,127}));
   connect(PHeaPum.y, EHeaPum.u)
     annotation (Line(points={{41,-10},{58,-10}}, color={0,0,127}));
   connect(PBat.y,EBat. u)
@@ -86,5 +90,5 @@ equation
     __Dymola_Commands(
       file="modelica://BICEPS/Resources/Scripts/Dymola/Combined/ElectricalAndFluid/Examples/SingleFamilyResidentialBuilding.mos"
       "Simulate and plot"),
-    experiment(StopTime=86400, __Dymola_Algorithm="Dassl"));
+    experiment(StopTime=259200, __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;
