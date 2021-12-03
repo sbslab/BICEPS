@@ -11,7 +11,7 @@ model SingleFamilyResidentialBuilding
     redeclare package MediumWat = Medium,
     lat=weaDat.lat,
     POth_nominal=9653,
-    PPV_nominal=25000,
+    PPV_nominal=50000,
     PWin_nominal=25000,
     EBatMax=144000000,
     filNam=filNam)
@@ -107,7 +107,7 @@ equation
       "Simulate and plot"),
     experiment(
       StartTime=86400,
-      StopTime=172800,
+      StopTime=120000,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;

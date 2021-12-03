@@ -6,6 +6,8 @@ model HeatPump "Heat pump control"
   parameter Real T0=273.15+20 "Nominal value for independent variable";
   parameter Real a(min=0,max=1) = 0.5 "First weighting factor";
   parameter Real b(min=0,max=1) = 1 - a "First weighting factor";
+  parameter Modelica.SIunits.Time riseTime=1
+    "Rise time of the filter (time to reach 99.6 % of the transition speed)";
   Modelica.Blocks.Interfaces.RealOutput TSet "Setpoint temperature"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
   Modelica.Blocks.Interfaces.RealInput TConEnt
@@ -27,6 +29,14 @@ model HeatPump "Heat pump control"
     annotation (Placement(transformation(extent={{-40,50},{-20,70}})));
   Modelica.Blocks.Interfaces.RealInput y "Control signal"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
+  Modelica.Blocks.Continuous.Filter fil(
+    analogFilter=Modelica.Blocks.Types.AnalogFilter.CriticalDamping,
+    filterType=Modelica.Blocks.Types.FilterType.LowPass,
+    order=2,
+    f_cut=5/(2*Modelica.Constants.pi*riseTime),
+    init=Modelica.Blocks.Types.Init.InitialOutput)
+    "Second order filter to approximate battery transitions between charge/off/discharge/off/charge"
+    annotation (Placement(transformation(extent={{72,-10},{92,10}})));
 equation
   connect(spl.x,lim. u)
     annotation (Line(points={{-59,60},{-42,60}},
@@ -37,10 +47,12 @@ equation
           -8},{38,-8}}, color={0,0,127}));
   connect(lim.y, enaHeaPum.u1) annotation (Line(points={{-18,60},{0,60},{0,8},{
           38,8}},                 color={0,0,127}));
-  connect(enaHeaPum.y, TSet)
-    annotation (Line(points={{62,0},{110,0}}, color={0,0,127}));
   connect(y, spl.y)
     annotation (Line(points={{-120,60},{-82,60}}, color={0,0,127}));
+  connect(enaHeaPum.y, fil.u)
+    annotation (Line(points={{62,0},{70,0}}, color={0,0,127}));
+  connect(fil.y, TSet)
+    annotation (Line(points={{93,0},{98,0},{98,0},{110,0}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end HeatPump;
