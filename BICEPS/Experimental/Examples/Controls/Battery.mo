@@ -5,7 +5,7 @@ model Battery "Control for the battery energy storage system"
     "Maximum available charge";
   parameter Modelica.SIunits.Power P_nominal(min=0)
     "Nominal power charge/discharge rate";
-  parameter Modelica.SIunits.Time riseTime=1
+  parameter Modelica.SIunits.Time riseTime=60
     "Rise time of the filter (time to reach 99.6 % of the transition speed)"
     annotation(Dialog(tab="Dynamics", group="Filtered transition speed"));
   Modelica.Blocks.Interfaces.RealInput yNetPow

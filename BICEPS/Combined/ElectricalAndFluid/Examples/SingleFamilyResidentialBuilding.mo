@@ -11,7 +11,7 @@ model SingleFamilyResidentialBuilding
     redeclare package MediumWat = Medium,
     lat=weaDat.lat,
     POth_nominal=9653,
-    PPV_nominal=25000,
+    PPV_nominal=50000,
     PWin_nominal=25000,
     EBatMax=144000000,
     filNam=filNam)

@@ -137,7 +137,9 @@ model HeatPump "Heat pump model"
   Controls.HeatPump conHeaPum(
     TMin=273.15 + 28,
     TMax=273.15 + 48,
-    T0=273.15 + 38)
+    T0=273.15 + 38,
+    riseTime=60,
+    THeaWatSup_nominal=THeaWatSup_nominal)
     annotation (Placement(transformation(extent={{-80,-30},{-60,-50}})));
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold staPum[2](
     y(each start=false),

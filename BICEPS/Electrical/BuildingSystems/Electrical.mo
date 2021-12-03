@@ -29,11 +29,11 @@ model Electrical "Model of a building's electrical system"
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
   parameter Modelica.SIunits.Length LGri=1500 "Length of the grid line";
-  parameter Modelica.SIunits.Length LCon[nCon]=fill(50,nCon)
+  parameter Modelica.SIunits.Length LCon[nCon]=fill(10,nCon)
     "Length of the consumer lines";
-  parameter Modelica.SIunits.Length LPro[nPro]=fill(100,nPro)
+  parameter Modelica.SIunits.Length LPro[nPro]=fill(25,nPro)
     "Length of the producer lines";
-  parameter Modelica.SIunits.Length LSto[nSto]=fill(20,nSto)
+  parameter Modelica.SIunits.Length LSto[nSto]=fill(5,nSto)
     "Length of the storage lines";
   Equipment.Panel P1(
     nPro=nPro,
@@ -54,14 +54,14 @@ model Electrical "Model of a building's electrical system"
     PBat=PSto_nominal,
     EBatMax=EBatMax)
     annotation (Placement(transformation(extent={{10,-40},{-10,-20}})));
-  Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linGri(
+  Buildings.Electrical.AC.OnePhase.Lines.Line linGri(
     l=LGri,
     P_nominal=sum(PCon_nominal)+sum(PPro_nominal)+sum(PSto_nominal),
     each final V_nominal=V_nominal) "Grid power line"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={0,60})));
-  Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linCon[nCon](
+  Buildings.Electrical.AC.OnePhase.Lines.Line linCon[nCon](
     l=LCon,
     P_nominal=PCon_nominal,
     each final V_nominal=V_nominal) "Consumer power lines" annotation (Placement(
@@ -69,7 +69,7 @@ model Electrical "Model of a building's electrical system"
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={10,0})));
-  Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linSto[nSto](
+  Buildings.Electrical.AC.OnePhase.Lines.Line linSto[nSto](
     l=LSto,
     final P_nominal=fill(PSto_nominal, nSto),
     each final V_nominal=V_nominal) "Storage  power lines" annotation (Placement(
@@ -77,7 +77,7 @@ model Electrical "Model of a building's electrical system"
         extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={0,0})));
-  Buildings.Electrical.AC.ThreePhasesBalanced.Lines.Line linPro[nPro](
+  Buildings.Electrical.AC.OnePhase.Lines.Line linPro[nPro](
     l=LPro,
     P_nominal=fill(PPro_nominal, nPro),
     each final V_nominal=V_nominal) "Producer power lines" annotation (Placement(
