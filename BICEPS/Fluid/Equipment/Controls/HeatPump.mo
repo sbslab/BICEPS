@@ -8,6 +8,9 @@ model HeatPump "Heat pump control"
   parameter Real b(min=0,max=1) = 1 - a "First weighting factor";
   parameter Modelica.SIunits.Time riseTime=1
     "Rise time of the filter (time to reach 99.6 % of the transition speed)";
+  parameter Modelica.SIunits.Temperature THeaWatSup_nominal=313.15
+    "Heating water supply temperature"
+    annotation (Dialog(group="Nominal condition"));
   Modelica.Blocks.Interfaces.RealOutput TSet "Setpoint temperature"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
   Modelica.Blocks.Interfaces.RealInput TConEnt
@@ -34,7 +37,8 @@ model HeatPump "Heat pump control"
     filterType=Modelica.Blocks.Types.FilterType.LowPass,
     order=2,
     f_cut=5/(2*Modelica.Constants.pi*riseTime),
-    init=Modelica.Blocks.Types.Init.InitialOutput)
+    init=Modelica.Blocks.Types.Init.InitialOutput,
+    y_start=THeaWatSup_nominal)
     "Second order filter to approximate battery transitions between charge/off/discharge/off/charge"
     annotation (Placement(transformation(extent={{72,-10},{92,10}})));
 equation
