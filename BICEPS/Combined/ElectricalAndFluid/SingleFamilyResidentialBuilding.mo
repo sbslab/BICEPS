@@ -8,6 +8,8 @@ model SingleFamilyResidentialBuilding
   replaceable package MediumAir=Buildings.Media.Air
     constrainedby Modelica.Media.Interfaces.PartialMedium
     "Load side medium";
+  parameter Boolean have_pv=true "True if the building has a PV system";
+  parameter Boolean have_wind=true "True if the building has a wind system";
   parameter Modelica.SIunits.Angle lat "Latitude";
   parameter Modelica.SIunits.Power PHeaPum_nominal=5000
     "Nominal power for heat pump";
@@ -20,6 +22,8 @@ model SingleFamilyResidentialBuilding
     "Nominal power for pumps";
   parameter Modelica.SIunits.Power PPV_nominal=4000
     "Nominal power for PV";
+  parameter Modelica.SIunits.Power PWin_nominal=2000
+    "Nominal power for wind";
   parameter Modelica.SIunits.Power PBat_nominal=5800
     "Nominal power for battery";
   parameter Modelica.SIunits.Energy EBatMax(displayUnit="kWh")
@@ -31,9 +35,12 @@ model SingleFamilyResidentialBuilding
     annotation (Dialog(tab="Assumptions"), Evaluate=true);
   Electrical.BuildingSystems.Electrical ele(
     nCon=3,
+    have_pv=have_pv,
+    have_wind=have_wind,
     lat=lat,
     PCon_nominal=PCon_nominal,
-    PPro_nominal=PPV_nominal,
+    PSun=PPV_nominal,
+    PWin=PWin_nominal,
     PSto_nominal=PBat_nominal,
     EBatMax(displayUnit="kWh") = EBatMax)           "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,20},{0,40}})));
@@ -76,7 +83,6 @@ model SingleFamilyResidentialBuilding
     smoothness=Modelica.Blocks.Types.Smoothness.MonotoneContinuousDerivative1)
     "Reader for other electrical loads (combined lighting, devices, refrigerator, etc.)"
     annotation (Placement(transformation(extent={{-80,20},{-60,40}})));
-
 equation
   connect(terminal, ele.terminal) annotation (Line(points={{-110,80},{-40,80},{-40,
           37},{-21,37}}, color={0,120,120}));
