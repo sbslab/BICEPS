@@ -20,8 +20,8 @@ model Electrical "Model of a building's electrical system"
       have_wind then PWin else
       0
     "Nominal power for producer loads";
-  parameter Modelica.SIunits.Power PSun if have_pv "Nominal power of the PV";
-  parameter Modelica.SIunits.Power PWin if have_wind "Nominal power of the wind turbine";
+  parameter Modelica.SIunits.Power PSun "Nominal power of the PV";
+  parameter Modelica.SIunits.Power PWin "Nominal power of the wind turbine";
   parameter Modelica.SIunits.Power PSto_nominal
     "Nominal power for storage loads";
   parameter Modelica.SIunits.Energy EBatMax=180000000

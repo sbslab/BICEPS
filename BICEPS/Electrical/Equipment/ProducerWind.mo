@@ -13,11 +13,10 @@ model ProducerWind "Wind subsystem"
     annotation(Evaluate=true,Dialog(group="Orientation"));
   Modelica.Blocks.Interfaces.RealOutput yOut "Output control signal"
     annotation (Placement(transformation(extent={{100,50},{120,70}})));
-  Experimental.Examples.Sensors.RelativeElectricalExergyPotential
-                                            senPV(
+  Experimental.Examples.Sensors.RelativeElectricalExergyPotential senWin(
     tol=tol,
     v0=V_nominal,
-    k=k) "Control signal pv"
+    k=k) "Control signal wind"
     annotation (Placement(transformation(extent={{-10,42},{10,62}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terminal
     "Generalized electric terminal"
@@ -38,8 +37,8 @@ model ProducerWind "Wind subsystem"
     scale=PWin) "Wind turbine model"
     annotation (Placement(transformation(extent={{-20,-20},{-40,0}})));
 equation
-  connect(senPV.y, yOut) annotation (Line(points={{11,60},{110,60}},
-                color={0,0,127}));
+  connect(senWin.y, yOut)
+    annotation (Line(points={{11,60},{110,60}}, color={0,0,127}));
   connect(weaBus.winSpe, winTur.vWin) annotation (Line(
       points={{-80,-100},{-80,12},{-30,12},{-30,2}},
       color={255,204,51},
@@ -48,7 +47,7 @@ equation
       index=-1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(senPV.terminal, terminal)
+  connect(senWin.terminal, terminal)
     annotation (Line(points={{0,42},{0,-108},{0,-108}}, color={0,120,120}));
   connect(winTur.terminal, terminal) annotation (Line(points={{-20,-10},{0,-10},
           {0,-108},{0,-108}}, color={0,120,120}));

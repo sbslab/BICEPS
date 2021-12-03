@@ -11,7 +11,7 @@ model ConnectedDevices
   parameter Boolean have_wind = true "True if the building has a wind system";
 
   // Producer:
-  parameter Modelica.SIunits.Angle lat if have_pv or have_wind "Latitude"
+  parameter Modelica.SIunits.Angle lat "Latitude"
     annotation(Evaluate=true,Dialog(group="Orientation"));
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
@@ -19,15 +19,15 @@ model ConnectedDevices
   parameter Real k=100
     "Percentage penalty for deviating outside of min/max range. Smaller numbers
     indicate a steeper penalty.";
-  parameter Modelica.SIunits.Power PSun = 4000 if have_pv
+  parameter Modelica.SIunits.Power PSun = 4000
     "Nominal power of the PV";
-  parameter Modelica.SIunits.DensityOfHeatFlowRate W_m2_nominal = 1000 if have_pv
+  parameter Modelica.SIunits.DensityOfHeatFlowRate W_m2_nominal = 1000
     "Nominal solar power per unit area";
-  parameter Real eff_PV = 0.12*0.85*0.9 if have_pv
+  parameter Real eff_PV = 0.12*0.85*0.9
     "Nominal solar power conversion efficiency (this should consider converion efficiency, area covered, AC/DC losses)";
-  parameter Modelica.SIunits.Area A_PV = PSun/eff_PV/W_m2_nominal if have_pv
+  parameter Modelica.SIunits.Area A_PV = PSun/eff_PV/W_m2_nominal
     "Nominal area of a P installation";
-  parameter Modelica.SIunits.Power PWin if have_wind
+  parameter Modelica.SIunits.Power PWin
     "Nominal power of the wind turbine";
   // Storage: Battery
   parameter Real SOC_start=0.5 "Initial charge";
@@ -95,7 +95,7 @@ model ConnectedDevices
     tol=tol,
     k=k,
     PWin=PWin,
-    lat=lat) annotation (Placement(transformation(extent={{20,40},{40,20}})));
+    lat=lat) if have_wind annotation (Placement(transformation(extent={{20,40},{40,20}})));
 
 equation
   connect(PCon, con.P) annotation (Line(points={{-120,-60},{-52,-60},{-52,-60}},
@@ -122,14 +122,23 @@ equation
       index=-1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(pv.yOut, yPro[1]) annotation (Line(points={{71,44},{80,44},{80,80},{
-          108,80}}, color={0,0,127}));
-  connect(win.yOut, yPro[2]) annotation (Line(points={{41,24},{80,24},{80,80},{
-          108,80}}, color={0,0,127}));
-  connect(pv.terminal, terPro[1])
-    annotation (Line(points={{60,60.8},{60,110},{60,110}}, color={0,120,120}));
-  connect(win.terminal, terPro[2]) annotation (Line(points={{30,40.8},{30,80},{
-          60,80},{60,110}}, color={0,120,120}));
+  if have_pv then
+    connect(pv.terminal, terPro[1])
+      annotation (Line(points={{60,60.8},{60,110},{60,110}}, color={0,120,120}));
+    connect(pv.yOut, yPro[1]) annotation (Line(points={{71,44},{80,44},{80,80},{
+            108,80}}, color={0,0,127}));
+  end if;
+  if have_pv and have_wind then
+    connect(win.terminal, terPro[2])
+      annotation (Line(points={{30,40.8},{30,80},{60,80},{60,110}}, color={0,120,120}));
+    connect(win.yOut, yPro[2]) annotation (Line(points={{41,24},{80,24},{80,80},{
+            108,80}}, color={0,0,127}));
+  elseif have_wind then
+    connect(win.terminal, terPro[1]) annotation (Line(points={{30,40.8},{30,80},{
+            60,80},{60,110}}, color={0,120,120}));
+    connect(win.yOut, yPro[1]) annotation (Line(points={{41,24},{80,24},{80,80},{
+            108,80}}, color={0,0,127}));
+  end if;
   connect(weaBus, pv.weaBus) annotation (Line(
       points={{-80,100},{-80,70},{52,70},{52,60}},
       color={255,204,51},

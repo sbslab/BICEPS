@@ -31,8 +31,7 @@ model ProducerPV "PV subsystem"
     azi=Buildings.Types.Azimuth.S,
     til=0.5235987755983) "PV"
     annotation (Placement(transformation(extent={{-20,-30},{-40,-10}})));
-  Experimental.Examples.Sensors.RelativeElectricalExergyPotential
-                                            senPV(
+  Experimental.Examples.Sensors.RelativeElectricalExergyPotential senPV(
     tol=tol,
     v0=V_nominal,
     k=k) "Control signal pv"
