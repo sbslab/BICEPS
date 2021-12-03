@@ -20,6 +20,8 @@ model SingleFamilyResidentialBuilding
     "Nominal power for pumps";
   parameter Modelica.SIunits.Power PPV_nominal=4000
     "Nominal power for PV";
+  parameter Modelica.SIunits.Power PWin_nominal=2000
+    "Nominal power for wind";
   parameter Modelica.SIunits.Power PBat_nominal=5800
     "Nominal power for battery";
   parameter Modelica.SIunits.Energy EBatMax(displayUnit="kWh")
@@ -33,7 +35,8 @@ model SingleFamilyResidentialBuilding
     nCon=3,
     lat=lat,
     PCon_nominal=PCon_nominal,
-    PPro_nominal=PPV_nominal,
+    PSun=PPV_nominal,
+    PWin=PWin_nominal,
     PSto_nominal=PBat_nominal,
     EBatMax(displayUnit="kWh") = EBatMax)           "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,20},{0,40}})));

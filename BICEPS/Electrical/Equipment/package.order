@@ -1,6 +1,7 @@
 ConsumerThreePhaseBalanced
 Panel
 ProducerPV
+ProducerWind
 StorageBattery
 Controls
 Examples

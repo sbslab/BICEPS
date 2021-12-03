@@ -39,8 +39,8 @@ model ProducerPV "PV subsystem"
     annotation (Placement(transformation(extent={{-10,42},{10,62}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terminal
     "Generalized electric terminal"
-    annotation (Placement(transformation(extent={{-12,-112},{4,-96}}),
-        iconTransformation(extent={{-12,-112},{4,-96}})));
+    annotation (Placement(transformation(extent={{-8,-116},{8,-100}}),
+        iconTransformation(extent={{-8,-116},{8,-100}})));
   Buildings.BoundaryConditions.WeatherData.Bus weaBus
     "Weather data bus"
     annotation (Placement(transformation(extent={{-100,-80},{-60,-120}}),
@@ -49,7 +49,7 @@ equation
   connect(senPV.terminal, pv.terminal)
     annotation (Line(points={{0,42},{0,-20},{-20,-20}},    color={0,120,120}));
   connect(pv.terminal, terminal)
-    annotation (Line(points={{-20,-20},{0,-20},{0,-104},{-4,-104}},
+    annotation (Line(points={{-20,-20},{0,-20},{0,-108},{0,-108}},
                                                          color={0,120,120}));
   connect(senPV.y, yOut) annotation (Line(points={{11,60},{110,60}},
                 color={0,0,127}));

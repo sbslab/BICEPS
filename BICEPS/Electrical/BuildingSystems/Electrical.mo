@@ -1,9 +1,12 @@
 within BICEPS.Electrical.BuildingSystems;
 model Electrical "Model of a building's electrical system"
   extends Buildings.BaseClasses.BaseIconLow;
-  parameter Integer nPro=1 "Number of producer connections";
   parameter Integer nCon=1 "Number of consumer connections";
   parameter Integer nSto=1 "Number of storage connections";
+  final parameter Integer nPro=if have_pv and have_wind then 2 elseif
+     have_pv or have_wind then 1 else 0 "Number of producer connections";
+  parameter Boolean have_pv=true "True if the building has a PV system";
+  parameter Boolean have_wind=true "True if the building has a wind system";
   parameter Real tol=0.05
     "Tolerance allowed on nominal voltage control (5-10% typical)";
   parameter Real k=100 "Percentage penalty for deviating outside of min/max range. Smaller numbers
@@ -11,8 +14,14 @@ model Electrical "Model of a building's electrical system"
   parameter Modelica.SIunits.Angle lat "Latitude";
   parameter Modelica.SIunits.Power PCon_nominal[nCon]
     "Nominal power for consumer loads";
-  parameter Modelica.SIunits.Power PPro_nominal
+  parameter Modelica.SIunits.Power PPro_nominal=
+    if (have_pv and have_wind) then PSun+PWin elseif
+      have_pv then PSun elseif
+      have_wind then PWin else
+      0
     "Nominal power for producer loads";
+  parameter Modelica.SIunits.Power PSun if have_pv "Nominal power of the PV";
+  parameter Modelica.SIunits.Power PWin if have_wind "Nominal power of the wind turbine";
   parameter Modelica.SIunits.Power PSto_nominal
     "Nominal power for storage loads";
   parameter Modelica.SIunits.Energy EBatMax=180000000
@@ -32,14 +41,16 @@ model Electrical "Model of a building's electrical system"
     nSto=nSto)
     annotation (Placement(transformation(extent={{-10,20},{10,40}})));
   BaseClasses.ConnectedDevices dev(
-    nPro=nPro,
     nCon=nCon,
     nSto=nSto,
+    have_pv=have_pv,
+    have_wind=have_wind,
     lat=lat,
     V_nominal=V_nominal,
     tol=tol,
     k=k,
-    PSun=PPro_nominal,
+    PSun=PSun,
+    PWin=PWin,
     PBat=PSto_nominal,
     EBatMax=EBatMax)
     annotation (Placement(transformation(extent={{10,-40},{-10,-20}})));
