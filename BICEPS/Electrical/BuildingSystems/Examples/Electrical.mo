@@ -3,9 +3,12 @@ model Electrical
   "Example model to demonstrate the electrical subsystem"
   extends Modelica.Icons.Example;
   BICEPS.Electrical.BuildingSystems.Electrical ele(
+    have_wind=false,
     lat=weaDat.lat,
     PCon_nominal={PHeaPum.k},
     PPro_nominal=4000,
+    PSun=5000,
+    PWin=ele.PSun,
     PSto_nominal=1000)         "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,0},{0,20}})));
   Modelica.Blocks.Continuous.Integrator EGri "Grid energy"
@@ -19,7 +22,7 @@ model Electrical
     annotation (Placement(transformation(extent={{60,0},{80,20}})));
   Modelica.Blocks.Continuous.Integrator EBat "Battery energy"
     annotation (Placement(transformation(extent={{60,-30},{80,-10}})));
-  Modelica.Blocks.Sources.RealExpression Ppv(y=ele.dev.pv[1].pv.P)
+  Modelica.Blocks.Sources.RealExpression Ppv(y=ele.dev.pv.pv.P)
                                                          "PV power"
     annotation (Placement(transformation(extent={{20,30},{40,50}})));
   Modelica.Blocks.Sources.RealExpression PLoa(y=ele.dev.con[1].loa.P)

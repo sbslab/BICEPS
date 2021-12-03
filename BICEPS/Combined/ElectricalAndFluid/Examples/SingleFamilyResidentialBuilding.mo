@@ -107,7 +107,7 @@ equation
       "Simulate and plot"),
     experiment(
       StartTime=86400,
-      StopTime=120000,
+      StopTime=172800,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;
