@@ -21,7 +21,8 @@ model Pump "Pump control"
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
   Modelica.Blocks.Interfaces.RealInput y "Control signal"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
-  Buildings.Controls.Continuous.LimPID conPID(k=0.1, Ti=60)
+  Buildings.Controls.Continuous.LimPID conPID(k=0.1, Ti=60,
+    yMin=1e-3)
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 equation
   connect(spl.x, TSet.u)
