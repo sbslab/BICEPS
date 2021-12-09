@@ -11,8 +11,10 @@ model SingleFamilyResidentialBuilding
     redeclare package MediumWat = Medium,
     lat=weaDat.lat,
     POth_nominal=9653,
-    EBatMax=48600000,
-    filNam=filNam)
+    EBatMax=540000000,
+    filNam=filNam,
+    TMin=bld.T0 - 5,
+    TMax=bld.T0 + 5)
     "Building"
     annotation (Placement(transformation(extent={{-20,-70},{0,-50}})));
   Buildings.Fluid.Sources.Boundary_pT sin(
@@ -104,7 +106,7 @@ equation
       file="modelica://BICEPS/Resources/Scripts/Dymola/Combined/ElectricalAndFluid/Examples/SingleFamilyResidentialBuilding.mos"
       "Simulate and plot"),
     experiment(
-      StopTime=604800,
+      StopTime=2592000,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;

@@ -36,6 +36,11 @@ model FanCoilWithDistributionPump
     min=0)=0
     "Nominal heating capacity (>=0)"
     annotation (Dialog(group="Nominal condition"));
+  parameter Real TMin=273.15 + 15
+    "Minimimum desired threshold for independent variable";
+  parameter Real TMax=273.15 + 25
+    "Maximum desired threshold for independent variable";
+  parameter Real T0=273.15 + 20 "Nominal value for independent variable";
   // AHRI 440 Standard Heating
   parameter Modelica.SIunits.Temperature T_aHeaWat_nominal=273.15 + 60
     "Heating water inlet temperature at nominal conditions"
@@ -161,7 +166,10 @@ model FanCoilWithDistributionPump
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={80,40})));
-  Controls.Pump2 con "Pump/fan control"
+  Controls.Pump2 con(
+    TMin=TMin,
+    TMax=TMax,
+    T0=T0) "Pump/fan control"
     annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
 protected
   parameter Medium1.ThermodynamicState sta1_default=Medium1.setState_pTX(
@@ -204,8 +212,8 @@ equation
     annotation (Line(points={{-120,80},{-62,80}}, color={0,0,127}));
   connect(con.yOut, m2Set_flow.u)
     annotation (Line(points={{-39,80},{-22,80}}, color={0,0,127}));
-  connect(con.yOut, m1Set_flow.u) annotation (Line(points={{-39,80},{-32,80},{
-          -32,-10},{-38,-10}}, color={0,0,127}));
+  connect(con.yOut, m1Set_flow.u) annotation (Line(points={{-39,80},{-32,80},{-32,
+          -10},{-38,-10}}, color={0,0,127}));
   connect(senTem.T, con.TMea) annotation (Line(points={{80,51},{80,60},{-70,60},
           {-70,74},{-62,74}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={

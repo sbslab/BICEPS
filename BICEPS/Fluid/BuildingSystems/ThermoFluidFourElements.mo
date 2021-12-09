@@ -41,6 +41,11 @@ model ThermoFluidFourElements "Thermofluid subsystem"
   parameter Boolean allowFlowReversal=false
     "Set to true to allow flow reversal on condenser side"
     annotation (Dialog(tab="Assumptions"), Evaluate=true);
+  parameter Real TMin=273.15 + 15
+    "Minimimum desired threshold for independent variable";
+  parameter Real TMax=273.15 + 25
+    "Maximum desired threshold for independent variable";
+  parameter Real T0=273.15 + 20 "Nominal value for independent variable";
   parameter Real tSmo(
     final quantity="Time",
     final unit="s",
@@ -65,9 +70,15 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     m2_flow_nominal=mLoaHea_flow_nominal,
     dp1_nominal=100000,
     dp2_nominal=250,
-    QHea_flow_nominal=QHea_flow_nominal)
+    QHea_flow_nominal=QHea_flow_nominal,
+    TMin=TMin,
+    TMax=TMax,
+    T0=T0)
     annotation (Placement(transformation(extent={{-30,-20},{-10,0}})));
-  ThermalZones.SimpleRoomFourElements zon
+  ThermalZones.SimpleRoomFourElements zon(
+    TMin=TMin,
+    TMax=TMax,
+    T0=T0)
     annotation (Placement(transformation(extent={{-30,20},{-10,40}})));
   Modelica.Blocks.Interfaces.RealInput yEle
     "Relative exergetic potential of electrical subsystem"
