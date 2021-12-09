@@ -149,8 +149,6 @@ model FanCoilWithDistributionPump
     annotation (Placement(transformation(extent={{-60,-100},{-80,-80}})));
   Modelica.Blocks.Interfaces.RealInput y "Control signal"
     annotation (Placement(transformation(extent={{-140,60},{-100,100}})));
-  Controls.Pump con "Control signal based on zone temperature"
-    annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
   Modelica.Blocks.Math.Gain m2Set_flow(k=m2_flow_nominal)
     "Mass flow setpoint for the fan"
     annotation (Placement(transformation(extent={{-20,70},{0,90}})));
@@ -163,6 +161,8 @@ model FanCoilWithDistributionPump
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={80,40})));
+  Controls.Pump2 con "Pump/fan control"
+    annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
 protected
   parameter Medium1.ThermodynamicState sta1_default=Medium1.setState_pTX(
     T=Medium1.T_default,
@@ -190,25 +190,24 @@ equation
           {34,40},{30,40}}, color={0,127,255}));
   connect(pRefPum.ports[1], pum.port_a) annotation (Line(points={{-80,-90},{-88,
           -90},{-88,-60},{-80,-60}}, color={0,127,255}));
-  connect(con.yOut, m2Set_flow.u)
-    annotation (Line(points={{-39,80},{-22,80}}, color={0,0,127}));
   connect(m2Set_flow.y, fan.m_flow_in)
     annotation (Line(points={{1,80},{20,80},{20,52}}, color={0,0,127}));
-  connect(con.yOut, m1Set_flow.u) annotation (Line(points={{-39,80},{-30,80},{
-          -30,-10},{-38,-10}}, color={0,0,127}));
   connect(m1Set_flow.y, pum.m_flow_in)
     annotation (Line(points={{-61,-10},{-70,-10},{-70,-48}}, color={0,0,127}));
-  connect(senTem.T, con.TMea) annotation (Line(points={{80,51},{80,60},{-72,60},
-          {-72,74},{-62,74}},
-                     color={0,0,127}));
-  connect(y, con.y)
-    annotation (Line(points={{-120,80},{-62,80}}, color={0,0,127}));
   connect(fan.port_b, hex.port_a2) annotation (Line(points={{10,40},{4,40},{4,
           -4},{0,-4}}, color={0,127,255}));
   connect(port_a2, senTem.port_a)
     annotation (Line(points={{100,40},{90,40}}, color={0,127,255}));
   connect(senTem.port_b, resLoa.port_a)
     annotation (Line(points={{70,40},{60,40}}, color={0,127,255}));
+  connect(y, con.y)
+    annotation (Line(points={{-120,80},{-62,80}}, color={0,0,127}));
+  connect(con.yOut, m2Set_flow.u)
+    annotation (Line(points={{-39,80},{-22,80}}, color={0,0,127}));
+  connect(con.yOut, m1Set_flow.u) annotation (Line(points={{-39,80},{-32,80},{
+          -32,-10},{-38,-10}}, color={0,0,127}));
+  connect(senTem.T, con.TMea) annotation (Line(points={{80,51},{80,60},{-70,60},
+          {-70,74},{-62,74}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-100,-66},{100,-54}},

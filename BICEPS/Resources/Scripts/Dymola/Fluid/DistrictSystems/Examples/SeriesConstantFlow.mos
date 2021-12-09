@@ -1,5 +1,5 @@
 removePlots();
-simulateModel("BICEPS.Fluid.Examples.SeriesConstantFlow",
+simulateModel("BICEPS.Fluid.DistrictSystems.Examples.SeriesConstantFlow",
     method="cvode",
     tolerance=1e-6,
     startTime=0,
