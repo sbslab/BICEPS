@@ -41,6 +41,11 @@ model ThermoFluidFourElements "Thermofluid subsystem"
   parameter Boolean allowFlowReversal=false
     "Set to true to allow flow reversal on condenser side"
     annotation (Dialog(tab="Assumptions"), Evaluate=true);
+  parameter Real tSmo(
+    final quantity="Time",
+    final unit="s",
+    min=1E-5)=30*60
+    "Smoothing time for thermal-fluid control signal";
   Equipment.HeatPump heaPum(
     redeclare package Medium1 = MediumWat,
     redeclare package Medium2 = MediumWat,
@@ -88,7 +93,7 @@ model ThermoFluidFourElements "Thermofluid subsystem"
   Buildings.BoundaryConditions.WeatherData.Bus weaBus "Weather data bus"
     annotation (Placement(transformation(extent={{-20,80},{20,120}}),
         iconTransformation(extent={{-10,90},{10,110}})));
-  Controls.ThermoFluid conFlu(n=2)
+  Controls.ThermoFluid conFlu(n=2, tSmo=tSmo)
     annotation (Placement(transformation(extent={{40,20},{60,40}})));
 
   Modelica.Blocks.Logical.Hysteresis noHea(uLow=-300, uHigh=0) "Enable heating"
