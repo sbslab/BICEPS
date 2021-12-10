@@ -138,8 +138,8 @@ model HeatPump "Heat pump model"
         iconTransformation(extent={{90,10},{110,30}})));
   Controls.HeatPump conHeaPum(
     biomimeticControl=biomimeticControl,
-    TMin=273.15 + 28,
-    TMax=273.15 + 48,
+    TMin=conHeaPum.T0 - 1,
+    TMax=conHeaPum.T0 + 1,
     T0=273.15 + 38,
     riseTime=60,
     THeaWatSup_nominal=THeaWatSup_nominal) "Heat pump control"
