@@ -11,10 +11,10 @@ model SingleFamilyResidentialBuilding
     redeclare package MediumWat = Medium,
     lat=weaDat.lat,
     POth_nominal=9653,
-    PPV_nominal=50000,
-    PWin_nominal=25000,
-    EBatMax=144000000,
-    filNam=filNam)
+    EBatMax=540000000,
+    filNam=filNam,
+    TMin=bld.T0 - 5,
+    TMax=bld.T0 + 5)
     "Building"
     annotation (Placement(transformation(extent={{-20,-70},{0,-50}})));
   Buildings.Fluid.Sources.Boundary_pT sin(

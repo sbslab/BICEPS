@@ -1,4 +1,4 @@
-within BICEPS.Fluid.Examples.BaseClasses;
+within BICEPS.Fluid.DistrictSystems.Examples.BaseClasses;
 partial model PartialSeries "Partial model for series network"
   extends Modelica.Icons.Example;
   package Medium = Buildings.Media.Water "Medium model";

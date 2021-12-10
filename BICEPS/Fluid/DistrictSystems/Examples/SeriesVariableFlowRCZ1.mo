@@ -1,4 +1,4 @@
-within BICEPS.Fluid.Examples;
+within BICEPS.Fluid.DistrictSystems.Examples;
 model SeriesVariableFlowRCZ1
   "Example of series connection with variable district water mass flow rate"
   extends
@@ -7,7 +7,7 @@ model SeriesVariableFlowRCZ1
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
     __Dymola_Commands(
-      file="modelica://BICEPS/Resources/Scripts/Dymola/Fluid/Examples/SeriesVariableFlow.mos"
+      file="modelica://BICEPS/Resources/Scripts/Dymola/Fluid/DistrictSystems/Examples/SeriesVariableFlow.mos"
       "Simulate and plot"),
     experiment(
       StopTime=604800,

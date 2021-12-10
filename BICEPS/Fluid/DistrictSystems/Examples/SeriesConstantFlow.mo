@@ -1,12 +1,13 @@
-within BICEPS.Fluid.Examples;
+within BICEPS.Fluid.DistrictSystems.Examples;
 model SeriesConstantFlow
   "Example of series connection with constant district water mass flow rate"
-  extends Buildings.Experimental.DHC.Examples.Combined.Generation5.Examples.SeriesConstantFlow;
+  extends
+    Buildings.Experimental.DHC.Examples.Combined.Generation5.Examples.SeriesConstantFlow;
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
     __Dymola_Commands(
-      file="modelica://BICEPS/Resources/Scripts/Dymola/Fluid/Examples/SeriesConstantFlow.mos"
+      file="modelica://BICEPS/Resources/Scripts/Dymola/Fluid/DistrictSystems/Examples/SeriesConstantFlow.mos"
       "Simulate and plot"),
     experiment(
       StopTime=604800,

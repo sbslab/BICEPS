@@ -36,6 +36,11 @@ model FanCoilWithDistributionPump
     min=0)=0
     "Nominal heating capacity (>=0)"
     annotation (Dialog(group="Nominal condition"));
+  parameter Real TMin=273.15 + 15
+    "Minimimum desired threshold for independent variable";
+  parameter Real TMax=273.15 + 25
+    "Maximum desired threshold for independent variable";
+  parameter Real T0=273.15 + 20 "Nominal value for independent variable";
   // AHRI 440 Standard Heating
   parameter Modelica.SIunits.Temperature T_aHeaWat_nominal=273.15 + 60
     "Heating water inlet temperature at nominal conditions"
@@ -56,7 +61,7 @@ model FanCoilWithDistributionPump
     constrainedby Buildings.Fluid.Movers.Data.Generic
     "Record with performance data"
     annotation (choicesAllMatching=true,
-      Placement(transformation(extent={{60,58},{80,78}})));
+      Placement(transformation(extent={{60,-40},{80,-20}})));
   Buildings.Fluid.Movers.FlowControlled_m_flow pum(
     redeclare final package Medium = Medium1,
     per(
@@ -80,7 +85,7 @@ model FanCoilWithDistributionPump
     redeclare final package Medium = Medium1,
     final m_flow_nominal=m1_flow_nominal,
     final dp_nominal=dp1_nominal) "Distribution resistence pipe"
-    annotation (Placement(transformation(extent={{-48,-70},{-28,-50}})));
+    annotation (Placement(transformation(extent={{-50,-70},{-30,-50}})));
   Modelica.Fluid.Interfaces.FluidPort_b port_b1(
     p(start=Medium1.p_default),
     redeclare final package Medium = Medium1,
@@ -109,7 +114,7 @@ model FanCoilWithDistributionPump
     final allowFlowReversal1=allowFlowReversal1,
     final allowFlowReversal2=allowFlowReversal2)
     "Heating coil"
-    annotation (Placement(transformation(extent={{-10,0},{10,-20}})));
+    annotation (Placement(transformation(extent={{-20,0},{0,-20}})));
   Buildings.Fluid.Movers.FlowControlled_m_flow fan(
     redeclare final package Medium = Medium2,
     final allowFlowReversal=allowFlowReversal2,
@@ -120,13 +125,13 @@ model FanCoilWithDistributionPump
     use_inputFilter=false,
     final dp_nominal=dp2_nominal)
     "Fan"
-    annotation (Placement(transformation(extent={{50,30},{30,50}})));
+    annotation (Placement(transformation(extent={{30,30},{10,50}})));
   Buildings.Fluid.FixedResistances.PressureDrop resLoa(
     redeclare final package Medium = Medium2,
     final m_flow_nominal=m2_flow_nominal,
     final dp_nominal=dp2_nominal)
     "Load side pressure drop"
-    annotation (Placement(transformation(extent={{80,30},{60,50}})));
+    annotation (Placement(transformation(extent={{60,30},{40,50}})));
   Modelica.Fluid.Interfaces.FluidPort_a port_a2(
     redeclare final package Medium = Medium2,
     p(start=Medium2.p_default),
@@ -143,14 +148,12 @@ model FanCoilWithDistributionPump
     annotation (Placement(transformation(extent={{-90,30},{-110,50}})));
   Buildings.Fluid.Sources.Boundary_pT pRefFan(redeclare package Medium =
         Medium2, nPorts=1) "Reference pressure"
-    annotation (Placement(transformation(extent={{80,-10},{60,10}})));
+    annotation (Placement(transformation(extent={{60,0},{40,20}})));
   Buildings.Fluid.Sources.Boundary_pT pRefPum(redeclare package Medium =
         Medium1, nPorts=1) "Reference pressure"
     annotation (Placement(transformation(extent={{-60,-100},{-80,-80}})));
   Modelica.Blocks.Interfaces.RealInput y "Control signal"
     annotation (Placement(transformation(extent={{-140,60},{-100,100}})));
-  Controls.Pump con "Control signal based on zone temperature"
-    annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
   Modelica.Blocks.Math.Gain m2Set_flow(k=m2_flow_nominal)
     "Mass flow setpoint for the fan"
     annotation (Placement(transformation(extent={{-20,70},{0,90}})));
@@ -161,8 +164,13 @@ model FanCoilWithDistributionPump
         Medium2, m_flow_nominal=m2_flow_nominal) annotation (Placement(
         transformation(
         extent={{10,-10},{-10,10}},
-        rotation=90,
-        origin={20,20})));
+        rotation=0,
+        origin={80,40})));
+  Controls.Pump2 con(
+    TMin=TMin,
+    TMax=TMax,
+    T0=T0) "Pump/fan control"
+    annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
 protected
   parameter Medium1.ThermodynamicState sta1_default=Medium1.setState_pTX(
     T=Medium1.T_default,
@@ -172,42 +180,42 @@ protected
     sta1_default)
     "Density, used to compute fluid volume";
 equation
-  connect(port_b2, hex.port_b2) annotation (Line(points={{-100,40},{-20,40},{
-          -20,-4},{-10,-4}},
+  connect(port_b2, hex.port_b2) annotation (Line(points={{-100,40},{-24,40},{
+          -24,-4},{-20,-4}},
                          color={0,127,255}));
-  connect(port_a2, resLoa.port_a)
-    annotation (Line(points={{100,40},{80,40}}, color={0,127,255}));
   connect(resLoa.port_b, fan.port_a)
-    annotation (Line(points={{60,40},{50,40}}, color={0,127,255}));
+    annotation (Line(points={{40,40},{30,40}}, color={0,127,255}));
   connect(port_a1, pum.port_a)
     annotation (Line(points={{-100,-60},{-80,-60}}, color={0,127,255}));
   connect(pum.port_b, resDis.port_a)
-    annotation (Line(points={{-60,-60},{-48,-60}}, color={0,127,255}));
-  connect(resDis.port_b, hex.port_a1) annotation (Line(points={{-28,-60},{-20,
-          -60},{-20,-16},{-10,-16}},
+    annotation (Line(points={{-60,-60},{-50,-60}}, color={0,127,255}));
+  connect(resDis.port_b, hex.port_a1) annotation (Line(points={{-30,-60},{-24,
+          -60},{-24,-16},{-20,-16}},
                             color={0,127,255}));
-  connect(hex.port_b1, port_b1) annotation (Line(points={{10,-16},{20,-16},{20,
-          -60},{100,-60}},    color={0,127,255}));
-  connect(pRefFan.ports[1], fan.port_a) annotation (Line(points={{60,0},{54,0},
-          {54,40},{50,40}}, color={0,127,255}));
+  connect(hex.port_b1, port_b1) annotation (Line(points={{0,-16},{4,-16},{4,-60},
+          {100,-60}},         color={0,127,255}));
+  connect(pRefFan.ports[1], fan.port_a) annotation (Line(points={{40,10},{34,10},
+          {34,40},{30,40}}, color={0,127,255}));
   connect(pRefPum.ports[1], pum.port_a) annotation (Line(points={{-80,-90},{-88,
           -90},{-88,-60},{-80,-60}}, color={0,127,255}));
-  connect(con.yOut, m2Set_flow.u)
-    annotation (Line(points={{-39,80},{-22,80}}, color={0,0,127}));
   connect(m2Set_flow.y, fan.m_flow_in)
-    annotation (Line(points={{1,80},{40,80},{40,52}}, color={0,0,127}));
-  connect(con.yOut, m1Set_flow.u) annotation (Line(points={{-39,80},{-30,80},{
-          -30,-10},{-38,-10}}, color={0,0,127}));
+    annotation (Line(points={{1,80},{20,80},{20,52}}, color={0,0,127}));
   connect(m1Set_flow.y, pum.m_flow_in)
     annotation (Line(points={{-61,-10},{-70,-10},{-70,-48}}, color={0,0,127}));
-  connect(fan.port_b, senTem.port_a)
-    annotation (Line(points={{30,40},{20,40},{20,30}}, color={0,127,255}));
-  connect(senTem.port_b, hex.port_a2)
-    annotation (Line(points={{20,10},{20,-4},{10,-4}}, color={0,127,255}));
-  connect(senTem.T, con.TMea) annotation (Line(points={{9,20},{-72,20},{-72,74},
-          {-62,74}}, color={0,0,127}));
+  connect(fan.port_b, hex.port_a2) annotation (Line(points={{10,40},{4,40},{4,
+          -4},{0,-4}}, color={0,127,255}));
+  connect(port_a2, senTem.port_a)
+    annotation (Line(points={{100,40},{90,40}}, color={0,127,255}));
+  connect(senTem.port_b, resLoa.port_a)
+    annotation (Line(points={{70,40},{60,40}}, color={0,127,255}));
   connect(y, con.y)
     annotation (Line(points={{-120,80},{-62,80}}, color={0,0,127}));
+  connect(con.yOut, m2Set_flow.u)
+    annotation (Line(points={{-39,80},{-22,80}}, color={0,0,127}));
+  connect(con.yOut, m1Set_flow.u) annotation (Line(points={{-39,80},{-32,80},{-32,
+          -10},{-38,-10}}, color={0,0,127}));
+  connect(senTem.T, con.TMea) annotation (Line(points={{80,51},{80,60},{-70,60},
+          {-70,74},{-62,74}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-100,-66},{100,-54}},

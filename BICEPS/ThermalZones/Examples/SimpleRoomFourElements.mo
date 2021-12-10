@@ -19,5 +19,5 @@ equation
       thickness=0.5));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=31536000, __Dymola_Algorithm="Dassl"));
+    experiment(StopTime=2592000, __Dymola_Algorithm="Dassl"));
 end SimpleRoomFourElements;

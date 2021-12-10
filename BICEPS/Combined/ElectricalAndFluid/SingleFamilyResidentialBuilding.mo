@@ -33,6 +33,16 @@ model SingleFamilyResidentialBuilding
   parameter Boolean allowFlowReversal=false
     "Set to true to allow flow reversal on condenser side"
     annotation (Dialog(tab="Assumptions"), Evaluate=true);
+  parameter Real TMin=273.15 + 15
+    "Minimimum desired threshold for independent variable";
+  parameter Real TMax=273.15 + 25
+    "Maximum desired threshold for independent variable";
+  parameter Real T0=273.15 + 20 "Nominal value for independent variable";
+  parameter Real tSmo(
+    final quantity="Time",
+    final unit="s",
+    min=1E-5)=30*60
+    "Smoothing time for thermal-fluid control signal";
   Electrical.BuildingSystems.Electrical ele(
     nCon=3,
     have_pv=have_pv,
@@ -48,7 +58,11 @@ model SingleFamilyResidentialBuilding
     redeclare package MediumWat = MediumWat,
     redeclare package MediumAir = MediumAir,
     QHea_flow_nominal=PHeaPum_nominal*mec.COP_nominal,
-    COP_nominal=4)
+    COP_nominal=4,
+    TMin=TMin,
+    TMax=TMax,
+    T0=T0,
+    tSmo=tSmo)
     "Mechanical (thermo-fluid) subsystem"
     annotation (Placement(transformation(extent={{20,-40},{0,-20}})));
   Buildings.BoundaryConditions.WeatherData.Bus weaBus "Weather data bus"
