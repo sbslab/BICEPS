@@ -8,6 +8,8 @@ model SingleFamilyResidentialBuilding
   replaceable package MediumAir=Buildings.Media.Air
     constrainedby Modelica.Media.Interfaces.PartialMedium
     "Load side medium";
+  parameter Boolean biomimeticControl=true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Boolean have_pv=true "True if the building has a PV system";
   parameter Boolean have_wind=true "True if the building has a wind system";
   parameter Modelica.SIunits.Angle lat "Latitude";
@@ -26,7 +28,7 @@ model SingleFamilyResidentialBuilding
     "Nominal power for wind";
   parameter Modelica.SIunits.Power PBat_nominal=5800
     "Nominal power for battery";
-  parameter Modelica.SIunits.Energy EBatMax(displayUnit="kWh")
+  parameter Modelica.SIunits.Energy EBatMax=48600000
     "Maximum energy capacity of the battery";
   parameter String filNam
     "File name with thermal loads as time series";
@@ -44,6 +46,7 @@ model SingleFamilyResidentialBuilding
     min=1E-5)=30*60
     "Smoothing time for thermal-fluid control signal";
   Electrical.BuildingSystems.Electrical ele(
+    biomimeticControl=biomimeticControl,
     nCon=3,
     have_pv=have_pv,
     have_wind=have_wind,
@@ -52,9 +55,11 @@ model SingleFamilyResidentialBuilding
     PSun=PPV_nominal,
     PWin=PWin_nominal,
     PSto_nominal=PBat_nominal,
-    EBatMax(displayUnit="kWh") = EBatMax)           "Electrical subsystem"
+    EBatMax=EBatMax)
+    "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,20},{0,40}})));
   Fluid.BuildingSystems.ThermoFluidFourElements mec(
+    biomimeticControl=biomimeticControl,
     redeclare package MediumWat = MediumWat,
     redeclare package MediumAir = MediumAir,
     QHea_flow_nominal=PHeaPum_nominal*mec.COP_nominal,
@@ -72,7 +77,8 @@ model SingleFamilyResidentialBuilding
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-110,80}),    iconTransformation(extent={{-120,60},{-100,80}})));
-  Modelica.Blocks.Interfaces.RealOutput yOut "Output control signal"
+  Modelica.Blocks.Interfaces.RealOutput yOut if biomimeticControl
+    "Output control signal"
     annotation (Placement(transformation(extent={{100,70},{120,90}})));
   Modelica.Fluid.Interfaces.FluidPort_a port_a(
     redeclare final package Medium = MediumWat,
