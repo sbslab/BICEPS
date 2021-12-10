@@ -65,25 +65,6 @@ model FanCoilWithDistributionPump
     "Record with performance data"
     annotation (choicesAllMatching=true,
       Placement(transformation(extent={{60,-40},{80,-20}})));
-  Buildings.Fluid.Movers.FlowControlled_m_flow pum(
-    redeclare final package Medium = Medium1,
-    per(
-      final hydraulicEfficiency=per.hydraulicEfficiency,
-      final motorEfficiency=per.motorEfficiency,
-      final motorCooledByFluid=per.motorCooledByFluid,
-      final speed_nominal=per.speed_nominal,
-      final constantSpeed=per.constantSpeed,
-      final speeds=per.speeds,
-      final power=per.power),
-    final allowFlowReversal=allowFlowReversal1,
-    final m_flow_nominal=m1_flow_nominal,
-    final dp_nominal=dp1_nominal,
-    addPowerToMedium=false,
-    nominalValuesDefineDefaultPressureCurve=true,
-    use_inputFilter=false,
-    energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState)
-    "Distribution pump with prescribed mass flow rate"
-    annotation (Placement(transformation(extent={{-80,-70},{-60,-50}})));
   Buildings.Fluid.FixedResistances.PressureDrop resDis(
     redeclare final package Medium = Medium1,
     final m_flow_nominal=m1_flow_nominal,
@@ -152,17 +133,11 @@ model FanCoilWithDistributionPump
   Buildings.Fluid.Sources.Boundary_pT pRefFan(redeclare package Medium =
         Medium2, nPorts=1) "Reference pressure"
     annotation (Placement(transformation(extent={{60,0},{40,20}})));
-  Buildings.Fluid.Sources.Boundary_pT pRefPum(redeclare package Medium =
-        Medium1, nPorts=1) "Reference pressure"
-    annotation (Placement(transformation(extent={{-60,-100},{-80,-80}})));
   Modelica.Blocks.Interfaces.RealInput y if biomimeticControl "Control signal"
     annotation (Placement(transformation(extent={{-140,60},{-100,100}})));
   Modelica.Blocks.Math.Gain m2Set_flow(k=m2_flow_nominal)
     "Mass flow setpoint for the fan"
     annotation (Placement(transformation(extent={{-20,70},{0,90}})));
-  Modelica.Blocks.Math.Gain m1Set_flow(k=m1_flow_nominal)
-    "Mass flow setpoint for the pump"
-    annotation (Placement(transformation(extent={{-40,-20},{-60,0}})));
   Buildings.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium =
         Medium2, m_flow_nominal=m2_flow_nominal) annotation (Placement(
         transformation(
@@ -191,10 +166,6 @@ equation
                          color={0,127,255}));
   connect(resLoa.port_b, fan.port_a)
     annotation (Line(points={{40,40},{30,40}}, color={0,127,255}));
-  connect(port_a1, pum.port_a)
-    annotation (Line(points={{-100,-60},{-80,-60}}, color={0,127,255}));
-  connect(pum.port_b, resDis.port_a)
-    annotation (Line(points={{-60,-60},{-50,-60}}, color={0,127,255}));
   connect(resDis.port_b, hex.port_a1) annotation (Line(points={{-30,-60},{-24,
           -60},{-24,-16},{-20,-16}},
                             color={0,127,255}));
@@ -202,12 +173,8 @@ equation
           {100,-60}},         color={0,127,255}));
   connect(pRefFan.ports[1], fan.port_a) annotation (Line(points={{40,10},{34,10},
           {34,40},{30,40}}, color={0,127,255}));
-  connect(pRefPum.ports[1], pum.port_a) annotation (Line(points={{-80,-90},{-88,
-          -90},{-88,-60},{-80,-60}}, color={0,127,255}));
   connect(m2Set_flow.y, fan.m_flow_in)
     annotation (Line(points={{1,80},{20,80},{20,52}}, color={0,0,127}));
-  connect(m1Set_flow.y, pum.m_flow_in)
-    annotation (Line(points={{-61,-10},{-70,-10},{-70,-48}}, color={0,0,127}));
   connect(fan.port_b, hex.port_a2) annotation (Line(points={{10,40},{4,40},{4,
           -4},{0,-4}}, color={0,127,255}));
   connect(port_a2, senTem.port_a)
@@ -218,12 +185,12 @@ equation
     annotation (Line(points={{-120,80},{-62,80}}, color={0,0,127}));
   connect(con.yOut, m2Set_flow.u)
     annotation (Line(points={{-39,80},{-22,80}}, color={0,0,127}));
-  connect(con.yOut, m1Set_flow.u) annotation (Line(points={{-39,80},{-32,80},{-32,
-          -10},{-38,-10}}, color={0,0,127}));
   connect(senTem.T, con.TMea) annotation (Line(points={{80,51},{80,60},{-70,60},
           {-70,74},{-62,74}}, color={0,0,127}));
   connect(TSetSta.y, con.y) annotation (Line(points={{-79,100},{-70,100},{-70,80},
           {-62,80}}, color={0,0,127}));
+  connect(port_a1, resDis.port_a)
+    annotation (Line(points={{-100,-60},{-50,-60}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-100,-66},{100,-54}},
