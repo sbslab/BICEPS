@@ -1,0 +1,18 @@
+﻿// Simulate both models
+simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.BiomimeticControl", stopTime=604800, tolerance=1e-06, resultFile="BiomimeticControl");
+simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.NormalControl", stopTime=604800, tolerance=1e-06, resultFile="NormalControl");
+// Plot commands
+createPlot(id=1, position={19, 168, 764, 454}, y={"bld.mec.heaPum.heaPum.QCon_flow", "bld.mec.heaPum.heaPum.QCon_flow_nominal"}, range={0.0, 7.0, -5000.0, 25000.0}, grid=true, filename="BiomimeticControl.mat", colors={{238,46,47}, {0,0,0}}, patterns={LinePattern.Solid, LinePattern.Dot}, timeUnit="d", displayUnits={"W", "W"});
+createPlot(id=1, position={19, 168, 764, 454}, y={"bld.mec.heaPum.heaPum.TSet", "bld.mec.heaPum.conHeaPum.TMin", "bld.mec.heaPum.conHeaPum.TMax",
+ "bld.mec.heaPum.conHeaPum.T0"}, range={0.0, 7.0, 310.0, 314.0}, grid=true, subPlot=102, colors={{238,46,47}, {0,0,0}, {0,0,0}, {0,0,0}}, patterns={LinePattern.Solid, LinePattern.Dot, LinePattern.Dot, LinePattern.Dot}, timeUnit="d", displayUnits={"K", "", "", ""});
+createPlot(id=2, position={601, 34, 813, 409}, y={"PHeaPum.y", "PPum.y"}, range={0.0, 7.0, -1500.0, 500.0}, grid=true, colors={{238,46,47}, {238,46,47}}, patterns={LinePattern.Solid, LinePattern.Dash}, timeUnit="d");
+createPlot(id=2, position={601, 34, 813, 409}, y={"EHeaPum.y", "EPum.y"}, range={0.0, 7.0, -300000000.0, 100000000.0}, grid=true, subPlot=102, colors={{238,46,47}, {238,46,47}}, patterns={LinePattern.Solid, LinePattern.Dash}, timeUnit="d");
+createPlot(id=3, position={402, 379, 958, 412}, y={"bld.mec.zon.thermalZoneFourElements.volAir.T"}, range={0.0, 7.0, 18.0, 26.0}, grid=true, colors={{238,46,47}}, timeUnit="d", displayUnits={"degC"});
+createPlot(id=3, position={402, 379, 958, 412}, y={"bld.mec.zon.thermalZoneFourElements.volAir.ports[1].m_flow"}, range={0.0, 7.0, -0.5, 1.5}, grid=true, subPlot=102, colors={{238,46,47}}, timeUnit="d", displayUnits={"kg/s"});
+createPlot(id=1, position={19, 168, 764, 454}, y={"bld.mec.heaPum.heaPum.QCon_flow"}, range={0.0, 7.0, -5000.0, 25000.0}, erase=false, grid=true, filename="NormalControl.mat", colors={{28,108,200}}, timeUnit="d", displayUnits={"W"});
+createPlot(id=1, position={19, 168, 764, 454}, y={"bld.mec.heaPum.heaPum.TSet"}, range={0.0, 7.0, 310.0, 314.0}, erase=false, grid=true, subPlot=102, colors={{28,108,200}}, timeUnit="d", displayUnits={"K"});
+createPlot(id=2, position={601, 34, 813, 409}, y={"PHeaPum.y", "PPum.y"}, range={0.0, 7.0, -1500.0, 500.0}, erase=false, grid=true, colors={{28,108,200}, {28,108,200}}, patterns={LinePattern.Solid, LinePattern.Dash}, timeUnit="d");
+createPlot(id=2, position={601, 34, 813, 409}, y={"EHeaPum.y", "EPum.y"}, range={0.0, 7.0, -300000000.0, 100000000.0}, erase=false, grid=true, subPlot=102, colors={{28,108,200}, {28,108,200}}, patterns={LinePattern.Solid, LinePattern.Dash}, timeUnit="d");
+createPlot(id=3, position={402, 379, 958, 412}, y={"bld.mec.zon.thermalZoneFourElements.volAir.T"}, range={0.0, 7.0, 18.0, 26.0}, erase=false, grid=true, colors={{28,108,200}}, timeUnit="d", displayUnits={"degC"});
+createPlot(id=3, position={402, 379, 958, 412}, y={"bld.mec.zon.thermalZoneFourElements.volAir.ports[1].m_flow"}, range={0.0, 7.0, -0.5, 1.5}, erase=false, grid=true, subPlot=102, colors={{28,108,200}}, timeUnit="d", displayUnits={"kg/s"});
+
