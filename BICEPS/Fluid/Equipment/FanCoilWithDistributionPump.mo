@@ -8,7 +8,7 @@ model FanCoilWithDistributionPump
   replaceable package Medium2=Buildings.Media.Air
     constrainedby Modelica.Media.Interfaces.PartialMedium
     "Load side medium";
-  parameter Boolean biomimeticControl = true
+  parameter Boolean biomimeticControl=true
     "True if biomimetic control is enabled. False for standard control practice.";
   parameter Boolean allowFlowReversal1=false
     "Set to true to allow flow reversal in building distribution system"
@@ -145,6 +145,7 @@ model FanCoilWithDistributionPump
         rotation=0,
         origin={80,40})));
   Controls.Pump2 con(
+    biomimeticControl=biomimeticControl,
     TMin=TMin,
     TMax=TMax,
     T0=T0) "Pump/fan control"
@@ -187,10 +188,10 @@ equation
     annotation (Line(points={{-39,80},{-22,80}}, color={0,0,127}));
   connect(senTem.T, con.TMea) annotation (Line(points={{80,51},{80,60},{-70,60},
           {-70,74},{-62,74}}, color={0,0,127}));
-  connect(TSetSta.y, con.y) annotation (Line(points={{-79,100},{-70,100},{-70,80},
-          {-62,80}}, color={0,0,127}));
   connect(port_a1, resDis.port_a)
     annotation (Line(points={{-100,-60},{-50,-60}}, color={0,127,255}));
+  connect(TSetSta.y, con.TSetSta) annotation (Line(points={{-79,100},{-70,100},
+          {-70,86},{-62,86}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-100,-66},{100,-54}},
