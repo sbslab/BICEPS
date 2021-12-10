@@ -9,6 +9,7 @@ model SingleFamilyResidentialBuilding
     "Library path of the files with other electrical loads as time series";
   BICEPS.Combined.ElectricalAndFluid.SingleFamilyResidentialBuilding bld(
     redeclare package MediumWat = Medium,
+    show_T=true,
     lat=weaDat.lat,
     POth_nominal=9653,
     EBatMax=540000000,
@@ -23,7 +24,7 @@ model SingleFamilyResidentialBuilding
     annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
   Buildings.Fluid.Sources.Boundary_pT sou(
     redeclare package Medium = Medium,
-    T=bld.mec.TDisWatMin,
+    T=293.15,
     nPorts=1) "Source"
     annotation (Placement(transformation(extent={{60,-90},{40,-70}})));
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(

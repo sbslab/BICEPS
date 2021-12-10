@@ -10,6 +10,12 @@ model SingleFamilyResidentialBuilding
     "Load side medium";
   parameter Boolean biomimeticControl=true
     "True if biomimetic control is enabled. False for standard control practice.";
+  // Diagnostic
+  parameter Boolean show_T = false
+    "= true, if actual temperature at port is computed"
+    annotation (
+      Dialog(tab="Advanced", group="Diagnostics"),
+      HideResult=true);
   parameter Boolean have_pv=true "True if the building has a PV system";
   parameter Boolean have_wind=true "True if the building has a wind system";
   parameter Modelica.SIunits.Angle lat "Latitude";
@@ -62,6 +68,7 @@ model SingleFamilyResidentialBuilding
     biomimeticControl=biomimeticControl,
     redeclare package MediumWat = MediumWat,
     redeclare package MediumAir = MediumAir,
+    show_T=show_T,
     QHea_flow_nominal=PHeaPum_nominal*mec.COP_nominal,
     COP_nominal=4,
     TMin=TMin,
