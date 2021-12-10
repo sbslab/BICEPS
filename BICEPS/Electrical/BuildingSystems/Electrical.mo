@@ -1,6 +1,8 @@
 within BICEPS.Electrical.BuildingSystems;
 model Electrical "Model of a building's electrical system"
   extends Buildings.BaseClasses.BaseIconLow;
+  parameter Boolean biomimeticControl=true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Integer nCon=1 "Number of consumer connections";
   parameter Integer nSto=1 "Number of storage connections";
   final parameter Integer nPro=if have_pv and have_wind then 2 elseif
@@ -36,11 +38,13 @@ model Electrical "Model of a building's electrical system"
   parameter Modelica.SIunits.Length LSto[nSto]=fill(5,nSto)
     "Length of the storage lines";
   Equipment.Panel P1(
+    biomimeticControl=biomimeticControl,
     nPro=nPro,
     nCon=nCon,
     nSto=nSto)
     annotation (Placement(transformation(extent={{-10,20},{10,40}})));
   BaseClasses.ConnectedDevices dev(
+    biomimeticControl=biomimeticControl,
     nCon=nCon,
     nSto=nSto,
     have_pv=have_pv,
@@ -96,7 +100,8 @@ model Electrical "Model of a building's electrical system"
     annotation (Placement(transformation(extent={{-20,82},{20,122}}),
       iconTransformation(extent={{-10,90},{10,110}})));
 
-  Modelica.Blocks.Interfaces.RealOutput yOut "Output control signal"
+  Modelica.Blocks.Interfaces.RealOutput yOut if biomimeticControl
+    "Output control signal"
     annotation (Placement(transformation(extent={{100,70},{120,90}})));
 equation
   connect(P1.terCon, linCon.terminal_n) annotation (Line(points={{4,19},{4,14},{

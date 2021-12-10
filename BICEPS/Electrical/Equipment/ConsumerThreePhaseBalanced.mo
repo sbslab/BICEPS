@@ -2,6 +2,8 @@ within BICEPS.Electrical.Equipment;
 model ConsumerThreePhaseBalanced
   "Generic model for an electrical consumer with a three phase balanced load"
   extends Buildings.BaseClasses.BaseIcon;
+  parameter Boolean biomimeticControl=true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
   parameter Real tol=0.05 "Tolerance allowed on nominal voltage control (5-10% typical)";
@@ -14,7 +16,8 @@ model ConsumerThreePhaseBalanced
   Experimental.Examples.Sensors.RelativeElectricalExergyPotential senV(
     tol=tol,
     v0=V_nominal,
-    k=k) "Control signal load"
+    k=k) if biomimeticControl
+    "Control signal load"
     annotation (Placement(transformation(extent={{-10,42},{10,62}})));
   Modelica.Blocks.Math.Gain inv(k=-1) "Invert to be negative (consumption)"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
@@ -28,7 +31,8 @@ model ConsumerThreePhaseBalanced
     "Generalized electric terminal"
     annotation (Placement(transformation(extent={{-4,-112},{12,-96}}),
         iconTransformation(extent={{-8,-116},{8,-100}})));
-  Modelica.Blocks.Interfaces.RealOutput y "Control signal"
+  Modelica.Blocks.Interfaces.RealOutput y if biomimeticControl
+    "Control signal"
     annotation (Placement(transformation(extent={{100,50},{120,70}})));
 equation
   connect(P, inv.u)

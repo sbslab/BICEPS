@@ -2,6 +2,8 @@ within BICEPS.Electrical.Equipment;
 model StorageBattery
   "Model for a chemical battery for the electrical system"
   extends Buildings.BaseClasses.BaseIconLow;
+  parameter Boolean biomimeticControl=true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
   parameter Real tol=0.05 "Tolerance allowed on nominal voltage control (5-10% typical)";
@@ -16,12 +18,13 @@ model StorageBattery
   // 50 kWh
   parameter Modelica.SIunits.Energy EBatMax = 180000000
     "Maximum energy capacity of the battery";
-  Modelica.Blocks.Interfaces.RealOutput yOut "Output control signal"
+  Modelica.Blocks.Interfaces.RealOutput yOut if biomimeticControl
+    "Output control signal"
     annotation (Placement(transformation(extent={{100,50},{120,70}})));
   Experimental.Examples.Sensors.RelativeElectricalExergyPotential senBat(
     tol=tol,
     v0=V_nominal,
-    k=k)
+    k=k) if biomimeticControl
     "Control signal battery"
     annotation (Placement(transformation(extent={{-10,42},{10,62}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Storage.Battery bat(
