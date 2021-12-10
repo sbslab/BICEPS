@@ -13,7 +13,23 @@ model SimpleRoomFourElements
   parameter Real k(min=Modelica.Constants.small)=10
     "Percentage penalty for deviating outside of min/max range. Smaller numbers
     indicate a steeper penalty.";
+  // Diagnostics
+   parameter Boolean show_T = false
+    "= true, if actual temperature at port is computed"
+    annotation (
+      Dialog(tab="Advanced", group="Diagnostics"),
+      HideResult=true);
+  Medium.ThermodynamicState sta_a=
+      Medium.setState_phX(port_a.p,
+                          noEvent(actualStream(port_a.h_outflow)),
+                          noEvent(actualStream(port_a.Xi_outflow))) if
+         show_T "Medium properties in port_a";
 
+  Medium.ThermodynamicState sta_b=
+      Medium.setState_phX(port_b.p,
+                          noEvent(actualStream(port_b.h_outflow)),
+                          noEvent(actualStream(port_b.Xi_outflow))) if
+          show_T "Medium properties in port_b";
   Buildings.BoundaryConditions.SolarIrradiation.DiffusePerez HDifTil[4](
     each outSkyCon=true,
     each outGroCon=true,
@@ -172,7 +188,6 @@ model SimpleRoomFourElements
   Modelica.Blocks.Sources.Constant const1[2](each k=0)
     "Sets sunblind signal to zero (open)"
     annotation (Placement(transformation(extent={{56,90},{50,96}})));
-
   Modelica.Fluid.Interfaces.FluidPort_a port_a(
     redeclare package Medium = Medium)
     annotation (Placement(transformation(extent={{-110,-90},{-90,-70}}),
@@ -201,6 +216,7 @@ model SimpleRoomFourElements
   Modelica.Blocks.Sources.RealExpression QFloHeaPor(y=thermalZoneFourElements.volAir.heatPort.Q_flow)
     "Heat flow rate at the air volume heat port"
     annotation (Placement(transformation(extent={{86,30},{96,50}})));
+
 equation
   connect(eqAirTemp.TEqAirWin, preTem1.T)
     annotation (Line(points={{-15,-0.2},{-12,-0.2},{-12,20},{-5.2,20}},

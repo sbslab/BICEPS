@@ -10,6 +10,17 @@ model FanCoilWithDistributionPump
     "Load side medium";
   parameter Boolean biomimeticControl=true
     "True if biomimetic control is enabled. False for standard control practice.";
+  // Diagnostics
+   parameter Boolean show_T1 = false
+    "= true, if actual temperature at port is computed"
+    annotation (
+      Dialog(tab="Advanced", group="Diagnostics"),
+      HideResult=true);
+   parameter Boolean show_T2 = false
+    "= true, if actual temperature at port is computed"
+    annotation (
+      Dialog(tab="Advanced", group="Diagnostics"),
+      HideResult=true);
   parameter Boolean allowFlowReversal1=false
     "Set to true to allow flow reversal in building distribution system"
     annotation (Dialog(tab="Assumptions"),Evaluate=true);
@@ -56,6 +67,28 @@ model FanCoilWithDistributionPump
   parameter Modelica.SIunits.Temperature T_aLoaHea_nominal=273.15 + 21.1
     "Load side inlet temperature at nominal conditions in heating mode"
     annotation (Dialog(group="Nominal condition"));
+  Medium1.ThermodynamicState sta_a1=
+      Medium1.setState_phX(port_a1.p,
+                          noEvent(actualStream(port_a1.h_outflow)),
+                          noEvent(actualStream(port_a1.Xi_outflow))) if
+         show_T1 "Medium properties in port_a1";
+
+  Medium1.ThermodynamicState sta_b1=
+      Medium1.setState_phX(port_b1.p,
+                          noEvent(actualStream(port_b1.h_outflow)),
+                          noEvent(actualStream(port_b1.Xi_outflow))) if
+          show_T1 "Medium properties in port_b1";
+  Medium2.ThermodynamicState sta_a2=
+      Medium2.setState_phX(port_a2.p,
+                          noEvent(actualStream(port_a2.h_outflow)),
+                          noEvent(actualStream(port_a2.Xi_outflow))) if
+         show_T2 "Medium properties in port_a1";
+
+  Medium2.ThermodynamicState sta_b2=
+      Medium2.setState_phX(port_b1.p,
+                          noEvent(actualStream(port_b2.h_outflow)),
+                          noEvent(actualStream(port_b2.Xi_outflow))) if
+          show_T2 "Medium properties in port_b2";
   replaceable parameter Buildings.Fluid.Movers.Data.Generic per(
     pressure(
       V_flow=m1_flow_nominal/rho1_default .* {0,1,2},

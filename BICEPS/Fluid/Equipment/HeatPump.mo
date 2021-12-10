@@ -42,6 +42,16 @@ model HeatPump "Heat pump model"
   parameter Modelica.SIunits.Pressure dp2_nominal(displayUnit="Pa")
     "Pressure difference over evaporator"
     annotation (Dialog(group="Nominal condition"));
+   parameter Boolean show_T1 = false
+    "= true, if actual temperature at port is computed"
+    annotation (
+      Dialog(tab="Advanced", group="Diagnostics"),
+      HideResult=true);
+   parameter Boolean show_T2 = false
+    "= true, if actual temperature at port is computed"
+    annotation (
+      Dialog(tab="Advanced", group="Diagnostics"),
+      HideResult=true);
   parameter Boolean allowFlowReversal1=false
     "Set to true to allow flow reversal on condenser side"
     annotation (Dialog(tab="Assumptions"), Evaluate=true);
@@ -61,6 +71,28 @@ model HeatPump "Heat pump model"
       p = Medium1.p_default,
       T = Medium1.T_default))
     "Specific heat capacity of the fluid";
+  Medium1.ThermodynamicState sta_a1=
+      Medium1.setState_phX(port_a1.p,
+                          noEvent(actualStream(port_a1.h_outflow)),
+                          noEvent(actualStream(port_a1.Xi_outflow))) if
+         show_T1 "Medium properties in port_a1";
+
+  Medium1.ThermodynamicState sta_b1=
+      Medium1.setState_phX(port_b1.p,
+                          noEvent(actualStream(port_b1.h_outflow)),
+                          noEvent(actualStream(port_b1.Xi_outflow))) if
+          show_T1 "Medium properties in port_b1";
+  Medium2.ThermodynamicState sta_a2=
+      Medium2.setState_phX(port_a2.p,
+                          noEvent(actualStream(port_a2.h_outflow)),
+                          noEvent(actualStream(port_a2.Xi_outflow))) if
+         show_T2 "Medium properties in port_a1";
+
+  Medium2.ThermodynamicState sta_b2=
+      Medium2.setState_phX(port_b1.p,
+                          noEvent(actualStream(port_b2.h_outflow)),
+                          noEvent(actualStream(port_b2.Xi_outflow))) if
+          show_T2 "Medium properties in port_b2";
   Buildings.Fluid.HeatPumps.Carnot_TCon heaPum(
     redeclare final package Medium1 = Medium1,
     redeclare final package Medium2 = Medium2,

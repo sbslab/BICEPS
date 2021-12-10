@@ -9,6 +9,12 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     "Load side medium";
   parameter Boolean biomimeticControl=true
     "True if biomimetic control is enabled. False for standard control practice.";
+  // Diagnostic
+  parameter Boolean show_T = false
+    "= true, if actual temperature at port is computed"
+    annotation (
+      Dialog(tab="Advanced", group="Diagnostics"),
+      HideResult=true);
   parameter Modelica.SIunits.HeatFlowRate QHea_flow_nominal=0
     "Nominal heating capacity (>=0)";
   parameter Real COP_nominal "Heat pump COP";
@@ -57,6 +63,8 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     biomimeticControl=biomimeticControl,
     redeclare package Medium1 = MediumWat,
     redeclare package Medium2 = MediumWat,
+    show_T1=show_T,
+    show_T2=show_T,
     COP_nominal=COP_nominal,
     TCon_nominal=THeaWatSup_nominal,
     TEva_nominal=TDisWatMin - dT_nominal,
@@ -70,6 +78,8 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     biomimeticControl=biomimeticControl,
     redeclare package Medium1 = MediumWat,
     redeclare package Medium2 = MediumAir,
+    show_T1=show_T,
+    show_T2=show_T,
     m1_flow_nominal=mHeaWat_flow_nominal,
     m2_flow_nominal=mLoaHea_flow_nominal,
     dp1_nominal=100000,
@@ -83,7 +93,8 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     biomimeticControl=biomimeticControl,
     TMin=TMin,
     TMax=TMax,
-    T0=T0)
+    T0=T0,
+    show_T=show_T)
     annotation (Placement(transformation(extent={{-30,20},{-10,40}})));
   Modelica.Blocks.Interfaces.RealInput yEle if biomimeticControl
     "Relative exergetic potential of electrical subsystem"
