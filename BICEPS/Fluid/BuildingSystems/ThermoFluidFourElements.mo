@@ -7,6 +7,8 @@ model ThermoFluidFourElements "Thermofluid subsystem"
   replaceable package MediumAir=Buildings.Media.Air
     constrainedby Modelica.Media.Interfaces.PartialMedium
     "Load side medium";
+  parameter Boolean biomimeticControl=true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Modelica.SIunits.HeatFlowRate QHea_flow_nominal=0
     "Nominal heating capacity (>=0)";
   parameter Real COP_nominal "Heat pump COP";
@@ -16,7 +18,7 @@ model ThermoFluidFourElements "Thermofluid subsystem"
   parameter Modelica.SIunits.TemperatureDifference dT_nominal(min=0) = 5
     "Water temperature drop/increase accross load and source-side HX (always positive)"
     annotation (Dialog(group="Nominal condition"));
-  parameter Modelica.SIunits.Temperature TDisWatMin=6+273.15
+  parameter Modelica.SIunits.Temperature TDisWatMin=279.15
     "District water minimum temperature"
     annotation (Dialog(group="DHC system"));
   parameter Modelica.SIunits.Temperature THeaWatSup_nominal=313.15
@@ -52,6 +54,7 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     min=1E-5)=30*60
     "Smoothing time for thermal-fluid control signal";
   Equipment.HeatPump heaPum(
+    biomimeticControl=biomimeticControl,
     redeclare package Medium1 = MediumWat,
     redeclare package Medium2 = MediumWat,
     COP_nominal=COP_nominal,
@@ -64,6 +67,7 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     dp2_nominal=dp_nominal)
     annotation (Placement(transformation(extent={{-10,-62},{-30,-42}})));
   Equipment.FanCoilWithDistributionPump fcu(
+    biomimeticControl=biomimeticControl,
     redeclare package Medium1 = MediumWat,
     redeclare package Medium2 = MediumAir,
     m1_flow_nominal=mHeaWat_flow_nominal,
@@ -76,11 +80,12 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     T0=T0)
     annotation (Placement(transformation(extent={{-30,-20},{-10,0}})));
   ThermalZones.SimpleRoomFourElements zon(
+    biomimeticControl=biomimeticControl,
     TMin=TMin,
     TMax=TMax,
     T0=T0)
     annotation (Placement(transformation(extent={{-30,20},{-10,40}})));
-  Modelica.Blocks.Interfaces.RealInput yEle
+  Modelica.Blocks.Interfaces.RealInput yEle if biomimeticControl
     "Relative exergetic potential of electrical subsystem"
     annotation (Placement(transformation(extent={{-140,50},{-100,90}})));
   Modelica.Blocks.Interfaces.RealOutput PHeaPum(
@@ -104,7 +109,7 @@ model ThermoFluidFourElements "Thermofluid subsystem"
   Buildings.BoundaryConditions.WeatherData.Bus weaBus "Weather data bus"
     annotation (Placement(transformation(extent={{-20,80},{20,120}}),
         iconTransformation(extent={{-10,90},{10,110}})));
-  Controls.ThermoFluid conFlu(n=2, tSmo=tSmo)
+  Controls.ThermoFluid conFlu(n=2, tSmo=tSmo) if biomimeticControl
     annotation (Placement(transformation(extent={{40,20},{60,40}})));
 
   Modelica.Blocks.Logical.Hysteresis noHea(uLow=-300, uHigh=0) "Enable heating"

@@ -5,6 +5,8 @@ model SimpleRoomFourElements
   replaceable package Medium=Buildings.Media.Air
     constrainedby Modelica.Media.Interfaces.PartialMedium
     "Load side medium";
+  parameter Boolean biomimeticControl = true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Modelica.SIunits.Temperature TMin=273.15+15 "Minimimum desired threshold for independent variable";
   parameter Modelica.SIunits.Temperature TMax=273.15+25 "Maximum desired threshold for independent variable";
   parameter Modelica.SIunits.Temperature T0=273.15+20 "Nominal value for independent variable";
@@ -179,7 +181,7 @@ model SimpleRoomFourElements
     redeclare package Medium = Medium)
     annotation (Placement(transformation(extent={{90,-90},{110,-70}}),
         iconTransformation(extent={{90,-90},{110,-70}})));
-  Modelica.Blocks.Interfaces.RealOutput y "Control signal"
+  Modelica.Blocks.Interfaces.RealOutput y if biomimeticControl "Control signal"
     annotation (Placement(transformation(extent={{100,70},{120,90}}),
         iconTransformation(
         extent={{100,60},{120,80}})));
@@ -189,7 +191,8 @@ model SimpleRoomFourElements
     final x0=T0,
     final k=k,
     reverseActing=true,
-    final ensureMonotonicity=true)
+    final ensureMonotonicity=true) if biomimeticControl
+    "Spline to calculate control signal"
     annotation (Placement(transformation(extent={{76,70},{96,90}})));
   Modelica.Blocks.Interfaces.RealOutput QAct_flow
     "Actual heat flow rate into air zone" annotation (Placement(transformation(

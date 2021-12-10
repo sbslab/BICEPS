@@ -8,6 +8,8 @@ model FanCoilWithDistributionPump
   replaceable package Medium2=Buildings.Media.Air
     constrainedby Modelica.Media.Interfaces.PartialMedium
     "Load side medium";
+  parameter Boolean biomimeticControl = true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Boolean allowFlowReversal1=false
     "Set to true to allow flow reversal in building distribution system"
     annotation (Dialog(tab="Assumptions"),Evaluate=true);
@@ -40,7 +42,8 @@ model FanCoilWithDistributionPump
     "Minimimum desired threshold for independent variable";
   parameter Real TMax=273.15 + 25
     "Maximum desired threshold for independent variable";
-  parameter Real T0=273.15 + 20 "Nominal value for independent variable";
+  parameter Real T0=273.15 + 20
+    "Nominal value for independent variable. Fixed setpoint if not biomimetic control.";
   // AHRI 440 Standard Heating
   parameter Modelica.SIunits.Temperature T_aHeaWat_nominal=273.15 + 60
     "Heating water inlet temperature at nominal conditions"
@@ -152,7 +155,7 @@ model FanCoilWithDistributionPump
   Buildings.Fluid.Sources.Boundary_pT pRefPum(redeclare package Medium =
         Medium1, nPorts=1) "Reference pressure"
     annotation (Placement(transformation(extent={{-60,-100},{-80,-80}})));
-  Modelica.Blocks.Interfaces.RealInput y "Control signal"
+  Modelica.Blocks.Interfaces.RealInput y if biomimeticControl "Control signal"
     annotation (Placement(transformation(extent={{-140,60},{-100,100}})));
   Modelica.Blocks.Math.Gain m2Set_flow(k=m2_flow_nominal)
     "Mass flow setpoint for the fan"
@@ -171,6 +174,9 @@ model FanCoilWithDistributionPump
     TMax=TMax,
     T0=T0) "Pump/fan control"
     annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
+  Modelica.Blocks.Sources.Constant TSetSta(k=T0) if not biomimeticControl
+    "Static setpoint temperature if not biomimetic control"
+    annotation (Placement(transformation(extent={{-100,90},{-80,110}})));
 protected
   parameter Medium1.ThermodynamicState sta1_default=Medium1.setState_pTX(
     T=Medium1.T_default,
@@ -216,6 +222,8 @@ equation
           -10},{-38,-10}}, color={0,0,127}));
   connect(senTem.T, con.TMea) annotation (Line(points={{80,51},{80,60},{-70,60},
           {-70,74},{-62,74}}, color={0,0,127}));
+  connect(TSetSta.y, con.y) annotation (Line(points={{-79,100},{-70,100},{-70,80},
+          {-62,80}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-100,-66},{100,-54}},
@@ -234,5 +242,5 @@ equation
           lineColor={27,0,55},
           fillColor={170,213,255},
           fillPattern=FillPattern.Solid)}),                      Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,120}})));
 end FanCoilWithDistributionPump;

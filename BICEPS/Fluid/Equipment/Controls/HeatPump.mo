@@ -1,6 +1,8 @@
 within BICEPS.Fluid.Equipment.Controls;
 model HeatPump "Heat pump control"
   extends Modelica.Blocks.Icons.Block;
+  parameter Boolean biomimeticControl = true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Real TMin=273.15+15 "Minimimum desired threshold for independent variable";
   parameter Real TMax=273.15+25 "Maximum desired threshold for independent variable";
   parameter Real T0=273.15+20 "Nominal value for independent variable";
@@ -15,23 +17,26 @@ model HeatPump "Heat pump control"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
   Modelica.Blocks.Interfaces.RealInput TConEnt
     "Measured entering condenser water temperature"
-    annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
+    annotation (Placement(transformation(extent={{-140,-100},{-100,-60}})));
   Buildings.Controls.OBC.CDL.Logical.Switch enaHeaPum(u2(start=false))
     "Enable heat pump by switching to actual set point"
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
   Modelica.Blocks.Interfaces.BooleanInput uEna "Enable signal"
-    annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
+    annotation (Placement(transformation(extent={{-140,-40},{-100,0}})));
   Utilities.Math.CubicHermiteInverse spl(
     final xMin=TMin,
     final xMax=TMax,
     final x0=T0,
-    final ensureMonotonicity=true)
-    annotation (Placement(transformation(extent={{-80,50},{-60,70}})));
-  Buildings.Controls.OBC.CDL.Continuous.Limiter lim(final uMax=TMax, final uMin=
-       TMin)
-    annotation (Placement(transformation(extent={{-40,50},{-20,70}})));
-  Modelica.Blocks.Interfaces.RealInput y "Control signal"
-    annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
+    final ensureMonotonicity=true) if biomimeticControl
+    annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
+  Buildings.Controls.OBC.CDL.Continuous.Limiter lim(
+    final uMax=TMax,
+    final uMin=TMin) if biomimeticControl
+    annotation (Placement(transformation(extent={{-40,30},{-20,50}})));
+  Modelica.Blocks.Interfaces.RealInput y if biomimeticControl
+    "Control signal"
+    annotation (Placement(transformation(extent={{-140,20},{-100,60}}),
+        iconTransformation(extent={{-140,20},{-100,60}})));
   Modelica.Blocks.Continuous.Filter fil(
     analogFilter=Modelica.Blocks.Types.AnalogFilter.CriticalDamping,
     filterType=Modelica.Blocks.Types.FilterType.LowPass,
@@ -41,22 +46,31 @@ model HeatPump "Heat pump control"
     y_start=THeaWatSup_nominal)
     "Second order filter to approximate battery transitions between charge/off/discharge/off/charge"
     annotation (Placement(transformation(extent={{72,-10},{92,10}})));
+  Modelica.Blocks.Interfaces.RealInput TSetSta if not biomimeticControl
+    "Static temperature setpoint if normal control"
+    annotation (Placement(transformation(extent={{-140,80},{-100,120}}),
+        iconTransformation(extent={{-140,80},{-100,120}})));
 equation
   connect(spl.x,lim. u)
-    annotation (Line(points={{-59,60},{-42,60}},
+    annotation (Line(points={{-59,40},{-42,40}},
                                              color={0,0,127}));
   connect(uEna, enaHeaPum.u2)
-    annotation (Line(points={{-120,0},{38,0}}, color={255,0,255}));
-  connect(TConEnt, enaHeaPum.u3) annotation (Line(points={{-120,-60},{0,-60},{0,
+    annotation (Line(points={{-120,-20},{-42,-20},{-42,0},{38,0}},
+                                               color={255,0,255}));
+  connect(TConEnt, enaHeaPum.u3) annotation (Line(points={{-120,-80},{0,-80},{0,
           -8},{38,-8}}, color={0,0,127}));
-  connect(lim.y, enaHeaPum.u1) annotation (Line(points={{-18,60},{0,60},{0,8},{
-          38,8}},                 color={0,0,127}));
+  connect(lim.y, enaHeaPum.u1) annotation (Line(points={{-18,40},{0,40},{0,8},{38,
+          8}},                    color={0,0,127}));
   connect(y, spl.y)
-    annotation (Line(points={{-120,60},{-82,60}}, color={0,0,127}));
+    annotation (Line(points={{-120,40},{-102,40},{-102,40},{-82,40}},
+                                                  color={0,0,127}));
   connect(enaHeaPum.y, fil.u)
     annotation (Line(points={{62,0},{70,0}}, color={0,0,127}));
   connect(fil.y, TSet)
     annotation (Line(points={{93,0},{98,0},{98,0},{110,0}}, color={0,0,127}));
+  connect(TSetSta, enaHeaPum.u1) annotation (Line(points={{-120,100},{20,100},{
+          20,8},{38,8}},
+                      color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end HeatPump;
