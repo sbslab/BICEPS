@@ -3,9 +3,9 @@ model HeatPump "Heat pump control"
   extends Modelica.Blocks.Icons.Block;
   parameter Boolean biomimeticControl = true
     "True if biomimetic control is enabled. False for standard control practice.";
-  parameter Real TMin=273.15+15 "Minimimum desired threshold for independent variable";
-  parameter Real TMax=273.15+25 "Maximum desired threshold for independent variable";
-  parameter Real T0=273.15+20 "Nominal value for independent variable";
+  parameter Modelica.SIunits.Temperature TMin=273.15+15 "Minimimum desired threshold for independent variable";
+  parameter Modelica.SIunits.Temperature TMax=273.15+25 "Maximum desired threshold for independent variable";
+  parameter Modelica.SIunits.Temperature T0=273.15+20 "Nominal value for independent variable";
   parameter Real a(min=0,max=1) = 0.5 "First weighting factor";
   parameter Real b(min=0,max=1) = 1 - a "First weighting factor";
   parameter Modelica.SIunits.Time riseTime=1

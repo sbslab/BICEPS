@@ -35,11 +35,11 @@ model SingleFamilyResidentialBuilding
   parameter Boolean allowFlowReversal=false
     "Set to true to allow flow reversal on condenser side"
     annotation (Dialog(tab="Assumptions"), Evaluate=true);
-  parameter Real TMin=273.15 + 15
+  parameter Modelica.SIunits.Temperature TMin=288.15
     "Minimimum desired threshold for independent variable";
-  parameter Real TMax=273.15 + 25
+  parameter Modelica.SIunits.Temperature TMax=298.15
     "Maximum desired threshold for independent variable";
-  parameter Real T0=273.15 + 20 "Nominal value for independent variable";
+  parameter Modelica.SIunits.Temperature T0=293.15      "Nominal value for independent variable";
   parameter Real tSmo(
     final quantity="Time",
     final unit="s",

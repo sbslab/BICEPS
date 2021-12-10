@@ -38,11 +38,11 @@ model FanCoilWithDistributionPump
     min=0)=0
     "Nominal heating capacity (>=0)"
     annotation (Dialog(group="Nominal condition"));
-  parameter Real TMin=273.15 + 15
+  parameter Modelica.SIunits.Temperature TMin=288.15
     "Minimimum desired threshold for independent variable";
-  parameter Real TMax=273.15 + 25
+  parameter Modelica.SIunits.Temperature TMax=298.15
     "Maximum desired threshold for independent variable";
-  parameter Real T0=273.15 + 20
+  parameter Modelica.SIunits.Temperature T0=293.15
     "Nominal value for independent variable. Fixed setpoint if not biomimetic control.";
   // AHRI 440 Standard Heating
   parameter Modelica.SIunits.Temperature T_aHeaWat_nominal=273.15 + 60

@@ -140,7 +140,7 @@ model HeatPump "Heat pump model"
     biomimeticControl=biomimeticControl,
     TMin=conHeaPum.T0 - 1,
     TMax=conHeaPum.T0 + 1,
-    T0=273.15 + 38,
+    T0=311.15,
     riseTime=60,
     THeaWatSup_nominal=THeaWatSup_nominal) "Heat pump control"
     annotation (Placement(transformation(extent={{-80,-30},{-60,-50}})));

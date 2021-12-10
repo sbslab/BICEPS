@@ -1,9 +1,9 @@
 within BICEPS.Fluid.Equipment.Controls;
 model Pump2 "Pump control"
   extends Modelica.Blocks.Icons.Block;
-  parameter Real TMin=273.15+15 "Minimimum desired threshold for independent variable";
-  parameter Real TMax=273.15+25 "Maximum desired threshold for independent variable";
-  parameter Real T0=273.15+20 "Nominal value for independent variable";
+  parameter Modelica.SIunits.Temperature TMin=288.15    "Minimimum desired threshold for independent variable";
+  parameter Modelica.SIunits.Temperature TMax=298.15    "Maximum desired threshold for independent variable";
+  parameter Modelica.SIunits.Temperature T0=293.15    "Nominal value for independent variable";
   parameter Real dT=0.5 "Temperature deadband for complete linear transition";
   parameter Real a(min=0,max=1) = 0.5 "First weighting factor";
   parameter Real b(min=0,max=1) = 1 - a "First weighting factor";
