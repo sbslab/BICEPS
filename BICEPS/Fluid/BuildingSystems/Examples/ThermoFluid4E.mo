@@ -14,6 +14,8 @@ model ThermoFluid4E "Test model for the thermofluid subsystem"
 
   BICEPS.Fluid.BuildingSystems.ThermoFluidFourElements thermoFluid(
     redeclare package MediumWat = Medium,
+    biomimeticControl=false,
+    show_T=true,
     QHea_flow_nominal=10000,
     COP_nominal=4,
     mLoaHea_flow_nominal=1)
@@ -22,7 +24,7 @@ model ThermoFluid4E "Test model for the thermofluid subsystem"
                                                      "Ideal electrical signal"
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
   Buildings.Fluid.Sources.Boundary_pT sou(redeclare package Medium = Medium,
-    T=thermoFluid.TDisWatMin,
+    T=285.15,
     nPorts=1) "Source"
     annotation (Placement(transformation(extent={{-40,0},{-20,20}})));
   Buildings.Fluid.Sources.Boundary_pT sin(redeclare package Medium = Medium,
@@ -52,7 +54,7 @@ equation
       file="modelica://BICEPS/Resources/Scripts/Dymola/Fluid/BuildingSystems/Examples/ThermoFluid4E.mos"
       "Simulate and plot"),
     experiment(
-      StopTime=2592000,
+      StopTime=604800,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"),
     Diagram(

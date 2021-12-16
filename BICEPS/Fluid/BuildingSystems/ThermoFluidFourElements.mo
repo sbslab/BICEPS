@@ -27,7 +27,7 @@ model ThermoFluidFourElements "Thermofluid subsystem"
   parameter Modelica.SIunits.Temperature TDisWatMin=279.15
     "District water minimum temperature"
     annotation (Dialog(group="DHC system"));
-  parameter Modelica.SIunits.Temperature THeaWatSup_nominal=313.15
+  parameter Modelica.SIunits.Temperature THeaWatSup_nominal=323.15
     "Heating water supply temperature"
     annotation (Dialog(group="Nominal condition"));
   final parameter Modelica.SIunits.Temperature THeaWatRet_nominal=
@@ -63,6 +63,7 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     biomimeticControl=biomimeticControl,
     redeclare package Medium1 = MediumWat,
     redeclare package Medium2 = MediumWat,
+    THeaWatSup_nominal=323.15,
     show_T1=show_T,
     show_T2=show_T,
     COP_nominal=COP_nominal,
@@ -133,7 +134,7 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     min=0,
     displayUnit="kW") "Pump power"
     annotation (Placement(transformation(extent={{100,70},{120,90}})));
-  Modelica.Blocks.Sources.BooleanConstant heaPumOn(k=true)
+  Modelica.Blocks.Sources.BooleanConstant heaPumOn(k=false)
     "Set heat pump to always on (for heating-season only simulation)"
     annotation (Placement(transformation(extent={{40,-90},{20,-70}})));
 equation

@@ -96,6 +96,7 @@ model HeatPump "Heat pump model"
   Buildings.Fluid.HeatPumps.Carnot_TCon heaPum(
     redeclare final package Medium1 = Medium1,
     redeclare final package Medium2 = Medium2,
+    show_T=show_T1,
     final dTEva_nominal=dT2_nominal,
     final dTCon_nominal=dT1_nominal,
     final TCon_nominal=TCon_nominal,
@@ -117,13 +118,15 @@ model HeatPump "Heat pump model"
   Buildings.Experimental.DHC.EnergyTransferStations.BaseClasses.Pump_m_flow pumCon(
     redeclare final package Medium = Medium1,
     final m_flow_nominal=m1_flow_nominal,
-    final allowFlowReversal=allowFlowReversal1)
+    final allowFlowReversal=allowFlowReversal1,
+    show_T=show_T1)
     "Heat pump condenser water pump"
     annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
   Buildings.Experimental.DHC.EnergyTransferStations.BaseClasses.Pump_m_flow pumEva(
     redeclare final package Medium = Medium2,
     final m_flow_nominal=m2_flow_nominal,
-    final allowFlowReversal=allowFlowReversal2)
+    final allowFlowReversal=allowFlowReversal2,
+    show_T=show_T2)
     "Heat pump evaporator water pump"
     annotation (Placement(transformation(extent={{120,-110},{100,-90}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput PPum(final unit="W")
@@ -172,7 +175,7 @@ model HeatPump "Heat pump model"
     biomimeticControl=biomimeticControl,
     TMin=conHeaPum.T0 - 1,
     TMax=conHeaPum.T0 + 1,
-    T0=311.15,
+    T0=323.15,
     riseTime=60,
     THeaWatSup_nominal=THeaWatSup_nominal) "Heat pump control"
     annotation (Placement(transformation(extent={{-80,-30},{-60,-50}})));
@@ -213,10 +216,12 @@ model HeatPump "Heat pump model"
     "Heat flow rate at evaporator"
     annotation (Placement(transformation(extent={{62,-34},{82,-14}})));
   Controls.PrimaryVariableFlow conFloCon(Q_flow_nominal=Q1_flow_nominal,
-      dT_nominal=dT1_nominal)
+      dT_nominal=dT1_nominal,
+    ratFloMin=0.2)
     annotation (Placement(transformation(extent={{60,74},{80,94}})));
   Controls.PrimaryVariableFlow conFloEva(Q_flow_nominal=-Q1_flow_nominal*(1 + 1
-        /COP_nominal), dT_nominal=dT2_nominal)
+        /COP_nominal), dT_nominal=dT2_nominal,
+    ratFloMin=0.2)
     annotation (Placement(transformation(extent={{110,-34},{130,-14}})));
   Modelica.Blocks.Interfaces.RealInput yHeaPum if biomimeticControl
     "Control signal" annotation (
@@ -225,8 +230,8 @@ model HeatPump "Heat pump model"
   Buildings.Fluid.Sources.Boundary_pT pRef(redeclare package Medium = Medium1,
       nPorts=1) "Reference pressure"
     annotation (Placement(transformation(extent={{-20,-30},{-40,-10}})));
-  Modelica.Blocks.Sources.Constant TSetSta(k=conHeaPum.T0) if
-                                                    not biomimeticControl
+  Modelica.Blocks.Sources.Constant TSetSta(
+    k=conHeaPum.T0) if not biomimeticControl
     "Static setpoint temperature if not biomimetic control"
     annotation (Placement(transformation(extent={{-130,-80},{-110,-60}})));
 equation

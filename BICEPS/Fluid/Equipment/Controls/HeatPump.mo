@@ -13,10 +13,13 @@ model HeatPump "Heat pump control"
   parameter Modelica.SIunits.Temperature THeaWatSup_nominal=313.15
     "Heating water supply temperature"
     annotation (Dialog(group="Nominal condition"));
-  Modelica.Blocks.Interfaces.RealOutput TSet "Setpoint temperature"
+  Modelica.Blocks.Interfaces.RealOutput TSet(
+    final quantity="ThermodynamicTemperature",
+    final unit="K") "Setpoint temperature"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
-  Modelica.Blocks.Interfaces.RealInput TConEnt
-    "Measured entering condenser water temperature"
+  Modelica.Blocks.Interfaces.RealInput TConEnt(
+    final quantity="ThermodynamicTemperature",
+    final unit="K") "Setpoint temperatureMeasured entering condenser water temperature"
     annotation (Placement(transformation(extent={{-140,-100},{-100,-60}})));
   Buildings.Controls.OBC.CDL.Logical.Switch enaHeaPum(u2(start=false))
     "Enable heat pump by switching to actual set point"
@@ -46,7 +49,9 @@ model HeatPump "Heat pump control"
     y_start=THeaWatSup_nominal)
     "Second order filter to approximate battery transitions between charge/off/discharge/off/charge"
     annotation (Placement(transformation(extent={{72,-10},{92,10}})));
-  Modelica.Blocks.Interfaces.RealInput TSetSta if not biomimeticControl
+  Modelica.Blocks.Interfaces.RealInput TSetSta(
+    final quantity="ThermodynamicTemperature",
+    final unit="K") if not biomimeticControl
     "Static temperature setpoint if normal control"
     annotation (Placement(transformation(extent={{-140,80},{-100,120}}),
         iconTransformation(extent={{-140,80},{-100,120}})));

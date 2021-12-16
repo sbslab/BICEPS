@@ -19,7 +19,7 @@ model SingleFamilyResidentialBuilding
   parameter Boolean have_pv=true "True if the building has a PV system";
   parameter Boolean have_wind=true "True if the building has a wind system";
   parameter Modelica.SIunits.Angle lat "Latitude";
-  parameter Modelica.SIunits.Power PHeaPum_nominal=5000
+  parameter Modelica.SIunits.Power PHeaPum_nominal=2000
     "Nominal power for heat pump";
   parameter Modelica.SIunits.Power PPum_nominal=100
     "Nominal power for pumps";
