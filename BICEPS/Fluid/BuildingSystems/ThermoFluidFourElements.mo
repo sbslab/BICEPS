@@ -134,7 +134,7 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     min=0,
     displayUnit="kW") "Pump power"
     annotation (Placement(transformation(extent={{100,70},{120,90}})));
-  Modelica.Blocks.Sources.BooleanConstant heaPumOn(k=false)
+  Modelica.Blocks.Sources.BooleanConstant heaPumOn(k=true)
     "Set heat pump to always on (for heating-season only simulation)"
     annotation (Placement(transformation(extent={{40,-90},{20,-70}})));
 equation
@@ -189,6 +189,5 @@ equation
           fillPattern=FillPattern.Solid),
         Rectangle(extent={{-40,22},{40,-58}}, lineColor={0,0,0}),
         Line(points={{-40,22},{0,62},{40,22}}, color={0,0,0})}),
-      Diagram(coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=604800, __Dymola_Algorithm="Dassl"));
+      Diagram(coordinateSystem(preserveAspectRatio=false)));
 end ThermoFluidFourElements;

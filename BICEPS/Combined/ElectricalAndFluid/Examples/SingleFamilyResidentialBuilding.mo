@@ -14,12 +14,13 @@ model SingleFamilyResidentialBuilding
     POth_nominal=9653,
     EBatMax=540000000,
     filNam=filNam,
-    TMin=bld.T0 - 5,
-    TMax=bld.T0 + 5)
+    TMin=bld.T0 - 1.5,
+    TMax=bld.T0 + 2.5)
     "Building"
     annotation (Placement(transformation(extent={{-20,-70},{0,-50}})));
   Buildings.Fluid.Sources.Boundary_pT sin(
     redeclare package Medium = Medium,
+    T=285.15,
     nPorts=1) "Sink"
     annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
   Buildings.Fluid.Sources.Boundary_pT sou(
@@ -28,9 +29,9 @@ model SingleFamilyResidentialBuilding
     nPorts=1) "Source"
     annotation (Placement(transformation(extent={{60,-90},{40,-70}})));
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(
-    computeWetBulbTemperature=false,
-    filNam=Modelica.Utilities.Files.loadResource(
-      "modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
+    computeWetBulbTemperature=false, filNam=
+        ModelicaServices.ExternalReferences.loadResource(
+        "modelica://BICEPS/Resources/weatherdata/DEU_BW_Mannheim_107290_TRY2010_12_Jahr_BBSR.mos"))
     "Weather data model"
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Sources.Grid gri(
@@ -107,7 +108,8 @@ equation
       file="modelica://BICEPS/Resources/Scripts/Dymola/Combined/ElectricalAndFluid/Examples/SingleFamilyResidentialBuilding.mos"
       "Simulate and plot"),
     experiment(
-      StopTime=345600,
+      StartTime=86400,
+      StopTime=172800,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;

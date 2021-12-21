@@ -18,7 +18,9 @@ model ThermoFluid4E "Test model for the thermofluid subsystem"
     show_T=true,
     QHea_flow_nominal=10000,
     COP_nominal=4,
-    mLoaHea_flow_nominal=1)
+    mLoaHea_flow_nominal=1,
+    TMin=thermoFluid.T0 - 1.5,
+    TMax=thermoFluid.T0 + 2.5)
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
   Modelica.Blocks.Sources.Constant idealElecSig(k=-1)
                                                      "Ideal electrical signal"

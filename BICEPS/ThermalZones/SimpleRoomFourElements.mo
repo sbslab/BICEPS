@@ -13,6 +13,7 @@ model SimpleRoomFourElements
   parameter Real k(min=Modelica.Constants.small)=10
     "Percentage penalty for deviating outside of min/max range. Smaller numbers
     indicate a steeper penalty.";
+  parameter Real kIntLoa=0.5 "Scaling rate for interior loads";
   // Diagnostics
    parameter Boolean show_T = false
     "= true, if actual temperature at port is computed"
@@ -138,7 +139,7 @@ model SimpleRoomFourElements
     columns={2,3,4},
     extrapolation=Modelica.Blocks.Types.Extrapolation.Periodic) "Table with profiles for persons (radiative and convective) and machines
     (convective)"
-    annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
+    annotation (Placement(transformation(extent={{-80,-60},{-60,-40}})));
   Modelica.Blocks.Sources.Constant const[4](each k=0)
     "Sets sunblind signal to zero (open)"
     annotation (Placement(transformation(extent={{-36,14},{-30,20}})));
@@ -217,6 +218,8 @@ model SimpleRoomFourElements
     "Heat flow rate at the air volume heat port"
     annotation (Placement(transformation(extent={{86,30},{96,50}})));
 
+  Modelica.Blocks.Math.Gain gai[3](each k=kIntLoa) "Interior load scaling rate"
+    annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
 equation
   connect(eqAirTemp.TEqAirWin, preTem1.T)
     annotation (Line(points={{-15,-0.2},{-12,-0.2},{-12,20},{-5.2,20}},
@@ -228,14 +231,6 @@ equation
     annotation (Line(points={{-1,100},{-4,100},{-4,90},{-90,90},{-90,-10},{-38,-10}},
     color={255,204,51},
     thickness=0.5), Text(textString="%first",index=-1,extent={{-6,3},{-6,3}}));
-  connect(intGai.y[1], perRad.Q_flow)
-    annotation (Line(points={{-19,-50},{-16,-50},{-16,-32},{0,-32}},
-    color={0,0,127}));
-  connect(intGai.y[2], perCon.Q_flow)
-    annotation (Line(points={{-19,-50},{0,-50}},            color={0,0,127}));
-  connect(intGai.y[3], macConv.Q_flow)
-    annotation (Line(points={{-19,-50},{-16,-50},{-16,-70},{0,-70}},
-    color={0,0,127}));
   connect(const.y, eqAirTemp.sunblind)
     annotation (Line(points={{-29.7,17},{-26,17},{-26,8}},
     color={0,0,127}));
@@ -407,6 +402,18 @@ equation
       horizontalAlignment=TextAlignment.Right));
   connect(QFloHeaPor.y, QAct_flow)
     annotation (Line(points={{96.5,40},{110,40}}, color={0,0,127}));
+  connect(intGai.y[1], gai[1].u)
+    annotation (Line(points={{-59,-50},{-42,-50}}, color={0,0,127}));
+  connect(intGai.y[2], gai[2].u)
+    annotation (Line(points={{-59,-50},{-42,-50}}, color={0,0,127}));
+  connect(intGai.y[3], gai[3].u)
+    annotation (Line(points={{-59,-50},{-42,-50}}, color={0,0,127}));
+  connect(gai[1].y, perRad.Q_flow) annotation (Line(points={{-19,-50},{-10,-50},
+          {-10,-32},{0,-32}}, color={0,0,127}));
+  connect(gai[2].y, perCon.Q_flow)
+    annotation (Line(points={{-19,-50},{0,-50}}, color={0,0,127}));
+  connect(gai[3].y, macConv.Q_flow) annotation (Line(points={{-19,-50},{-10,-50},
+          {-10,-70},{0,-70}}, color={0,0,127}));
   annotation ( Documentation(info="<html>
   <p>This example shows the application of
   <a href=\"Buildings.ThermalZones.ReducedOrder.RC.FourElements\">
