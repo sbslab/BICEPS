@@ -1,6 +1,6 @@
 ﻿// Simulate both biomimetic and normal control models
-simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.BiomimeticControl", stopTime=604800, tolerance=1e-06, resultFile="BiomimeticControl");
-simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.NormalControl", stopTime=604800, tolerance=1e-06, resultFile="NormalControl");
+simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.BiomimeticControl", stopTime=2.592e+06, tolerance=1e-06, resultFile="BiomimeticControl");
+simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.NormalControl", stopTime=2.592e+06, tolerance=1e-06, resultFile="NormalControl");
 // Plot commands
 createPlot(id=1, position={19, 168, 764, 454}, 
   y={"bld.mec.heaPum.heaPum.QCon_flow"}, 

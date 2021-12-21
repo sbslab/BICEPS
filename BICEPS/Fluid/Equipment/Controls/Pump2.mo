@@ -42,7 +42,7 @@ model Pump2 "Pump control"
     annotation (Placement(transformation(extent={{0,-50},{20,-30}})));
   Modelica.Blocks.Sources.Constant on(k=1) "On signal"
     annotation (Placement(transformation(extent={{0,50},{20,70}})));
-  Modelica.Blocks.Sources.Constant dTSet(k=dT*2) "Transition zone"
+  Modelica.Blocks.Sources.Constant dTSet(k=dT)   "Transition zone"
     annotation (Placement(transformation(extent={{-40,30},{-20,50}})));
   Modelica.Blocks.Math.Add x1(k1=-1) "First transition point"
     annotation (Placement(transformation(extent={{0,10},{20,30}})));
