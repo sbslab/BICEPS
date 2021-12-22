@@ -13,6 +13,8 @@ model HeatPump "Heat pump model"
     choice(redeclare package Medium =
       Buildings.Media.Antifreeze.PropyleneGlycolWater (property_T=293.15,X_a=0.40)
     "Propylene glycol water, 40% mass fraction")));
+  parameter Boolean biomimeticControl=true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Real COP_nominal(final unit="1")
     "Heat pump COP"
     annotation (Dialog(group="Nominal condition"));
@@ -40,6 +42,16 @@ model HeatPump "Heat pump model"
   parameter Modelica.SIunits.Pressure dp2_nominal(displayUnit="Pa")
     "Pressure difference over evaporator"
     annotation (Dialog(group="Nominal condition"));
+   parameter Boolean show_T1 = false
+    "= true, if actual temperature at port is computed"
+    annotation (
+      Dialog(tab="Advanced", group="Diagnostics"),
+      HideResult=true);
+   parameter Boolean show_T2 = false
+    "= true, if actual temperature at port is computed"
+    annotation (
+      Dialog(tab="Advanced", group="Diagnostics"),
+      HideResult=true);
   parameter Boolean allowFlowReversal1=false
     "Set to true to allow flow reversal on condenser side"
     annotation (Dialog(tab="Assumptions"), Evaluate=true);
@@ -59,9 +71,32 @@ model HeatPump "Heat pump model"
       p = Medium1.p_default,
       T = Medium1.T_default))
     "Specific heat capacity of the fluid";
+  Medium1.ThermodynamicState sta_a1=
+      Medium1.setState_phX(port_a1.p,
+                          noEvent(actualStream(port_a1.h_outflow)),
+                          noEvent(actualStream(port_a1.Xi_outflow))) if
+         show_T1 "Medium properties in port_a1";
+
+  Medium1.ThermodynamicState sta_b1=
+      Medium1.setState_phX(port_b1.p,
+                          noEvent(actualStream(port_b1.h_outflow)),
+                          noEvent(actualStream(port_b1.Xi_outflow))) if
+          show_T1 "Medium properties in port_b1";
+  Medium2.ThermodynamicState sta_a2=
+      Medium2.setState_phX(port_a2.p,
+                          noEvent(actualStream(port_a2.h_outflow)),
+                          noEvent(actualStream(port_a2.Xi_outflow))) if
+         show_T2 "Medium properties in port_a1";
+
+  Medium2.ThermodynamicState sta_b2=
+      Medium2.setState_phX(port_b1.p,
+                          noEvent(actualStream(port_b2.h_outflow)),
+                          noEvent(actualStream(port_b2.Xi_outflow))) if
+          show_T2 "Medium properties in port_b2";
   Buildings.Fluid.HeatPumps.Carnot_TCon heaPum(
     redeclare final package Medium1 = Medium1,
     redeclare final package Medium2 = Medium2,
+    show_T=show_T1,
     final dTEva_nominal=dT2_nominal,
     final dTCon_nominal=dT1_nominal,
     final TCon_nominal=TCon_nominal,
@@ -83,13 +118,15 @@ model HeatPump "Heat pump model"
   Buildings.Experimental.DHC.EnergyTransferStations.BaseClasses.Pump_m_flow pumCon(
     redeclare final package Medium = Medium1,
     final m_flow_nominal=m1_flow_nominal,
-    final allowFlowReversal=allowFlowReversal1)
+    final allowFlowReversal=allowFlowReversal1,
+    show_T=show_T1)
     "Heat pump condenser water pump"
     annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
   Buildings.Experimental.DHC.EnergyTransferStations.BaseClasses.Pump_m_flow pumEva(
     redeclare final package Medium = Medium2,
     final m_flow_nominal=m2_flow_nominal,
-    final allowFlowReversal=allowFlowReversal2)
+    final allowFlowReversal=allowFlowReversal2,
+    show_T=show_T2)
     "Heat pump evaporator water pump"
     annotation (Placement(transformation(extent={{120,-110},{100,-90}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput PPum(final unit="W")
@@ -135,11 +172,12 @@ model HeatPump "Heat pump model"
         transformation(extent={{130,10},{150,30}}),
         iconTransformation(extent={{90,10},{110,30}})));
   Controls.HeatPump conHeaPum(
-    TMin=273.15 + 28,
-    TMax=273.15 + 48,
-    T0=273.15 + 38,
+    biomimeticControl=biomimeticControl,
+    TMin=conHeaPum.T0 - 1,
+    TMax=conHeaPum.T0 + 1,
+    T0=323.15,
     riseTime=60,
-    THeaWatSup_nominal=THeaWatSup_nominal)
+    THeaWatSup_nominal=THeaWatSup_nominal) "Heat pump control"
     annotation (Placement(transformation(extent={{-80,-30},{-60,-50}})));
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold staPum[2](
     y(each start=false),
@@ -178,17 +216,24 @@ model HeatPump "Heat pump model"
     "Heat flow rate at evaporator"
     annotation (Placement(transformation(extent={{62,-34},{82,-14}})));
   Controls.PrimaryVariableFlow conFloCon(Q_flow_nominal=Q1_flow_nominal,
-      dT_nominal=dT1_nominal)
+      dT_nominal=dT1_nominal,
+    ratFloMin=0.2)
     annotation (Placement(transformation(extent={{60,74},{80,94}})));
   Controls.PrimaryVariableFlow conFloEva(Q_flow_nominal=-Q1_flow_nominal*(1 + 1
-        /COP_nominal), dT_nominal=dT2_nominal)
+        /COP_nominal), dT_nominal=dT2_nominal,
+    ratFloMin=0.2)
     annotation (Placement(transformation(extent={{110,-34},{130,-14}})));
-  Modelica.Blocks.Interfaces.RealInput yHeaPum "Control signal" annotation (
+  Modelica.Blocks.Interfaces.RealInput yHeaPum if biomimeticControl
+    "Control signal" annotation (
       Placement(transformation(extent={{-180,60},{-140,100}}),
         iconTransformation(extent={{-120,50},{-100,70}})));
   Buildings.Fluid.Sources.Boundary_pT pRef(redeclare package Medium = Medium1,
       nPorts=1) "Reference pressure"
     annotation (Placement(transformation(extent={{-20,-30},{-40,-10}})));
+  Modelica.Blocks.Sources.Constant TSetSta(
+    k=conHeaPum.T0) if not biomimeticControl
+    "Static setpoint temperature if not biomimetic control"
+    annotation (Placement(transformation(extent={{-130,-80},{-110,-60}})));
 equation
   connect(port_a1, port_a1)
     annotation (Line(points={{-140,20},{-140,20}}, color={0,127,255}));
@@ -241,12 +286,12 @@ equation
           -10,25},{-10,-80},{-18,-80}}, color={0,0,127}));
   connect(pumEva.m_flow_actual, staPum[2].u) annotation (Line(points={{99,-95},{
           99,-94},{-10,-94},{-10,-80},{-18,-80}}, color={0,0,127}));
-  connect(ena.y, conHeaPum.uEna) annotation (Line(points={{-84,-80},{-90,-80},{
-          -90,-40},{-82,-40}}, color={255,0,255}));
+  connect(ena.y, conHeaPum.uEna) annotation (Line(points={{-84,-80},{-90,-80},{-90,
+          -38},{-82,-38}},     color={255,0,255}));
   connect(yHeaPum, conHeaPum.y) annotation (Line(points={{-160,80},{-130,80},{-130,
-          -46},{-82,-46}}, color={0,0,127}));
+          -44},{-82,-44}}, color={0,0,127}));
   connect(senTConEnt.T, conHeaPum.TConEnt) annotation (Line(points={{-70,31},{-70,
-          40},{-90,40},{-90,-34},{-82,-34}}, color={0,0,127}));
+          40},{-90,40},{-90,-32},{-82,-32}}, color={0,0,127}));
   connect(pumEva.P, addPum.u2) annotation (Line(points={{99,-91},{98,-91},{98,64},
           {108,64}}, color={0,0,127}));
   connect(pumCon.P, addPum.u1) annotation (Line(points={{-19,29},{94,29},{94,76},
@@ -263,6 +308,8 @@ equation
           {0,-36},{10,-36}},color={0,127,255}));
   connect(heaPum.port_a2, pumEva.port_b) annotation (Line(points={{30,-36},{40,
           -36},{40,-100},{100,-100}}, color={0,127,255}));
+  connect(TSetSta.y, conHeaPum.TSetSta) annotation (Line(points={{-109,-70},{-100,
+          -70},{-100,-50},{-82,-50}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-100,14},{100,26}},

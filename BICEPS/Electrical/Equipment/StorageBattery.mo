@@ -2,6 +2,8 @@ within BICEPS.Electrical.Equipment;
 model StorageBattery
   "Model for a chemical battery for the electrical system"
   extends Buildings.BaseClasses.BaseIconLow;
+  parameter Boolean biomimeticControl=true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
   parameter Real tol=0.05 "Tolerance allowed on nominal voltage control (5-10% typical)";
@@ -13,15 +15,20 @@ model StorageBattery
   parameter Real SOC_start=0.5 "Initial charge";
   parameter Modelica.SIunits.Power PBat = 5000
     "Nominal power charge/discharge rate of the battery";
+  parameter Modelica.SIunits.Power PMax(min=0)=10000
+    "Maximum power charge/discharge rate";
+  parameter Modelica.SIunits.Power PMin(min=0)=100
+    "Minimum power charge/discharge rate";
   // 50 kWh
   parameter Modelica.SIunits.Energy EBatMax = 180000000
     "Maximum energy capacity of the battery";
-  Modelica.Blocks.Interfaces.RealOutput yOut "Output control signal"
+  Modelica.Blocks.Interfaces.RealOutput yOut if biomimeticControl
+    "Output control signal"
     annotation (Placement(transformation(extent={{100,50},{120,70}})));
   Experimental.Examples.Sensors.RelativeElectricalExergyPotential senBat(
     tol=tol,
     v0=V_nominal,
-    k=k)
+    k=k) if biomimeticControl
     "Control signal battery"
     annotation (Placement(transformation(extent={{-10,42},{10,62}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Storage.Battery bat(
@@ -31,19 +38,23 @@ model StorageBattery
     V_nominal=V_nominal,
     initMode=Buildings.Electrical.Types.InitMode.zero_current)
     annotation (Placement(transformation(extent={{10,-20},{30,0}})));
-  Experimental.Examples.Controls.Battery con(EMax=EBatMax, P_nominal=PBat)
+  replaceable Controls.Battery2 con(
+    EMax=EBatMax,
+    P_nominal=PBat,
+    PMax=PMax,
+    PMin=PMin,
+    riseTime=15)
     "Battery controller"
     annotation (Placement(transformation(extent={{-60,10},{-40,30}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terminal
     "Generalized electric terminal"
     annotation (Placement(transformation(extent={{-12,-112},{4,-96}}),
         iconTransformation(extent={{-8,100},{8,116}})));
-  Modelica.Blocks.Interfaces.RealInput yNetPow
-    "Net power signal (supply/demand)"
+  Modelica.Blocks.Interfaces.RealInput PNetIn "Net power input"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
 
 equation
-  connect(yNetPow, con.yNetPow) annotation (Line(points={{-120,60},{-70,60},{-70,
+  connect(PNetIn, con.PNetIn) annotation (Line(points={{-120,60},{-70,60},{-70,
           26},{-62,26}}, color={0,0,127}));
   connect(senBat.terminal, terminal)
     annotation (Line(points={{0,42},{0,-104},{-4,-104}}, color={0,120,120}));
@@ -52,7 +63,7 @@ equation
   connect(con.P, bat.P)
     annotation (Line(points={{-39,20},{20,20},{20,0}}, color={0,0,127}));
   connect(bat.SOC, con.soc) annotation (Line(points={{31,-4},{40,-4},{40,-20},{-70,
-          -20},{-70,14},{-62,14}}, color={0,0,127}));
+          -20},{-70,16},{-62,16}}, color={0,0,127}));
   connect(senBat.y, yOut)
     annotation (Line(points={{11,60},{110,60}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={

@@ -1,6 +1,8 @@
 within BICEPS.Electrical.Equipment;
 model ProducerPV "PV subsystem"
   extends Buildings.BaseClasses.BaseIcon;
+  parameter Boolean biomimeticControl=true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
   parameter Real tol=0.05 "Tolerance allowed on nominal voltage control (5-10% typical)";
@@ -17,7 +19,8 @@ model ProducerPV "PV subsystem"
     "Nominal solar power conversion efficiency (this should consider converion efficiency, area covered, AC/DC losses)";
   parameter Modelica.SIunits.Area A_PV = PSun/eff_PV/W_m2_nominal
     "Nominal area of a P installation";
-  Modelica.Blocks.Interfaces.RealOutput yOut "Output control signal"
+  Modelica.Blocks.Interfaces.RealOutput yOut if biomimeticControl
+    "Output control signal"
     annotation (Placement(transformation(extent={{100,50},{120,70}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Sources.PVSimpleOriented pv(
     eta_DCAC=0.89,
@@ -34,7 +37,8 @@ model ProducerPV "PV subsystem"
   Experimental.Examples.Sensors.RelativeElectricalExergyPotential senPV(
     tol=tol,
     v0=V_nominal,
-    k=k) "Control signal pv"
+    k=k) if biomimeticControl
+    "Control signal pv"
     annotation (Placement(transformation(extent={{-10,42},{10,62}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terminal
     "Generalized electric terminal"

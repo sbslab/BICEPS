@@ -9,27 +9,32 @@ model SingleFamilyResidentialBuilding
     "Library path of the files with other electrical loads as time series";
   BICEPS.Combined.ElectricalAndFluid.SingleFamilyResidentialBuilding bld(
     redeclare package MediumWat = Medium,
+    show_T=true,
     lat=weaDat.lat,
+    PHeaPum_nominal=5000,
     POth_nominal=9653,
-    EBatMax=540000000,
+    PPV_nominal=20000,
+    PWin_nominal=10000,
+    PBat_nominal=500,
     filNam=filNam,
-    TMin=bld.T0 - 5,
-    TMax=bld.T0 + 5)
+    TMin=bld.T0 - 1.5,
+    TMax=bld.T0 + 2.5)
     "Building"
     annotation (Placement(transformation(extent={{-20,-70},{0,-50}})));
   Buildings.Fluid.Sources.Boundary_pT sin(
     redeclare package Medium = Medium,
+    T=285.15,
     nPorts=1) "Sink"
     annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
   Buildings.Fluid.Sources.Boundary_pT sou(
     redeclare package Medium = Medium,
-    T=bld.mec.TDisWatMin,
+    T=293.15,
     nPorts=1) "Source"
     annotation (Placement(transformation(extent={{60,-90},{40,-70}})));
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(
-    computeWetBulbTemperature=false,
-    filNam=Modelica.Utilities.Files.loadResource(
-      "modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
+    computeWetBulbTemperature=false, filNam=
+        ModelicaServices.ExternalReferences.loadResource(
+        "modelica://BICEPS/Resources/weatherdata/DEU_BW_Mannheim_107290_TRY2010_12_Jahr_BBSR.mos"))
     "Weather data model"
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Sources.Grid gri(

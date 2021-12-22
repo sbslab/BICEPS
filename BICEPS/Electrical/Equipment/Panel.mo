@@ -1,5 +1,7 @@
 within BICEPS.Electrical.Equipment;
 model Panel "Generic model for an electrical panel"
+  parameter Boolean biomimeticControl=true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Integer nPro=1 "Number of producer connections";
   parameter Integer nCon=1 "Number of consumer connections";
   parameter Integer nSto=1 "Number of storage connections";
@@ -23,23 +25,27 @@ model Panel "Generic model for an electrical panel"
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={60,-110}), iconTransformation(extent={{30,-120},{50,-100}})));
-  Modelica.Blocks.Interfaces.RealInput yCon[nCon] "Consumer control signal(s)"
+  Modelica.Blocks.Interfaces.RealInput yCon[nCon] if biomimeticControl
+    "Consumer control signal(s)"
     annotation (Placement(transformation(extent={{-140,60},{-100,100}})));
-  Modelica.Blocks.Interfaces.RealOutput yOut "Output control signal"
+  Modelica.Blocks.Interfaces.RealOutput yOut if biomimeticControl
+    "Output control signal"
     annotation (Placement(transformation(extent={{100,50},{120,70}})));
   Buildings.Electrical.AC.OnePhase.Sensors.GeneralizedSensor met "Main meter"
     annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=-90,
         origin={0,40})));
-  Controls.Panel con(n=nPro + nSto + nCon) "Controller"
+  Controls.Panel con(n=nPro + nSto + nCon) if biomimeticControl
+    "Controller"
     annotation (Placement(transformation(extent={{-60,50},{-40,70}})));
-  Modelica.Blocks.Interfaces.RealInput ySto[nSto] "Storage control signal(s)"
+  Modelica.Blocks.Interfaces.RealInput ySto[nSto] if biomimeticControl
+    "Storage control signal(s)"
     annotation (Placement(transformation(extent={{-140,20},{-100,60}})));
-  Modelica.Blocks.Interfaces.RealInput yPro[nPro] "Producer control signal(s)"
+  Modelica.Blocks.Interfaces.RealInput yPro[nPro] if biomimeticControl
+    "Producer control signal(s)"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
-  Modelica.Blocks.Interfaces.RealOutput yNetPow
-    "Storage signal based on net supply/demand power"
+  Modelica.Blocks.Interfaces.RealOutput PNetOut "Net power output"
     annotation (Placement(transformation(extent={{100,10},{120,30}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Sensors.GeneralizedSensor senPro[
     nPro] "Sensor on producers" annotation (Placement(transformation(
@@ -60,8 +66,6 @@ model Panel "Generic model for an electrical panel"
   Modelica.Blocks.Math.Sum PCon(nin=nCon)
                                 "Consumer power"
     annotation (Placement(transformation(extent={{40,-22},{20,0}})));
-  Buildings.Controls.OBC.CDL.Continuous.Limiter lim(uMax=1, uMin=-1)
-    annotation (Placement(transformation(extent={{70,10},{90,30}})));
 equation
   connect(terGri, met.terminal_n)
     annotation (Line(points={{0,110},{0,50},{1.77636e-15,50}},
@@ -111,10 +115,8 @@ equation
           38,14}}, color={0,0,127}));
   connect(PPro.y, PNet.u1) annotation (Line(points={{-19,-11},{12,-11},{12,26},
           {38,26}}, color={0,0,127}));
-  connect(PNet.y, lim.u)
-    annotation (Line(points={{61,20},{68,20}}, color={0,0,127}));
-  connect(lim.y, yNetPow)
-    annotation (Line(points={{92,20},{110,20}}, color={0,0,127}));
+  connect(PNet.y, PNetOut)
+    annotation (Line(points={{61,20},{110,20}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Line(points={{0,-24},{0,-32}}, color={0,0,0}),
           Rectangle(

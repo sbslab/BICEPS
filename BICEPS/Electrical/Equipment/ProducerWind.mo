@@ -1,6 +1,8 @@
 within BICEPS.Electrical.Equipment;
 model ProducerWind "Wind subsystem"
   extends Buildings.BaseClasses.BaseIcon;
+  parameter Boolean biomimeticControl=true
+    "True if biomimetic control is enabled. False for standard control practice.";
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
   parameter Real tol=0.05 "Tolerance allowed on nominal voltage control (5-10% typical)";
@@ -11,12 +13,14 @@ model ProducerWind "Wind subsystem"
     "Nominal power of the wind turbine";
   parameter Modelica.SIunits.Angle lat "Latitude"
     annotation(Evaluate=true,Dialog(group="Orientation"));
-  Modelica.Blocks.Interfaces.RealOutput yOut "Output control signal"
+  Modelica.Blocks.Interfaces.RealOutput yOut if biomimeticControl
+    "Output control signal"
     annotation (Placement(transformation(extent={{100,50},{120,70}})));
   Experimental.Examples.Sensors.RelativeElectricalExergyPotential senWin(
     tol=tol,
     v0=V_nominal,
-    k=k) "Control signal wind"
+    k=k) if biomimeticControl
+    "Control signal wind"
     annotation (Placement(transformation(extent={{-10,42},{10,62}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terminal
     "Generalized electric terminal"

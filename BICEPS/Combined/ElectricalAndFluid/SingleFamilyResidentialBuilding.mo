@@ -8,10 +8,18 @@ model SingleFamilyResidentialBuilding
   replaceable package MediumAir=Buildings.Media.Air
     constrainedby Modelica.Media.Interfaces.PartialMedium
     "Load side medium";
+  parameter Boolean biomimeticControl=true
+    "True if biomimetic control is enabled. False for standard control practice.";
+  // Diagnostic
+  parameter Boolean show_T = false
+    "= true, if actual temperature at port is computed"
+    annotation (
+      Dialog(tab="Advanced", group="Diagnostics"),
+      HideResult=true);
   parameter Boolean have_pv=true "True if the building has a PV system";
   parameter Boolean have_wind=true "True if the building has a wind system";
   parameter Modelica.SIunits.Angle lat "Latitude";
-  parameter Modelica.SIunits.Power PHeaPum_nominal=5000
+  parameter Modelica.SIunits.Power PHeaPum_nominal=2000
     "Nominal power for heat pump";
   parameter Modelica.SIunits.Power PPum_nominal=100
     "Nominal power for pumps";
@@ -26,24 +34,29 @@ model SingleFamilyResidentialBuilding
     "Nominal power for wind";
   parameter Modelica.SIunits.Power PBat_nominal=5800
     "Nominal power for battery";
-  parameter Modelica.SIunits.Energy EBatMax(displayUnit="kWh")
+  parameter Modelica.SIunits.Power PBatMax(min=0)=6000
+    "Maximum power charge/discharge rate";
+  parameter Modelica.SIunits.Power PBatMin(min=0)=100
+    "Minimum power charge/discharge rate";
+  parameter Modelica.SIunits.Energy EBatMax=48600000
     "Maximum energy capacity of the battery";
   parameter String filNam
     "File name with thermal loads as time series";
   parameter Boolean allowFlowReversal=false
     "Set to true to allow flow reversal on condenser side"
     annotation (Dialog(tab="Assumptions"), Evaluate=true);
-  parameter Real TMin=273.15 + 15
+  parameter Modelica.SIunits.Temperature TMin=288.15
     "Minimimum desired threshold for independent variable";
-  parameter Real TMax=273.15 + 25
+  parameter Modelica.SIunits.Temperature TMax=298.15
     "Maximum desired threshold for independent variable";
-  parameter Real T0=273.15 + 20 "Nominal value for independent variable";
+  parameter Modelica.SIunits.Temperature T0=293.15      "Nominal value for independent variable";
   parameter Real tSmo(
     final quantity="Time",
     final unit="s",
     min=1E-5)=30*60
     "Smoothing time for thermal-fluid control signal";
   Electrical.BuildingSystems.Electrical ele(
+    biomimeticControl=biomimeticControl,
     nCon=3,
     have_pv=have_pv,
     have_wind=have_wind,
@@ -52,11 +65,16 @@ model SingleFamilyResidentialBuilding
     PSun=PPV_nominal,
     PWin=PWin_nominal,
     PSto_nominal=PBat_nominal,
-    EBatMax(displayUnit="kWh") = EBatMax)           "Electrical subsystem"
+    EBatMax=EBatMax,
+    PBatMax=PBatMax,
+    PBatMin=PBatMin)
+    "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,20},{0,40}})));
   Fluid.BuildingSystems.ThermoFluidFourElements mec(
+    biomimeticControl=biomimeticControl,
     redeclare package MediumWat = MediumWat,
     redeclare package MediumAir = MediumAir,
+    show_T=show_T,
     QHea_flow_nominal=PHeaPum_nominal*mec.COP_nominal,
     COP_nominal=4,
     TMin=TMin,
@@ -72,7 +90,8 @@ model SingleFamilyResidentialBuilding
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-110,80}),    iconTransformation(extent={{-120,60},{-100,80}})));
-  Modelica.Blocks.Interfaces.RealOutput yOut "Output control signal"
+  Modelica.Blocks.Interfaces.RealOutput yOut if biomimeticControl
+    "Output control signal"
     annotation (Placement(transformation(extent={{100,70},{120,90}})));
   Modelica.Fluid.Interfaces.FluidPort_a port_a(
     redeclare final package Medium = MediumWat,
@@ -96,7 +115,9 @@ model SingleFamilyResidentialBuilding
     columns={2},
     smoothness=Modelica.Blocks.Types.Smoothness.MonotoneContinuousDerivative1)
     "Reader for other electrical loads (combined lighting, devices, refrigerator, etc.)"
-    annotation (Placement(transformation(extent={{-80,20},{-60,40}})));
+    annotation (Placement(transformation(extent={{-90,16},{-70,36}})));
+  Modelica.Blocks.Math.Gain gain(k=0.3)
+    annotation (Placement(transformation(extent={{-60,16},{-40,36}})));
 equation
   connect(terminal, ele.terminal) annotation (Line(points={{-110,80},{-40,80},{-40,
           37},{-21,37}}, color={0,120,120}));
@@ -126,10 +147,13 @@ equation
         color={0,0,127}));
   connect(mec.PHeaPum, ele.PCon[1]) annotation (Line(points={{-1,-25},{-40,-25},
           {-40,24},{-22,24},{-22,22.6667}}, color={0,0,127}));
-  connect(mec.PPum, ele.PCon[2]) annotation (Line(points={{-1,-22},{-38,-22},{-38,
-          22},{-24,22},{-24,24},{-22,24}}, color={0,0,127}));
-  connect(loaOth.y[1], ele.PCon[3]) annotation (Line(points={{-59,30},{-40,30},
-          {-40,25.3333},{-22,25.3333}},color={0,0,127}));
+  connect(mec.PPum, ele.PCon[2]) annotation (Line(points={{-1,-22},{-38,-22},{
+          -38,22},{-24,22},{-24,24},{-22,24}},
+                                           color={0,0,127}));
+  connect(loaOth.y[1], gain.u)
+    annotation (Line(points={{-69,26},{-62,26}}, color={0,0,127}));
+  connect(gain.y, ele.PCon[3]) annotation (Line(points={{-39,26},{-22,26},{-22,
+          25.3333}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Polygon(
           points={{0,70},{-60,40},{60,40},{0,70}},

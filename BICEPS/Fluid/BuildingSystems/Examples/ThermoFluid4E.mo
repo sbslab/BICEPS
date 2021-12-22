@@ -14,15 +14,19 @@ model ThermoFluid4E "Test model for the thermofluid subsystem"
 
   BICEPS.Fluid.BuildingSystems.ThermoFluidFourElements thermoFluid(
     redeclare package MediumWat = Medium,
+    biomimeticControl=false,
+    show_T=true,
     QHea_flow_nominal=10000,
     COP_nominal=4,
-    mLoaHea_flow_nominal=1)
+    mLoaHea_flow_nominal=1,
+    TMin=thermoFluid.T0 - 1.5,
+    TMax=thermoFluid.T0 + 2.5)
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
   Modelica.Blocks.Sources.Constant idealElecSig(k=-1)
                                                      "Ideal electrical signal"
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
   Buildings.Fluid.Sources.Boundary_pT sou(redeclare package Medium = Medium,
-    T=thermoFluid.TDisWatMin,
+    T=285.15,
     nPorts=1) "Source"
     annotation (Placement(transformation(extent={{-40,0},{-20,20}})));
   Buildings.Fluid.Sources.Boundary_pT sin(redeclare package Medium = Medium,
