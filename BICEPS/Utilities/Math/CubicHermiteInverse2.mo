@@ -13,6 +13,7 @@ model CubicHermiteInverse2
   final parameter Real[3] d(each fixed=false)
     "Derivatives at the support points";
   Integer i "Integer to select data interval";
+  Real t[:,2] "abscissa scaled with h, i.e., t=[0..1] within x=[x1..x2]";
   Modelica.Blocks.Interfaces.RealInput y "Independent variable"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}}),
       iconTransformation(extent={{-140,-20},{-100,20}})));
@@ -27,8 +28,8 @@ initial algorithm
     ensureMonotonicity=ensureMonotonicity);
 algorithm
   i := 1;
-  for j in 1:size(xd, 1) - 1 loop
-    if x > xd[j] then
+  for j in 1:size(yd, 1) - 1 loop
+    if y > yd[j] then
       i := j;
     end if;
   end for;
