@@ -16,7 +16,6 @@ model SingleFamilyResidentialBuilding
     PPV_nominal=20000,
     PWin_nominal=10000,
     PBat_nominal=500,
-    EBatMax=540000000,
     filNam=filNam,
     TMin=bld.T0 - 1.5,
     TMax=bld.T0 + 2.5)
@@ -112,8 +111,7 @@ equation
       file="modelica://BICEPS/Resources/Scripts/Dymola/Combined/ElectricalAndFluid/Examples/SingleFamilyResidentialBuilding.mos"
       "Simulate and plot"),
     experiment(
-      StartTime=86400,
-      StopTime=172800,
+      StopTime=604800,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;

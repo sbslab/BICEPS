@@ -15,6 +15,10 @@ model StorageBattery
   parameter Real SOC_start=0.5 "Initial charge";
   parameter Modelica.SIunits.Power PBat = 5000
     "Nominal power charge/discharge rate of the battery";
+  parameter Modelica.SIunits.Power PMax(min=0)=10000
+    "Maximum power charge/discharge rate";
+  parameter Modelica.SIunits.Power PMin(min=0)=100
+    "Minimum power charge/discharge rate";
   // 50 kWh
   parameter Modelica.SIunits.Energy EBatMax = 180000000
     "Maximum energy capacity of the battery";
@@ -34,7 +38,11 @@ model StorageBattery
     V_nominal=V_nominal,
     initMode=Buildings.Electrical.Types.InitMode.zero_current)
     annotation (Placement(transformation(extent={{10,-20},{30,0}})));
-  replaceable Controls.Battery con(EMax=EBatMax, P_nominal=PBat,
+  replaceable Controls.Battery2 con(
+    EMax=EBatMax,
+    P_nominal=PBat,
+    PMax=PMax,
+    PMin=PMin,
     riseTime=15)
     "Battery controller"
     annotation (Placement(transformation(extent={{-60,10},{-40,30}})));

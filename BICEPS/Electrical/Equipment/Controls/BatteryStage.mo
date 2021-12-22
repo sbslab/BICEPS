@@ -17,21 +17,21 @@ model BatteryStage "Staging control for battery"
         rotation=-90,
         origin={10,40})));
   Modelica.StateGraph.Transition offToDis(
-    condition=PNetIn <= P_nominal and soc > 0.05,
-                                          enableTimer=true, waitTime=tWai)
+    condition=PNetIn <= -P_nominal and soc > 0.05,
+    enableTimer=false,                                      waitTime=tWai)
     "Off to discharge" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={10,-20})));
-  Modelica.StateGraph.Transition disToOff(condition=PNetIn > P_nominal or soc <=
-        0.05)
+  Modelica.StateGraph.Transition disToOff(condition=PNetIn > -P_nominal or soc
+         <= 0.05)
     "Discharge to off" annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={-70,-20})));
   Modelica.StateGraph.Transition offToCha(
     condition=PNetIn >= P_nominal and soc < 0.95,
-                                          enableTimer=true, waitTime=tWai)
+    enableTimer=false,                                      waitTime=tWai)
     "Off to charge" annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=-90,

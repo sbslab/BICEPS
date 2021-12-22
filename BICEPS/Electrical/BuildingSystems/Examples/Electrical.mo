@@ -10,7 +10,8 @@ model Electrical
     PPro_nominal=4000,
     PSun=5000,
     PWin=ele.PSun,
-    PSto_nominal=1000)         "Electrical subsystem"
+    PSto_nominal=1000,
+    PBatMax=2000)              "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,0},{0,20}})));
   Modelica.Blocks.Continuous.Integrator EGri "Grid energy"
     annotation (Placement(transformation(extent={{60,60},{80,80}})));

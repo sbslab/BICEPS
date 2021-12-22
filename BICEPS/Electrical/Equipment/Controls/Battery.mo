@@ -5,6 +5,10 @@ model Battery "Control for the battery energy storage system"
     "Maximum available charge";
   parameter Modelica.SIunits.Power P_nominal(min=0)
     "Nominal power charge/discharge rate";
+  parameter Modelica.SIunits.Power PMax(min=0)=10000
+    "Maximum power charge/discharge rate";
+  parameter Modelica.SIunits.Power PMin(min=0)=100
+    "Minimum power charge/discharge rate";
   parameter Modelica.SIunits.Time riseTime=60
     "Rise time of the filter (time to reach 99.6 % of the transition speed)"
     annotation(Dialog(tab="Dynamics", group="Filtered transition speed"));
@@ -70,21 +74,20 @@ equation
   connect(fil.y, P) annotation (Line(points={{91,0},{110,0}}, color={0,0,127}));
   connect(soc, notEmp.u) annotation (Line(points={{-120,-40},{-90,-40},{-90,-70},
           {-82,-70}}, color={0,0,127}));
-  connect(notEmp.y, dis.u2) annotation (Line(points={{-58,-70},{-10,-70},{-10,
-          -18},{-2,-18}},
-                     color={255,0,255}));
-  connect(PNetIn, grePowNomPos.u) annotation (Line(points={{-120,60},{-90,60},{
-          -90,30},{-82,30}}, color={0,0,127}));
+  connect(notEmp.y, dis.u2) annotation (Line(points={{-58,-70},{-10,-70},{-10,-18},
+          {-2,-18}}, color={255,0,255}));
+  connect(PNetIn, grePowNomPos.u) annotation (Line(points={{-120,60},{-90,60},{-90,
+          30},{-82,30}}, color={0,0,127}));
   connect(grePowNomNeg.y, lesPowNomNeg.u)
     annotation (Line(points={{-59,-10},{-42,-10}}, color={255,0,255}));
   connect(grePowNomPos.y, cha.u1)
     annotation (Line(points={{-59,30},{-2,30}}, color={255,0,255}));
-  connect(PNetIn, grePowNomNeg.u) annotation (Line(points={{-120,60},{-90,60},{
-          -90,-10},{-82,-10}}, color={0,0,127}));
+  connect(PNetIn, grePowNomNeg.u) annotation (Line(points={{-120,60},{-90,60},{-90,
+          -10},{-82,-10}}, color={0,0,127}));
   connect(dis.u1, lesPowNomNeg.y)
     annotation (Line(points={{-2,-10},{-18,-10}}, color={255,0,255}));
   connect(PNetIn, swi.u1) annotation (Line(points={{-120,60},{60,60},{60,38},{
-          68,38}}, color={0,0,127}));
+          68,38}},                  color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end Battery;

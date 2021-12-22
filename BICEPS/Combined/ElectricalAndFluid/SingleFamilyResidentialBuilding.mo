@@ -34,6 +34,10 @@ model SingleFamilyResidentialBuilding
     "Nominal power for wind";
   parameter Modelica.SIunits.Power PBat_nominal=5800
     "Nominal power for battery";
+  parameter Modelica.SIunits.Power PBatMax(min=0)=6000
+    "Maximum power charge/discharge rate";
+  parameter Modelica.SIunits.Power PBatMin(min=0)=100
+    "Minimum power charge/discharge rate";
   parameter Modelica.SIunits.Energy EBatMax=48600000
     "Maximum energy capacity of the battery";
   parameter String filNam
@@ -61,7 +65,9 @@ model SingleFamilyResidentialBuilding
     PSun=PPV_nominal,
     PWin=PWin_nominal,
     PSto_nominal=PBat_nominal,
-    EBatMax=EBatMax)
+    EBatMax=EBatMax,
+    PBatMax=PBatMax,
+    PBatMin=PBatMin)
     "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,20},{0,40}})));
   Fluid.BuildingSystems.ThermoFluidFourElements mec(

@@ -35,6 +35,10 @@ model ConnectedDevices
   parameter Real SOC_start=0.5 "Initial charge";
   parameter Modelica.SIunits.Power PBat = 5000
     "Nominal power charge/discharge rate of the battery";
+  parameter Modelica.SIunits.Power PBatMax(min=0)=10000
+    "Maximum power charge/discharge rate";
+  parameter Modelica.SIunits.Power PBatMin(min=0)=100
+    "Minimum power charge/discharge rate";
   // 50 kWh
   parameter Modelica.SIunits.Energy EBatMax = 180000000
     "Maximum energy capacity of the battery";
@@ -92,6 +96,8 @@ model ConnectedDevices
     each final k=k,
     each final SOC_start=SOC_start,
     each final PBat=PBat,
+    each final PMax=PBatMax,
+    each final PMin=PBatMin,
     each final EBatMax=EBatMax)
     annotation (Placement(transformation(extent={{-10,-16},{10,4}})));
   Buildings.BoundaryConditions.WeatherData.Bus weaBus

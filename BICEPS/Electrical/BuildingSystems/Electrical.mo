@@ -28,6 +28,10 @@ model Electrical "Model of a building's electrical system"
     "Nominal power for storage loads";
   parameter Modelica.SIunits.Energy EBatMax=180000000
     "Maximum energy capacity of the battery";
+  parameter Modelica.SIunits.Power PBatMax(min=0)=10000
+    "Maximum power charge/discharge rate";
+  parameter Modelica.SIunits.Power PBatMin(min=0)=100
+    "Minimum power charge/discharge rate";
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
   parameter Modelica.SIunits.Length LGri=1500 "Length of the grid line";
@@ -56,6 +60,8 @@ model Electrical "Model of a building's electrical system"
     PSun=PSun,
     PWin=PWin,
     PBat=PSto_nominal,
+    PBatMax=PBatMax,
+    PBatMin=PBatMin,
     EBatMax=EBatMax)
     annotation (Placement(transformation(extent={{10,-40},{-10,-20}})));
   Buildings.Electrical.AC.OnePhase.Lines.Line linGri(
