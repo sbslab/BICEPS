@@ -38,5 +38,5 @@ equation
     __Dymola_Commands(
       file="modelica://BICEPS/Resources/Scripts/Dymola/Electrical/Equipment/Examples/Battery.mos"
       "Simulate and plot"),
-    experiment(StopTime=240, __Dymola_Algorithm="Dassl"));
+    experiment(StopTime=240,Tolerance=1e-6, __Dymola_Algorithm="Dassl"));
 end Battery;

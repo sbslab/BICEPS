@@ -1,5 +1,5 @@
 ﻿// Simulate
-simulateModel("BICEPS.Electrical.Equipment.Examples.Battery", stopTime=240, resultFile="Battery");
+simulateModel("BICEPS.Electrical.Equipment.Examples.Battery", stopTime=240, tolerance=1e-6, resultFile="Battery");
 // Plot 
 createPlot(id=1, position={15, 15, 734, 707}, 
   y={"PNet.y"}, 
