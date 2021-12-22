@@ -24,7 +24,6 @@ model RelativeElectricalExergyPotential
     final xMin=vMin,
     final xMax=vMax,
     final x0=v0,
-    final k=k,
     final ensureMonotonicity=true)
     annotation (Placement(transformation(extent={{60,70},{80,90}})));
 equation

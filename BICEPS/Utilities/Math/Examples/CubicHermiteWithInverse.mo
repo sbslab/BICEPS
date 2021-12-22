@@ -3,19 +3,19 @@ model CubicHermiteWithInverse
   "Test problem for cubic hermite splines with the inverse"
   extends Modelica.Icons.Example;
   BICEPS.Utilities.Math.CubicHermite spl(
-    xMin=273.15 + 17,
-    xMax=273.15 + 24,
-    x0=273.15 + 20) "Spline function"
+    xMin=spl.x0 - 5,
+    xMax=spl.x0 + 5,
+    x0=273.15 + 20)          "Spline function"
     annotation (Placement(transformation(extent={{0,0},{20,20}})));
   Modelica.Blocks.Sources.Sine TMea(
-    amplitude=6,
+    amplitude=5,
     freqHz(displayUnit="Hz") = 1,
     offset=273.15 + 20) "Measured temperature"
     annotation (Placement(transformation(extent={{-40,0},{-20,20}})));
-  .BICEPS.Utilities.Math.CubicHermiteInverse splInv(
-    xMin=273.15 + 17,
-    xMax=273.15 + 24,
-    x0=273.15 + 20) "Inverse spline"
+  BICEPS.Utilities.Math.CubicHermiteInverse2 splInv(
+    xMin=spl.xMin,
+    xMax=spl.xMax,
+    x0=spl.x0)      "Inverse spline"
     annotation (Placement(transformation(extent={{40,0},{60,20}})));
 equation
   connect(TMea.y, spl.x)

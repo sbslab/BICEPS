@@ -95,6 +95,7 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     TMin=TMin,
     TMax=TMax,
     T0=T0,
+    k=100,
     show_T=show_T)
     annotation (Placement(transformation(extent={{-30,20},{-10,40}})));
   Modelica.Blocks.Interfaces.RealInput yEle if biomimeticControl

@@ -20,7 +20,6 @@ model RelativeInternalExergyPotential
     final xMin=TMin,
     final xMax=TMax,
     final x0=T0,
-    final k=k,
     final ensureMonotonicity=true)
     annotation (Placement(transformation(extent={{-20,60},{0,80}})));
   Modelica.Blocks.Interfaces.RealOutput y "Control signal"

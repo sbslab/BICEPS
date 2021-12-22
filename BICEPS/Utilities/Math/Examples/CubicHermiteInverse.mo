@@ -4,11 +4,11 @@ model CubicHermiteInverse "Test problem for cubic hermite splines"
   Modelica.Blocks.Sources.Sine y(amplitude=2, freqHz(displayUnit="Hz") = 1)
     "Control signal"
     annotation (Placement(transformation(extent={{-40,0},{-20,20}})));
-  BICEPS.Utilities.Math.CubicHermiteInverse spl(
+  BICEPS.Utilities.Math.CubicHermiteInverse2 spl(
     xMin=15,
     xMax=25,
     x0=20) annotation (Placement(transformation(extent={{0,0},{20,20}})));
-  BICEPS.Utilities.Math.CubicHermiteInverse splRev(
+  BICEPS.Utilities.Math.CubicHermiteInverse2 splRev(
     xMin=15,
     xMax=25,
     x0=20,

@@ -205,7 +205,6 @@ model SimpleRoomFourElements
     final xMin=TMin,
     final xMax=TMax,
     final x0=T0,
-    final k=k,
     reverseActing=true,
     final ensureMonotonicity=true) if biomimeticControl
     "Spline to calculate control signal"

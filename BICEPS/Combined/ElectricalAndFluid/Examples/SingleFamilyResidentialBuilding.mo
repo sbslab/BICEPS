@@ -11,10 +11,10 @@ model SingleFamilyResidentialBuilding
     redeclare package MediumWat = Medium,
     show_T=true,
     lat=weaDat.lat,
-    PHeaPum_nominal=5000,
+    PHeaPum_nominal(displayUnit="kW") = 5000,
     POth_nominal=9653,
-    PPV_nominal=20000,
-    PWin_nominal=10000,
+    PPV_nominal(displayUnit="kW"),
+    PWin_nominal(displayUnit="kW"),
     PBat_nominal=500,
     filNam=filNam,
     TMin=bld.T0 - 1.5,
@@ -111,8 +111,7 @@ equation
       file="modelica://BICEPS/Resources/Scripts/Dymola/Combined/ElectricalAndFluid/Examples/SingleFamilyResidentialBuilding.mos"
       "Simulate and plot"),
     experiment(
-      StartTime=86400,
-      StopTime=172800,
+      StopTime=2592000,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;
