@@ -3,6 +3,7 @@ model Electrical
   "Example model to demonstrate the electrical subsystem"
   extends Modelica.Icons.Example;
   BICEPS.Electrical.BuildingSystems.Electrical ele(
+    biomimeticControl=false,
     have_wind=false,
     lat=weaDat.lat,
     PCon_nominal={PHeaPum.k},

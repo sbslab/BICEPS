@@ -109,9 +109,9 @@ model SingleFamilyResidentialBuilding
     columns={2},
     smoothness=Modelica.Blocks.Types.Smoothness.MonotoneContinuousDerivative1)
     "Reader for other electrical loads (combined lighting, devices, refrigerator, etc.)"
-    annotation (Placement(transformation(extent={{-90,20},{-70,40}})));
+    annotation (Placement(transformation(extent={{-90,16},{-70,36}})));
   Modelica.Blocks.Math.Gain gain(k=0.3)
-    annotation (Placement(transformation(extent={{-62,20},{-42,40}})));
+    annotation (Placement(transformation(extent={{-60,16},{-40,36}})));
 equation
   connect(terminal, ele.terminal) annotation (Line(points={{-110,80},{-40,80},{-40,
           37},{-21,37}}, color={0,120,120}));
@@ -145,8 +145,8 @@ equation
           -38,22},{-24,22},{-24,24},{-22,24}},
                                            color={0,0,127}));
   connect(loaOth.y[1], gain.u)
-    annotation (Line(points={{-69,30},{-64,30}}, color={0,0,127}));
-  connect(gain.y, ele.PCon[3]) annotation (Line(points={{-41,30},{-22,30},{-22,
+    annotation (Line(points={{-69,26},{-62,26}}, color={0,0,127}));
+  connect(gain.y, ele.PCon[3]) annotation (Line(points={{-39,26},{-22,26},{-22,
           25.3333}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Polygon(

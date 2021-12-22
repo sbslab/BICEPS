@@ -56,8 +56,7 @@ model ConnectedDevices
   Modelica.Blocks.Interfaces.RealOutput yCon[nCon] if biomimeticControl
     "Consumer control signal(s)"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
-  Modelica.Blocks.Interfaces.RealInput yNetPow
-    "Net power signal (supply/demand)"
+  Modelica.Blocks.Interfaces.RealInput PNetIn "Net power input"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
   Modelica.Blocks.Interfaces.RealInput PCon[nCon]
     "Power of consumers"
@@ -116,8 +115,8 @@ equation
           0}},
         color={0,0,127}));
   for i in 1:nSto loop
-    connect(yNetPow, bat[i].yNetPow) annotation (Line(points={{-120,60},{-80,60},
-            {-80,0},{-12,0}},   color={0,0,127}));
+    connect(PNetIn, bat[i].PNetIn) annotation (Line(points={{-120,60},{-80,60},
+            {-80,0},{-12,0}}, color={0,0,127}));
   end for;
   connect(bat.terminal, terSto)
     annotation (Line(points={{0,4.8},{0,110}},          color={0,120,120}));

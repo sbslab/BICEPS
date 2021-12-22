@@ -45,8 +45,7 @@ model Panel "Generic model for an electrical panel"
   Modelica.Blocks.Interfaces.RealInput yPro[nPro] if biomimeticControl
     "Producer control signal(s)"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
-  Modelica.Blocks.Interfaces.RealOutput yNetPow
-    "Storage signal based on net supply/demand power"
+  Modelica.Blocks.Interfaces.RealOutput PNetOut "Net power output"
     annotation (Placement(transformation(extent={{100,10},{120,30}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Sensors.GeneralizedSensor senPro[
     nPro] "Sensor on producers" annotation (Placement(transformation(
@@ -67,8 +66,6 @@ model Panel "Generic model for an electrical panel"
   Modelica.Blocks.Math.Sum PCon(nin=nCon)
                                 "Consumer power"
     annotation (Placement(transformation(extent={{40,-22},{20,0}})));
-  Buildings.Controls.OBC.CDL.Continuous.Limiter lim(uMax=1, uMin=-1)
-    annotation (Placement(transformation(extent={{70,10},{90,30}})));
 equation
   connect(terGri, met.terminal_n)
     annotation (Line(points={{0,110},{0,50},{1.77636e-15,50}},
@@ -118,10 +115,8 @@ equation
           38,14}}, color={0,0,127}));
   connect(PPro.y, PNet.u1) annotation (Line(points={{-19,-11},{12,-11},{12,26},
           {38,26}}, color={0,0,127}));
-  connect(PNet.y, lim.u)
-    annotation (Line(points={{61,20},{68,20}}, color={0,0,127}));
-  connect(lim.y, yNetPow)
-    annotation (Line(points={{92,20},{110,20}}, color={0,0,127}));
+  connect(PNet.y, PNetOut)
+    annotation (Line(points={{61,20},{110,20}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Line(points={{0,-24},{0,-32}}, color={0,0,0}),
           Rectangle(

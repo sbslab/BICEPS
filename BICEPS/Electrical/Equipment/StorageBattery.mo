@@ -34,19 +34,19 @@ model StorageBattery
     V_nominal=V_nominal,
     initMode=Buildings.Electrical.Types.InitMode.zero_current)
     annotation (Placement(transformation(extent={{10,-20},{30,0}})));
-  Experimental.Examples.Controls.Battery con(EMax=EBatMax, P_nominal=PBat)
+  replaceable Controls.Battery con(EMax=EBatMax, P_nominal=PBat,
+    riseTime=15)
     "Battery controller"
     annotation (Placement(transformation(extent={{-60,10},{-40,30}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terminal
     "Generalized electric terminal"
     annotation (Placement(transformation(extent={{-12,-112},{4,-96}}),
         iconTransformation(extent={{-8,100},{8,116}})));
-  Modelica.Blocks.Interfaces.RealInput yNetPow
-    "Net power signal (supply/demand)"
+  Modelica.Blocks.Interfaces.RealInput PNetIn "Net power input"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
 
 equation
-  connect(yNetPow, con.yNetPow) annotation (Line(points={{-120,60},{-70,60},{-70,
+  connect(PNetIn, con.PNetIn) annotation (Line(points={{-120,60},{-70,60},{-70,
           26},{-62,26}}, color={0,0,127}));
   connect(senBat.terminal, terminal)
     annotation (Line(points={{0,42},{0,-104},{-4,-104}}, color={0,120,120}));
@@ -55,7 +55,7 @@ equation
   connect(con.P, bat.P)
     annotation (Line(points={{-39,20},{20,20},{20,0}}, color={0,0,127}));
   connect(bat.SOC, con.soc) annotation (Line(points={{31,-4},{40,-4},{40,-20},{-70,
-          -20},{-70,14},{-62,14}}, color={0,0,127}));
+          -20},{-70,16},{-62,16}}, color={0,0,127}));
   connect(senBat.y, yOut)
     annotation (Line(points={{11,60},{110,60}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={

@@ -140,7 +140,7 @@ equation
   connect(P1.yOut, yOut) annotation (Line(points={{11,36},{30,36},{30,80},{110,
           80}},
         color={0,0,127}));
-  connect(P1.yNetPow, dev.yNetPow) annotation (Line(points={{11,32},{30,32},{30,
+  connect(P1.PNetOut, dev.PNetIn) annotation (Line(points={{11,32},{30,32},{30,
           -24},{12,-24}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
