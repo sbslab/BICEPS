@@ -8,14 +8,14 @@ model CubicHermiteWithInverse
     x0=273.15 + 20)          "Spline function"
     annotation (Placement(transformation(extent={{0,0},{20,20}})));
   Modelica.Blocks.Sources.Sine TMea(
-    amplitude=5,
+    amplitude=3,
     freqHz(displayUnit="Hz") = 1,
     offset=273.15 + 20) "Measured temperature"
     annotation (Placement(transformation(extent={{-40,0},{-20,20}})));
-  BICEPS.Utilities.Math.CubicHermiteInverse2 splInv(
+  BICEPS.Utilities.Math.CubicHermiteInverse splInv(
     xMin=spl.xMin,
     xMax=spl.xMax,
-    x0=spl.x0)      "Inverse spline"
+    x0=spl.x0) "Inverse spline"
     annotation (Placement(transformation(extent={{40,0},{60,20}})));
 equation
   connect(TMea.y, spl.x)

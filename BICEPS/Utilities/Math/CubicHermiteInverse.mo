@@ -1,12 +1,11 @@
 within BICEPS.Utilities.Math;
 model CubicHermiteInverse
-  "Block for the inverse function of the cubic hermite spline"
+  "Block for the inverse function of a strictly monotonic cubic hermite spline"
   extends Modelica.Blocks.Icons.Block;
-  extends Modelica.Icons.UnderConstruction;
   parameter Real xMin=-1 "Minimimum desired threshold for independent variable";
   parameter Real xMax=1 "Maximum desired threshold for independent variable";
   parameter Real x0=0 "Nominal value for independent variable";
-  parameter Boolean ensureMonotonicity=true "Set to true if spline monoticity is ensured";
+  final parameter Boolean ensureMonotonicity=true "Set to true if spline monoticity is ensured";
   parameter Boolean reverseActing=false "Set to true if xMin=-1 corresponds to yMax";
   final parameter Real[3] xd={xMin,x0,xMax} "Support points";
   final parameter Real[3] yd={-1,0,1}   "Support points";
@@ -33,12 +32,12 @@ algorithm
     end if;
   end for;
   // Extrapolate or interpolate the data
-  x := Buildings.Utilities.Math.Functions.cubicHermiteLinearExtrapolation(
-    x=y,
-    x1=yd[i],
-    x2=yd[i + 1],
-    y1=xd[i],
-    y2=xd[i + 1],
+  x := BICEPS.Utilities.Math.Functions.inverseMonotonicCubicHermite(
+    y=y,
+    x1=xd[i],
+    x2=xd[i + 1],
+    y1=yd[i],
+    y2=yd[i + 1],
     y1d=d[i],
     y2d=d[i + 1]);
   if reverseActing then
@@ -88,6 +87,15 @@ algorithm
     Text(
       extent={{-4,-30},{22,-46}},
       lineColor={160,160,164},
-      textString="-1")}),
+      textString="-1"),
+        Ellipse(
+          extent={{-4,2},{4,-6}},
+          lineColor={238,46,47},
+          fillColor={238,46,47},
+          fillPattern=FillPattern.Solid),
+    Text(
+      extent={{-87,38},{-6,-16}},
+      lineColor={0,0,0},
+          textString="p1*x^3+...+p4=0")}),
     Diagram(coordinateSystem(preserveAspectRatio=false)));
 end CubicHermiteInverse;

@@ -22,8 +22,7 @@ model RelativeFlowExergyPotential "Sensor for relative flow exergy"
   Utilities.Math.CubicHermite spl(
     final xMin=pMin,
     final xMax=pMax,
-    final x0=p0,
-    final ensureMonotonicity=true)
+    final x0=p0)
     annotation (Placement(transformation(extent={{60,60},{80,80}})));
   Modelica.Blocks.Interfaces.RealOutput y "Control signal"
     annotation (Placement(transformation(extent={{100,70},{120,90}}),

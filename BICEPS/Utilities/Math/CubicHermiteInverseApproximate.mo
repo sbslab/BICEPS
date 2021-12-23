@@ -1,19 +1,18 @@
 within BICEPS.Utilities.Math;
-model CubicHermiteInverse2
+model CubicHermiteInverseApproximate
   "Block for the inverse function of the cubic hermite spline"
   extends Modelica.Blocks.Icons.Block;
   extends Modelica.Icons.UnderConstruction;
   parameter Real xMin=-1 "Minimimum desired threshold for independent variable";
   parameter Real xMax=1 "Maximum desired threshold for independent variable";
   parameter Real x0=0 "Nominal value for independent variable";
-  final parameter Boolean ensureMonotonicity=true "Set to true if spline monoticity is ensured";
+  parameter Boolean ensureMonotonicity=true "Set to true if spline monoticity is ensured";
   parameter Boolean reverseActing=false "Set to true if xMin=-1 corresponds to yMax";
   final parameter Real[3] xd={xMin,x0,xMax} "Support points";
   final parameter Real[3] yd={-1,0,1}   "Support points";
   final parameter Real[3] d(each fixed=false)
     "Derivatives at the support points";
   Integer i "Integer to select data interval";
-  Real t[:,2] "abscissa scaled with h, i.e., t=[0..1] within x=[x1..x2]";
   Modelica.Blocks.Interfaces.RealInput y "Independent variable"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}}),
       iconTransformation(extent={{-140,-20},{-100,20}})));
@@ -34,12 +33,12 @@ algorithm
     end if;
   end for;
   // Extrapolate or interpolate the data
-  x := BICEPS.Utilities.Math.Functions.inverseMonotonicCubicHermite(
-    y=y,
-    x1=xd[i],
-    x2=xd[i + 1],
-    y1=yd[i],
-    y2=yd[i + 1],
+  x := Buildings.Utilities.Math.Functions.cubicHermiteLinearExtrapolation(
+    x=y,
+    x1=yd[i],
+    x2=yd[i + 1],
+    y1=xd[i],
+    y2=xd[i + 1],
     y1d=d[i],
     y2d=d[i + 1]);
   if reverseActing then
@@ -91,4 +90,4 @@ algorithm
       lineColor={160,160,164},
       textString="-1")}),
     Diagram(coordinateSystem(preserveAspectRatio=false)));
-end CubicHermiteInverse2;
+end CubicHermiteInverseApproximate;

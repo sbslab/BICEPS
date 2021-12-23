@@ -122,7 +122,8 @@ model ThermoFluidFourElements "Thermofluid subsystem"
   Buildings.BoundaryConditions.WeatherData.Bus weaBus "Weather data bus"
     annotation (Placement(transformation(extent={{-20,80},{20,120}}),
         iconTransformation(extent={{-10,90},{10,110}})));
-  Controls.ThermoFluid conFlu(n=2, tSmo=tSmo) if biomimeticControl
+  Controls.ThermoFluid conFlu(n=2,
+    a={0.9,0.1},                   tSmo=tSmo) if biomimeticControl
     annotation (Placement(transformation(extent={{40,20},{60,40}})));
 
   Modelica.Blocks.Logical.Hysteresis noHea(uLow=-300, uHigh=0) "Enable heating"

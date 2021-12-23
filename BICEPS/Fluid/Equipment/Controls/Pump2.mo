@@ -18,8 +18,7 @@ model Pump2 "Pump control"
   Utilities.Math.CubicHermiteInverse spl(
     final xMin=TMin,
     final xMax=TMax,
-    final x0=T0,
-    final ensureMonotonicity=true) if biomimeticControl
+    final x0=T0) if biomimeticControl
     "Spline to inversely calculate pulsing setpoint from control signal"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
   Buildings.Controls.OBC.CDL.Continuous.Limiter TSet(

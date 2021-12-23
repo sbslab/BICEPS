@@ -19,8 +19,7 @@ model RelativeInternalExergyPotential
   Utilities.Math.CubicHermite spl(
     final xMin=TMin,
     final xMax=TMax,
-    final x0=T0,
-    final ensureMonotonicity=true)
+    final x0=T0)
     annotation (Placement(transformation(extent={{-20,60},{0,80}})));
   Modelica.Blocks.Interfaces.RealOutput y "Control signal"
     annotation (Placement(transformation(extent={{0,100},{20,120}}),

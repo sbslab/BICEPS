@@ -23,8 +23,7 @@ model RelativeElectricalExergyPotential
   Utilities.Math.CubicHermite spl(
     final xMin=vMin,
     final xMax=vMax,
-    final x0=v0,
-    final ensureMonotonicity=true)
+    final x0=v0)
     annotation (Placement(transformation(extent={{60,70},{80,90}})));
 equation
   connect(terminal, terminal)

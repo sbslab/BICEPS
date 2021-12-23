@@ -111,7 +111,7 @@ equation
       file="modelica://BICEPS/Resources/Scripts/Dymola/Combined/ElectricalAndFluid/Examples/SingleFamilyResidentialBuilding.mos"
       "Simulate and plot"),
     experiment(
-      StopTime=2592000,
+      StopTime=604800,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;
