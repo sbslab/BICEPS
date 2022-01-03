@@ -1,7 +1,7 @@
 ﻿// Simulate
 simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.COBEE.NormalExporter", stopTime=2592000, tolerance=1e-06, resultFile="NormalExporter");
 simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.COBEE.NormalImporter", stopTime=2592000, tolerance=1e-06, resultFile="NormalImporter");
-simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.COBEE.NormalExporter", stopTime=2592000, tolerance=1e-06, resultFile="NormalZero");
+simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.COBEE.NormalZero", stopTime=2592000, tolerance=1e-06, resultFile="NormalZero");
 simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.COBEE.BiomimeticExporter", stopTime=2592000, tolerance=1e-06, resultFile="BiomimeticExporter");
 simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.COBEE.BiomimeticImporter", stopTime=2592000, tolerance=1e-06, resultFile="BiomimeticImporter");
 simulateModel("BICEPS.Combined.ElectricalAndFluid.Examples.COBEE.BiomimeticZero", stopTime=2592000, tolerance=1e-06, resultFile="BiomimeticZero");
