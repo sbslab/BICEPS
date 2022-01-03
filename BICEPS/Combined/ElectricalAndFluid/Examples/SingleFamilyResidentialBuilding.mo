@@ -23,12 +23,12 @@ model SingleFamilyResidentialBuilding
     annotation (Placement(transformation(extent={{-20,-70},{0,-50}})));
   Buildings.Fluid.Sources.Boundary_pT sin(
     redeclare package Medium = Medium,
-    T=285.15,
+    T=293.15,
     nPorts=1) "Sink"
     annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
   Buildings.Fluid.Sources.Boundary_pT sou(
     redeclare package Medium = Medium,
-    T=293.15,
+    T=285.15,
     nPorts=1) "Source"
     annotation (Placement(transformation(extent={{60,-90},{40,-70}})));
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(
@@ -111,7 +111,7 @@ equation
       file="modelica://BICEPS/Resources/Scripts/Dymola/Combined/ElectricalAndFluid/Examples/SingleFamilyResidentialBuilding.mos"
       "Simulate and plot"),
     experiment(
-      StopTime=604800,
+      StopTime=2592000,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;

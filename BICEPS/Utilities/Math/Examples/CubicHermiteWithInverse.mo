@@ -24,8 +24,11 @@ equation
     annotation (Line(points={{21,10},{38,10}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
+    __Dymola_Commands(
+      file="modelica://BICEPS/Resources/Scripts/Dymola/Utilities/Math/Examples/CubicHermiteWithInverse.mos"
+      "Simulate and plot"),
     experiment(
-      StopTime=0.5,
+      StopTime=1,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
 end CubicHermiteWithInverse;
