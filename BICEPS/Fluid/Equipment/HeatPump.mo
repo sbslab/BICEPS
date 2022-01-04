@@ -107,7 +107,11 @@ model HeatPump "Heat pump model"
     final COP_nominal=COP_nominal,
     final QCon_flow_nominal=Q1_flow_nominal,
     final dp1_nominal=dp1_nominal,
-    final dp2_nominal=dp2_nominal) "Heat pump (index 1 for condenser side)"
+    final dp2_nominal=dp2_nominal,
+    T1_start=TCon_nominal,
+    T2_start=TEva_nominal,
+    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial)
+                                   "Heat pump (index 1 for condenser side)"
     annotation (Placement(transformation(extent={{10,-40},{30,-20}})));
   Buildings.Fluid.Sensors.TemperatureTwoPort senTConEnt(
     redeclare final package Medium = Medium1,
@@ -117,6 +121,7 @@ model HeatPump "Heat pump model"
         extent={{-80,10},{-60,30}})));
   Buildings.Experimental.DHC.EnergyTransferStations.BaseClasses.Pump_m_flow pumCon(
     redeclare final package Medium = Medium1,
+    energyDynamics=Modelica.Fluid.Types.Dynamics.DynamicFreeInitial,
     final m_flow_nominal=m1_flow_nominal,
     final allowFlowReversal=allowFlowReversal1,
     show_T=show_T1)
@@ -124,6 +129,7 @@ model HeatPump "Heat pump model"
     annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
   Buildings.Experimental.DHC.EnergyTransferStations.BaseClasses.Pump_m_flow pumEva(
     redeclare final package Medium = Medium2,
+    energyDynamics=Modelica.Fluid.Types.Dynamics.DynamicFreeInitial,
     final m_flow_nominal=m2_flow_nominal,
     final allowFlowReversal=allowFlowReversal2,
     show_T=show_T2)
@@ -173,8 +179,8 @@ model HeatPump "Heat pump model"
         iconTransformation(extent={{90,10},{110,30}})));
   Controls.HeatPump conHeaPum(
     biomimeticControl=biomimeticControl,
-    TMin=conHeaPum.T0 - 1,
-    TMax=conHeaPum.T0 + 1,
+    TMin=conHeaPum.T0 - 10,
+    TMax=conHeaPum.T0 + 10,
     T0=323.15,
     riseTime=60,
     THeaWatSup_nominal=THeaWatSup_nominal) "Heat pump control"
@@ -217,11 +223,11 @@ model HeatPump "Heat pump model"
     annotation (Placement(transformation(extent={{62,-34},{82,-14}})));
   Controls.PrimaryVariableFlow conFloCon(Q_flow_nominal=Q1_flow_nominal,
       dT_nominal=dT1_nominal,
-    ratFloMin=0.2)
+    ratFloMin=0.3)
     annotation (Placement(transformation(extent={{60,74},{80,94}})));
   Controls.PrimaryVariableFlow conFloEva(Q_flow_nominal=-Q1_flow_nominal*(1 + 1
         /COP_nominal), dT_nominal=dT2_nominal,
-    ratFloMin=0.2)
+    ratFloMin=0.3)
     annotation (Placement(transformation(extent={{110,-34},{130,-14}})));
   Modelica.Blocks.Interfaces.RealInput yHeaPum if biomimeticControl
     "Control signal" annotation (

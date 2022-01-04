@@ -38,8 +38,8 @@ model Battery2 "Control for the battery energy storage system"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   Modelica.Blocks.Math.Abs abs "Absolute value"
     annotation (Placement(transformation(extent={{-60,50},{-40,70}})));
-  Buildings.Controls.OBC.CDL.Continuous.Limiter lim(final uMax=PMax, final uMin
-      =PMin)
+  Buildings.Controls.OBC.CDL.Continuous.Limiter lim(final uMax=PMax, final uMin=
+       PMin)
     annotation (Placement(transformation(extent={{-20,50},{0,70}})));
 equation
   connect(fil.y, P) annotation (Line(points={{91,0},{110,0}}, color={0,0,127}));

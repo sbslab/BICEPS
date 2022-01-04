@@ -183,6 +183,10 @@ model FanCoilWithDistributionPump
     TMax=TMax,
     T0=T0) "Pump/fan control"
     annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput PFan(final unit="W")
+    "Fan power"
+    annotation (Placement(transformation(extent={{100,90},{120,110}}),
+    iconTransformation(extent={{100,40},{140,80}})));
   Modelica.Blocks.Sources.Constant TSetSta(k=T0) if not biomimeticControl
     "Static setpoint temperature if not biomimetic control"
     annotation (Placement(transformation(extent={{-100,90},{-80,110}})));
@@ -225,6 +229,8 @@ equation
     annotation (Line(points={{-100,-60},{-50,-60}}, color={0,127,255}));
   connect(TSetSta.y, con.TSetSta) annotation (Line(points={{-79,100},{-70,100},
           {-70,86},{-62,86}}, color={0,0,127}));
+  connect(PFan, fan.P) annotation (Line(points={{110,100},{4,100},{4,49},{9,49}},
+        color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-100,-66},{100,-54}},

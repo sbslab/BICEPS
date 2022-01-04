@@ -139,6 +139,8 @@ model ThermoFluidFourElements "Thermofluid subsystem"
   Modelica.Blocks.Sources.BooleanConstant heaPumOn(k=true)
     "Set heat pump to always on (for heating-season only simulation)"
     annotation (Placement(transformation(extent={{40,-90},{20,-70}})));
+  Buildings.Controls.OBC.CDL.Continuous.Add addPumFan "Adder"
+    annotation (Placement(transformation(extent={{60,70},{80,90}})));
 equation
   connect(port_a, heaPum.port_a2)
     annotation (Line(points={{-100,-60},{-30,-60}}, color={0,127,255}));
@@ -157,7 +159,7 @@ equation
           -6},{-10,-6}},
                      color={0,127,255}));
   connect(weaBus, zon.weaBus) annotation (Line(
-      points={{0,100},{0,88},{-20,88},{-20,40}},
+      points={{0,100},{0,92},{-20,92},{-20,40}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -179,10 +181,14 @@ equation
           28},{38,28},{38,18},{78,18},{78,-30},{62,-30}}, color={0,0,127}));
   connect(noHea.y, enaHea.u)
     annotation (Line(points={{39,-30},{30,-30}}, color={255,0,255}));
-  connect(heaPum.PPum, PPum) annotation (Line(points={{-32,-46},{-70,-46},{-70,
-          80},{110,80}}, color={0,0,127}));
   connect(heaPumOn.y, heaPum.u) annotation (Line(points={{19,-80},{2,-80},{2,
           -42},{-9,-42}}, color={255,0,255}));
+  connect(addPumFan.y, PPum)
+    annotation (Line(points={{82,80},{110,80}}, color={0,0,127}));
+  connect(heaPum.PPum, addPumFan.u1) annotation (Line(points={{-32,-46},{-64,
+          -46},{-64,86},{58,86}}, color={0,0,127}));
+  connect(fcu.PFan, addPumFan.u2) annotation (Line(points={{-8,-4},{10,-4},{10,
+          74},{58,74}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
           extent={{-80,80},{80,-80}},
