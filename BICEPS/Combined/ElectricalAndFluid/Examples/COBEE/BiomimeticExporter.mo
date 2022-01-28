@@ -3,8 +3,8 @@ model BiomimeticExporter
   "SingleFamilyResidentialBuilding with biomimetic control, net exporter"
   extends SingleFamilyResidentialBuilding(bld(
     biomimeticControl=true,
-    PPV_nominal=4000*7,
-    PWin_nominal=2000*7));
+    PPV_nominal=4000*5,
+    PWin_nominal=2000*5));
   annotation (__Dymola_Commands(
     file="modelica://BICEPS/Resources/Scripts/CaseStudy/COBEE.mos"
         "COBEE"), experiment(

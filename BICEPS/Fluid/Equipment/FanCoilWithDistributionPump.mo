@@ -139,7 +139,6 @@ model FanCoilWithDistributionPump
     redeclare final Buildings.Fluid.Movers.Data.Generic per,
     nominalValuesDefineDefaultPressureCurve=true,
     energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    use_inputFilter=false,
     final dp_nominal=dp2_nominal)
     "Fan"
     annotation (Placement(transformation(extent={{30,30},{10,50}})));

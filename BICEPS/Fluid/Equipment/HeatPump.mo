@@ -124,7 +124,8 @@ model HeatPump "Heat pump model"
     energyDynamics=Modelica.Fluid.Types.Dynamics.DynamicFreeInitial,
     final m_flow_nominal=m1_flow_nominal,
     final allowFlowReversal=allowFlowReversal1,
-    show_T=show_T1)
+    show_T=show_T1,
+    use_inputFilter=true)
     "Heat pump condenser water pump"
     annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
   Buildings.Experimental.DHC.EnergyTransferStations.BaseClasses.Pump_m_flow pumEva(
@@ -132,7 +133,8 @@ model HeatPump "Heat pump model"
     energyDynamics=Modelica.Fluid.Types.Dynamics.DynamicFreeInitial,
     final m_flow_nominal=m2_flow_nominal,
     final allowFlowReversal=allowFlowReversal2,
-    show_T=show_T2)
+    show_T=show_T2,
+    use_inputFilter=true)
     "Heat pump evaporator water pump"
     annotation (Placement(transformation(extent={{120,-110},{100,-90}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput PPum(final unit="W")

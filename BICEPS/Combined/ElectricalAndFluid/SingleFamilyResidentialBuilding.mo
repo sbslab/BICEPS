@@ -119,7 +119,7 @@ model SingleFamilyResidentialBuilding
     smoothness=Modelica.Blocks.Types.Smoothness.MonotoneContinuousDerivative1)
     "Reader for other electrical loads (combined lighting, devices, refrigerator, etc.)"
     annotation (Placement(transformation(extent={{-90,16},{-70,36}})));
-  Modelica.Blocks.Math.Gain gain(k=0.3)
+  Modelica.Blocks.Math.Gain gain(k=0.25)
     annotation (Placement(transformation(extent={{-60,16},{-40,36}})));
 equation
   connect(terminal, ele.terminal) annotation (Line(points={{-110,80},{-40,80},{-40,
