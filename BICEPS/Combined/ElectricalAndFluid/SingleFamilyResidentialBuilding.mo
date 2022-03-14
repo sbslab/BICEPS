@@ -60,6 +60,7 @@ model SingleFamilyResidentialBuilding
     nCon=3,
     have_pv=have_pv,
     have_wind=have_wind,
+    tol=0.025,
     lat=lat,
     PCon_nominal=PCon_nominal,
     PSun=PPV_nominal,
@@ -77,6 +78,8 @@ model SingleFamilyResidentialBuilding
     show_T=show_T,
     QHea_flow_nominal=PHeaPum_nominal*mec.COP_nominal,
     COP_nominal=4,
+    dT_nominal=6,
+    TDisWatMin=285.15,
     TMin=TMin,
     TMax=TMax,
     T0=T0,
@@ -116,7 +119,7 @@ model SingleFamilyResidentialBuilding
     smoothness=Modelica.Blocks.Types.Smoothness.MonotoneContinuousDerivative1)
     "Reader for other electrical loads (combined lighting, devices, refrigerator, etc.)"
     annotation (Placement(transformation(extent={{-90,16},{-70,36}})));
-  Modelica.Blocks.Math.Gain gain(k=0.3)
+  Modelica.Blocks.Math.Gain gain(k=0.25)
     annotation (Placement(transformation(extent={{-60,16},{-40,36}})));
 equation
   connect(terminal, ele.terminal) annotation (Line(points={{-110,80},{-40,80},{-40,

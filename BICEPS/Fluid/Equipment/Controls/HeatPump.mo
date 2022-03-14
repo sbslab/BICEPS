@@ -29,8 +29,7 @@ model HeatPump "Heat pump control"
   Utilities.Math.CubicHermiteInverse spl(
     final xMin=TMin,
     final xMax=TMax,
-    final x0=T0,
-    final ensureMonotonicity=true) if biomimeticControl
+    final x0=T0) if biomimeticControl
     annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
   Buildings.Controls.OBC.CDL.Continuous.Limiter lim(
     final uMax=TMax,

@@ -205,9 +205,7 @@ model SimpleRoomFourElements
     final xMin=TMin,
     final xMax=TMax,
     final x0=T0,
-    final k=k,
-    reverseActing=true,
-    final ensureMonotonicity=true) if biomimeticControl
+    reverseActing=true) if biomimeticControl
     "Spline to calculate control signal"
     annotation (Placement(transformation(extent={{76,70},{96,90}})));
   Modelica.Blocks.Interfaces.RealOutput QAct_flow

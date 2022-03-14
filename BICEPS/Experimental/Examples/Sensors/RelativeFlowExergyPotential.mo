@@ -22,9 +22,7 @@ model RelativeFlowExergyPotential "Sensor for relative flow exergy"
   Utilities.Math.CubicHermite spl(
     final xMin=pMin,
     final xMax=pMax,
-    final x0=p0,
-    final k=k,
-    final ensureMonotonicity=true)
+    final x0=p0)
     annotation (Placement(transformation(extent={{60,60},{80,80}})));
   Modelica.Blocks.Interfaces.RealOutput y "Control signal"
     annotation (Placement(transformation(extent={{100,70},{120,90}}),
@@ -39,7 +37,8 @@ model RelativeFlowExergyPotential "Sensor for relative flow exergy"
         rotation=90)));
 equation
   connect(spl.y, y)
-    annotation (Line(points={{81,70},{110,70}}, color={0,0,127}));
+    annotation (Line(points={{81,70},{96,70},{96,80},{110,80}},
+                                                color={0,0,127}));
   connect(senPre.p, spl.x) annotation (Line(points={{11,10},{48,10},{48,70},{58,
           70}}, color={0,0,127}));
   connect(port, senPre.port)

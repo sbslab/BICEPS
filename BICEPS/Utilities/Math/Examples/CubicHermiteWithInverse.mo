@@ -3,19 +3,19 @@ model CubicHermiteWithInverse
   "Test problem for cubic hermite splines with the inverse"
   extends Modelica.Icons.Example;
   BICEPS.Utilities.Math.CubicHermite spl(
-    xMin=273.15 + 17,
-    xMax=273.15 + 24,
-    x0=273.15 + 20) "Spline function"
+    xMin=spl.x0 - 1.5,
+    xMax=spl.x0 + 2.5,
+    x0=273.15 + 20)          "Spline function"
     annotation (Placement(transformation(extent={{0,0},{20,20}})));
   Modelica.Blocks.Sources.Sine TMea(
-    amplitude=6,
+    amplitude=3,
     freqHz(displayUnit="Hz") = 1,
     offset=273.15 + 20) "Measured temperature"
     annotation (Placement(transformation(extent={{-40,0},{-20,20}})));
-  .BICEPS.Utilities.Math.CubicHermiteInverse splInv(
-    xMin=273.15 + 17,
-    xMax=273.15 + 24,
-    x0=273.15 + 20) "Inverse spline"
+  BICEPS.Utilities.Math.CubicHermiteInverse splInv(
+    xMin=spl.xMin,
+    xMax=spl.xMax,
+    x0=spl.x0) "Inverse spline"
     annotation (Placement(transformation(extent={{40,0},{60,20}})));
 equation
   connect(TMea.y, spl.x)
@@ -23,5 +23,12 @@ equation
   connect(spl.y, splInv.y)
     annotation (Line(points={{21,10},{38,10}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    __Dymola_Commands(
+      file="modelica://BICEPS/Resources/Scripts/Dymola/Utilities/Math/Examples/CubicHermiteWithInverse.mos"
+      "Simulate and plot"),
+    experiment(
+      StopTime=1,
+      Tolerance=1e-06,
+      __Dymola_Algorithm="Dassl"));
 end CubicHermiteWithInverse;

@@ -11,8 +11,7 @@ model Pump "Pump control"
   Utilities.Math.CubicHermiteInverse spl(
     final xMin=TMin,
     final xMax=TMax,
-    final x0=T0,
-    final ensureMonotonicity=true)
+    final x0=T0)
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
   Buildings.Controls.OBC.CDL.Continuous.Limiter TSet(final uMax=TMax, final
       uMin=TMin)

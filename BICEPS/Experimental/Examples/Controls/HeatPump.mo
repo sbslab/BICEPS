@@ -18,7 +18,7 @@ model HeatPump "Heat pump controller"
   Modelica.Blocks.Interfaces.RealInput yHeaPum
     "Heat pump relative exergy potential"
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
-  Utilities.Math.CubicHermiteInverse spl(
+  Utilities.Math.CubicHermiteInverseApproximate spl(
     final xMin=TMin,
     final xMax=TMax,
     final x0=T0,

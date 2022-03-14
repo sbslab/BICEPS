@@ -1,27 +1,24 @@
 within BICEPS.Utilities.Math;
-model CubicHermite "Block for cubic hermite spline function"
+model CubicHermiteInverseApproximate
+  "Block for the inverse function of the cubic hermite spline"
   extends Modelica.Blocks.Icons.Block;
+  extends Modelica.Icons.UnderConstruction;
   parameter Real xMin=-1 "Minimimum desired threshold for independent variable";
   parameter Real xMax=1 "Maximum desired threshold for independent variable";
   parameter Real x0=0 "Nominal value for independent variable";
-//  parameter Real k(min=Modelica.Constants.small)=100
-//    "Percentage penalty for deviating outside of min/max range. Smaller numbers
-//    indicate a steeper penalty.";
+  parameter Boolean ensureMonotonicity=true "Set to true if spline monoticity is ensured";
   parameter Boolean reverseActing=false "Set to true if xMin=-1 corresponds to yMax";
-  final parameter Boolean ensureMonotonicity=true "Set to true if spline monoticity is ensured";
   final parameter Real[3] xd={xMin,x0,xMax} "Support points";
-  final parameter Real[3] yd={-1,0,1} "Support points";
-//  final parameter Real[5] xd={xMin*(1-k/100),xMin,x0,xMax,xMax*(1+k/100)} "Support points";
-//  final parameter Real[5] yd={-100,-1,0,1,100} "Support points";
+  final parameter Real[3] yd={-1,0,1}   "Support points";
   final parameter Real[3] d(each fixed=false)
     "Derivatives at the support points";
   Integer i "Integer to select data interval";
-  Modelica.Blocks.Interfaces.RealInput x "Independent variable"
+  Modelica.Blocks.Interfaces.RealInput y "Independent variable"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}}),
       iconTransformation(extent={{-140,-20},{-100,20}})));
-  Modelica.Blocks.Interfaces.RealOutput y "Dependent variable"
-    annotation (Placement(transformation(extent={{100,-10},{120,10}}),
-        iconTransformation(extent={{100,-10},{120,10}})));
+  Modelica.Blocks.Interfaces.RealOutput x "Dependent variable" annotation (
+      Placement(transformation(extent={{100,-10},{120,10}}), iconTransformation(
+          extent={{100,-10},{120,10}})));
 initial algorithm
   // Get the derivative values at the support points
   d := Buildings.Utilities.Math.Functions.splineDerivatives(
@@ -30,24 +27,24 @@ initial algorithm
     ensureMonotonicity=ensureMonotonicity);
 algorithm
   i := 1;
-  for j in 1:size(xd, 1) - 1 loop
-    if x > xd[j] then
+  for j in 1:size(yd, 1) - 1 loop
+    if y > yd[j] then
       i := j;
     end if;
   end for;
   // Extrapolate or interpolate the data
-  y := Buildings.Utilities.Math.Functions.cubicHermiteLinearExtrapolation(
-    x=x,
-    x1=xd[i],
-    x2=xd[i + 1],
-    y1=yd[i],
-    y2=yd[i + 1],
+  x := Buildings.Utilities.Math.Functions.cubicHermiteLinearExtrapolation(
+    x=y,
+    x1=yd[i],
+    x2=yd[i + 1],
+    y1=xd[i],
+    y2=xd[i + 1],
     y1d=d[i],
     y2d=d[i + 1]);
   if reverseActing then
-    y := - y;
+    x := 2*x0 - x;
   else
-    y := y;
+    x := x;
   end if;
   annotation (
     defaultComponentName="spl",
@@ -93,4 +90,4 @@ algorithm
       lineColor={160,160,164},
       textString="-1")}),
     Diagram(coordinateSystem(preserveAspectRatio=false)));
-end CubicHermite;
+end CubicHermiteInverseApproximate;
