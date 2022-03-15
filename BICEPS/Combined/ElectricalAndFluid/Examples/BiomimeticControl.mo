@@ -3,6 +3,6 @@ model BiomimeticControl
   "SingleFamilyResidentialBuilding with biomimetic control"
   extends SingleFamilyResidentialBuilding(bld(biomimeticControl=true));
   annotation (__Dymola_Commands(
-    file="modelica://BICEPS/Resources/Scripts/Dymola/Combined/ElectricalAndFluid/Examples//NormalAndBiomimeticControl.mos"
+    file="modelica://BICEPS/Resources/Scripts/CaseStudy/NormalAndBiomimeticControl.mos"
         "Normal and Biomimetic"));
 end BiomimeticControl;
