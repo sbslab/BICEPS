@@ -16,8 +16,6 @@ model SingleFamilyResidentialBuilding
     annotation (
       Dialog(tab="Advanced", group="Diagnostics"),
       HideResult=true);
-  parameter Boolean have_pv=true "True if the building has a PV system";
-  parameter Boolean have_wind=true "True if the building has a wind system";
   parameter Modelica.SIunits.Angle lat "Latitude";
   parameter Modelica.SIunits.Power PHeaPum_nominal=2000
     "Nominal power for heat pump";
@@ -30,8 +28,6 @@ model SingleFamilyResidentialBuilding
     "Nominal power for pumps";
   parameter Modelica.SIunits.Power PPV_nominal=4000
     "Nominal power for PV";
-  parameter Modelica.SIunits.Power PWin_nominal=2000
-    "Nominal power for wind";
   parameter Modelica.SIunits.Power PBat_nominal=5800
     "Nominal power for battery";
   parameter Modelica.SIunits.Power PBatMax(min=0)=6000
@@ -49,7 +45,8 @@ model SingleFamilyResidentialBuilding
     "Minimimum desired threshold for independent variable";
   parameter Modelica.SIunits.Temperature TMax=298.15
     "Maximum desired threshold for independent variable";
-  parameter Modelica.SIunits.Temperature T0=293.15      "Nominal value for independent variable";
+  parameter Modelica.SIunits.Temperature T0=293.15
+    "Nominal value for independent variable";
   parameter Real tSmo(
     final quantity="Time",
     final unit="s",
@@ -58,13 +55,10 @@ model SingleFamilyResidentialBuilding
   Electrical.BuildingSystems.Electrical ele(
     biomimeticControl=biomimeticControl,
     nCon=3,
-    have_pv=have_pv,
-    have_wind=have_wind,
     tol=0.025,
     lat=lat,
     PCon_nominal=PCon_nominal,
     PSun=PPV_nominal,
-    PWin=PWin_nominal,
     PSto_nominal=PBat_nominal,
     EBatMax=EBatMax,
     PBatMax=PBatMax,
