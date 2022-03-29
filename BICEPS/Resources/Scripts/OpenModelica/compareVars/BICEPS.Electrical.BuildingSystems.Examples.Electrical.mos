@@ -1,0 +1,12 @@
+compareVars :=
+  {
+    "PGriRea.y",
+    "Ppv.y",
+    "PLoa.y",
+    "PBat.y",
+    "EGri.y",
+    "Epv.y",
+    "ELoa.y",
+    "EBat.y",
+    "ele.yOut"
+  };

@@ -1,0 +1,6 @@
+compareVars :=
+  {
+    "PNet.y",
+    "sta.sta",
+    "sta.soc"
+  };
