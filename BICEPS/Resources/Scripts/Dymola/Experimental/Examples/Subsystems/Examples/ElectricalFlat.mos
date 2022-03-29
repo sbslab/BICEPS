@@ -1,11 +1,11 @@
 ﻿// Simulate
-simulateModel("BICEPS.Experimental.Examples.Subsystems.Examples.Electrical", stopTime=86400, tolerance=1e-06, method="Radau", resultFile="Electrical");
+simulateModel("BICEPS.Experimental.Examples.Subsystems.Examples.ElectricalFlat", stopTime=86400, tolerance=1e-06, method="Radau", resultFile="ElectricalFlat");
 // Plot
 createPlot(id=1, position={15, 15, 1295, 684}, 
   y={"ele.senLoa.y", "ele.senBat.y", "ele.senPV.y", "ele.senWin.y"}, 
   range={0.0, 2600000.0, -2.0, 6.0}, 
   grid=true, 
-  filename="Electrical.mat", 
+  filename="ElectricalFlat.mat", 
   colors={{28,108,200}, {238,46,47}, {0,140,72}, {217,67,180}});
 createPlot(id=1, position={15, 15, 1295, 684}, 
   y={"ele.bat.SOC"}, 

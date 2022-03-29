@@ -15,7 +15,7 @@ model RenewableSupplyHeatPump
     V=208,
     phiSou=0) "Grid model that provides power to the system"
     annotation (Placement(transformation(extent={{-80,40},{-60,60}})));
-  Subsystems.Electrical ele(
+  Subsystems.ElectricalFlat ele(
     PLoa_nominal(displayUnit="kW") = 152000,
     PWin=1,
     PSun(displayUnit="kW") = 15000,

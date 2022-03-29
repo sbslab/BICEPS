@@ -1,5 +1,6 @@
 within BICEPS.Experimental.Examples.Subsystems;
-model Electrical
+model ElectricalFlat
+  "Flat electrical system model with renewable sources and grid connection"
   extends Buildings.BaseClasses.BaseIconLow;
   parameter Modelica.SIunits.Voltage V_nominal=208
     "Nominal voltage of the line";
@@ -214,4 +215,4 @@ equation
         points={{40,78},{-28,10},{32,10},{-50,-76},{-50,-76}},
         color={0,0,0},
         smooth=Smooth.None)}));
-end Electrical;
+end ElectricalFlat;

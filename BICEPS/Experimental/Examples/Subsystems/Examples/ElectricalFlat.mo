@@ -1,8 +1,8 @@
 within BICEPS.Experimental.Examples.Subsystems.Examples;
-model Electrical "Example model for the electrical subsystem"
+model ElectricalFlat "Example model for the electrical subsystem"
   extends Modelica.Icons.Example;
-  BICEPS.Experimental.Examples.Subsystems.Electrical ele(V_nominal=480, lat=
-        weaDat.lat) "Electrical subsystem"
+  BICEPS.Experimental.Examples.Subsystems.ElectricalFlat ele(V_nominal=480, lat
+      =weaDat.lat) "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,0},{0,20}})));
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3
                                             weaDat(computeWetBulbTemperature=
@@ -65,4 +65,4 @@ equation
     experiment(StopTime=86400, Tolerance=1e-6, __Dymola_Algorithm="Radau"),
     Diagram(
         coordinateSystem(preserveAspectRatio=false)));
-end Electrical;
+end ElectricalFlat;

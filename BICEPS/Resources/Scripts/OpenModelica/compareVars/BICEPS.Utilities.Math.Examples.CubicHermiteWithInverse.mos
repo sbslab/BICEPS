@@ -1,0 +1,7 @@
+compareVars :=
+  {
+    "TMea.y",
+    "splInv.x",
+    "spl.y",
+    "splInv.y"
+  };

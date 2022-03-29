@@ -1,0 +1,15 @@
+compareVars :=
+  {
+    "conSta.y",
+    "staPul.y",
+    "unStaPul.y",
+    "conTF.heaPum.sta_b1.T",
+    "staTF.heaPum.sta_b1.T",
+    "unStaTF.heaPum.sta_b1.T",
+    "staTF.TMin",
+    "staTF.TMax",
+    "staTF.T0",
+    "conTF.heaPum.P",
+    "staTF.heaPum.P",
+    "unStaTF.heaPum.P"
+  };
