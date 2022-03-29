@@ -1,0 +1,17 @@
+compareVars :=
+  {
+    "thermoFluid.zon.thermalZoneFourElements.TAir",
+    "weaDat.weaBus.TDryBul",
+    "thermoFluid.zon.TMin",
+    "thermoFluid.zon.TMax",
+    "thermoFluid.zon.T0",
+    "thermoFluid.conFlu.yIn[1]",
+    "thermoFluid.conFlu.yIn[2]",
+    "thermoFluid.conFlu.yOut",
+    "thermoFluid.heaPum.conHeaPum.TSet",
+    "thermoFluid.heaPum.conHeaPum.TMin",
+    "thermoFluid.heaPum.conHeaPum.TMax",
+    "thermoFluid.heaPum.conHeaPum.T0",
+    "EHeaPum.y",
+    "EPum.y"
+  };
