@@ -5,12 +5,7 @@ model ConnectedDevices
   extends Buildings.BaseClasses.BaseIconLow;
   parameter Boolean biomimeticControl=true
     "True if biomimetic control is enabled. False for standard control practice.";
-  final parameter Integer nPro=if have_pv and have_wind then 2 elseif
-     have_pv or have_wind then 1 else 0 "Number of producer connections";
-  parameter Integer nCon=1 "Number of consumer connections";
   parameter Integer nSto=1 "Number of storage connections";
-  parameter Boolean have_pv = true "True if the building has a PV system";
-  parameter Boolean have_wind = true "True if the building has a wind system";
 
   // Producer:
   parameter Modelica.SIunits.Angle lat "Latitude"
@@ -29,8 +24,6 @@ model ConnectedDevices
     "Nominal solar power conversion efficiency (this should consider converion efficiency, area covered, AC/DC losses)";
   parameter Modelica.SIunits.Area A_PV = PSun/eff_PV/W_m2_nominal
     "Nominal area of a P installation";
-  parameter Modelica.SIunits.Power PWin
-    "Nominal power of the wind turbine";
   // Storage: Battery
   parameter Real SOC_start=0.5 "Initial charge";
   parameter Modelica.SIunits.Power PBat = 5000
@@ -42,42 +35,40 @@ model ConnectedDevices
   // 50 kWh
   parameter Modelica.SIunits.Energy EBatMax = 180000000
     "Maximum energy capacity of the battery";
-  Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terPro[nPro]
+  Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terPro
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
-        origin={60,110}),   iconTransformation(extent={{30,100},{50,120}})));
+        origin={60,110}), iconTransformation(extent={{30,100},{50,120}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terSto[nSto]
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={0,110}),  iconTransformation(extent={{-10,100},{10,120}})));
-  Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_n terCon[nCon]
+  Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_n terCon
     "Connector for consumers" annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={-40,110}), iconTransformation(extent={{-50,100},{-30,120}})));
-  Modelica.Blocks.Interfaces.RealOutput yCon[nCon] if biomimeticControl
+  Modelica.Blocks.Interfaces.RealOutput yCon if biomimeticControl
     "Consumer control signal(s)"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
   Modelica.Blocks.Interfaces.RealInput PNetIn "Net power input"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
-  Modelica.Blocks.Interfaces.RealInput PCon[nCon]
-    "Power of consumers"
+  Modelica.Blocks.Interfaces.RealInput PCon "Total power of all consumers"
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
-  Equipment.ConsumerThreePhaseBalanced con[nCon](
+  Equipment.ConsumerThreePhaseBalanced con(
     each final biomimeticControl=biomimeticControl,
     each final V_nominal=V_nominal,
     each final tol=tol,
-    each final k=k)
-    "Consumers"
+    each final k=k) "Consumers"
     annotation (Placement(transformation(extent={{-50,-50},{-30,-70}})));
   Modelica.Blocks.Interfaces.RealOutput ySto[nSto] if biomimeticControl
     "Storage control signal(s)"
     annotation (Placement(transformation(extent={{100,30},{120,50}})));
-  Modelica.Blocks.Interfaces.RealOutput yPro[nPro] if biomimeticControl
+  Modelica.Blocks.Interfaces.RealOutput yPro if biomimeticControl
     "Producer control signal(s)"
-    annotation (Placement(transformation(extent={{98,70},{118,90}})));
+    annotation (Placement(transformation(extent={{100,70},{120,90}})));
   Equipment.ProducerPV pv(
     each final biomimeticControl=biomimeticControl,
     each final V_nominal=V_nominal,
@@ -87,7 +78,7 @@ model ConnectedDevices
     each final lat=lat,
     each final W_m2_nominal=W_m2_nominal,
     each final eff_PV=eff_PV,
-    each final A_PV=A_PV) if have_pv
+    each final A_PV=A_PV)
     annotation (Placement(transformation(extent={{50,60},{70,40}})));
   Equipment.StorageBattery bat[nSto](
     each final biomimeticControl=biomimeticControl,
@@ -104,13 +95,6 @@ model ConnectedDevices
     "Weather data bus"
     annotation (Placement(transformation(extent={{-100,80},{-60,120}}),
       iconTransformation(extent={{-100,90},{-80,110}})));
-  Equipment.ProducerWind win(
-    final biomimeticControl=biomimeticControl,
-    final V_nominal=V_nominal,
-    final tol=tol,
-    final k=k,
-    final PWin=PWin,
-    final lat=lat) if have_wind annotation (Placement(transformation(extent={{20,40},{40,20}})));
 
 equation
   connect(PCon, con.P) annotation (Line(points={{-120,-60},{-52,-60},{-52,-60}},
@@ -124,50 +108,23 @@ equation
     connect(PNetIn, bat[i].PNetIn) annotation (Line(points={{-120,60},{-80,60},
             {-80,0},{-12,0}}, color={0,0,127}));
   end for;
+  connect(weaBus, pv.weaBus) annotation (Line(
+        points={{-80,100},{-80,70},{52,70},{52,60}},
+        color={255,204,51},
+        thickness=0.5), Text(
+        string="%first",
+        index=-1,
+        extent={{-3,6},{-3,6}},
+        horizontalAlignment=TextAlignment.Right));
   connect(bat.terminal, terSto)
     annotation (Line(points={{0,4.8},{0,110}},          color={0,120,120}));
   connect(bat.yOut, ySto) annotation (Line(points={{11,0},{90,0},{90,40},{110,
           40}},
         color={0,0,127}));
-  connect(weaBus, win.weaBus) annotation (Line(
-      points={{-80,100},{-80,70},{22,70},{22,40}},
-      color={255,204,51},
-      thickness=0.5), Text(
-      string="%first",
-      index=-1,
-      extent={{-3,6},{-3,6}},
-      horizontalAlignment=TextAlignment.Right));
-  if have_pv then
-    connect(pv.terminal, terPro[1])
-      annotation (Line(points={{60,60.8},{60,110},{60,110}}, color={0,120,120}));
-    if biomimeticControl then
-      connect(pv.yOut, yPro[1]) annotation (Line(points={{71,44},{80,44},{80,80},{
-            108,80}}, color={0,0,127}));
-    end if;
-  end if;
-  if have_pv and have_wind then
-    connect(win.terminal, terPro[2])
-      annotation (Line(points={{30,40.8},{30,80},{60,80},{60,110}}, color={0,120,120}));
-    if biomimeticControl then
-      connect(win.yOut, yPro[2]) annotation (Line(points={{41,24},{80,24},{80,80},{
-            108,80}}, color={0,0,127}));
-    end if;
-  elseif have_wind then
-    connect(win.terminal, terPro[1]) annotation (Line(points={{30,40.8},{30,80},{
-            60,80},{60,110}}, color={0,120,120}));
-    if biomimeticControl then
-      connect(win.yOut, yPro[1]) annotation (Line(points={{41,24},{80,24},{80,80},{
-            108,80}}, color={0,0,127}));
-    end if;
-  end if;
-  connect(weaBus, pv.weaBus) annotation (Line(
-      points={{-80,100},{-80,70},{52,70},{52,60}},
-      color={255,204,51},
-      thickness=0.5), Text(
-      string="%first",
-      index=-1,
-      extent={{-3,6},{-3,6}},
-      horizontalAlignment=TextAlignment.Right));
+  connect(terPro, pv.terminal)
+    annotation (Line(points={{60,110},{60,60.8}}, color={0,120,120}));
+  connect(pv.yOut, yPro) annotation (Line(points={{71,44},{80,44},{80,80},{110,80}},
+        color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-80,80},{80,-80}},

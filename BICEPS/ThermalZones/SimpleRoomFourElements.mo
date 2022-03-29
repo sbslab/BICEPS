@@ -208,13 +208,6 @@ model SimpleRoomFourElements
     reverseActing=true) if biomimeticControl
     "Spline to calculate control signal"
     annotation (Placement(transformation(extent={{76,70},{96,90}})));
-  Modelica.Blocks.Interfaces.RealOutput QAct_flow
-    "Actual heat flow rate into air zone" annotation (Placement(transformation(
-          extent={{100,30},{120,50}}), iconTransformation(extent={{100,30},{120,
-            50}})));
-  Modelica.Blocks.Sources.RealExpression QFloHeaPor(y=thermalZoneFourElements.volAir.heatPort.Q_flow)
-    "Heat flow rate at the air volume heat port"
-    annotation (Placement(transformation(extent={{86,30},{96,50}})));
 
   Modelica.Blocks.Math.Gain gai[3](each k=kIntLoa) "Interior load scaling rate"
     annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
@@ -398,8 +391,6 @@ equation
       index=-1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(QFloHeaPor.y, QAct_flow)
-    annotation (Line(points={{96.5,40},{110,40}}, color={0,0,127}));
   connect(intGai.y[1], gai[1].u)
     annotation (Line(points={{-59,-50},{-42,-50}}, color={0,0,127}));
   connect(intGai.y[2], gai[2].u)

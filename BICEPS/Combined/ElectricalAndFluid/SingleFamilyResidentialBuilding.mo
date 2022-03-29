@@ -16,8 +16,6 @@ model SingleFamilyResidentialBuilding
     annotation (
       Dialog(tab="Advanced", group="Diagnostics"),
       HideResult=true);
-  parameter Boolean have_pv=true "True if the building has a PV system";
-  parameter Boolean have_wind=true "True if the building has a wind system";
   parameter Modelica.SIunits.Angle lat "Latitude";
   parameter Modelica.SIunits.Power PHeaPum_nominal=2000
     "Nominal power for heat pump";
@@ -25,13 +23,11 @@ model SingleFamilyResidentialBuilding
     "Nominal power for pumps";
   parameter Modelica.SIunits.Power POth_nominal=10000
     "Nominal power for other loads";
-  parameter Modelica.SIunits.Power PCon_nominal[3]=
-    {PHeaPum_nominal,PPum_nominal,POth_nominal}
+  parameter Modelica.SIunits.Power PCon_nominal=
+    PHeaPum_nominal+PPum_nominal+POth_nominal
     "Nominal power for pumps";
   parameter Modelica.SIunits.Power PPV_nominal=4000
     "Nominal power for PV";
-  parameter Modelica.SIunits.Power PWin_nominal=2000
-    "Nominal power for wind";
   parameter Modelica.SIunits.Power PBat_nominal=5800
     "Nominal power for battery";
   parameter Modelica.SIunits.Power PBatMax(min=0)=6000
@@ -49,7 +45,8 @@ model SingleFamilyResidentialBuilding
     "Minimimum desired threshold for independent variable";
   parameter Modelica.SIunits.Temperature TMax=298.15
     "Maximum desired threshold for independent variable";
-  parameter Modelica.SIunits.Temperature T0=293.15      "Nominal value for independent variable";
+  parameter Modelica.SIunits.Temperature T0=293.15
+    "Nominal value for independent variable";
   parameter Real tSmo(
     final quantity="Time",
     final unit="s",
@@ -57,14 +54,10 @@ model SingleFamilyResidentialBuilding
     "Smoothing time for thermal-fluid control signal";
   Electrical.BuildingSystems.Electrical ele(
     biomimeticControl=biomimeticControl,
-    nCon=3,
-    have_pv=have_pv,
-    have_wind=have_wind,
     tol=0.025,
     lat=lat,
     PCon_nominal=PCon_nominal,
     PSun=PPV_nominal,
-    PWin=PWin_nominal,
     PSto_nominal=PBat_nominal,
     EBatMax=EBatMax,
     PBatMax=PBatMax,
@@ -118,9 +111,12 @@ model SingleFamilyResidentialBuilding
     columns={2},
     smoothness=Modelica.Blocks.Types.Smoothness.MonotoneContinuousDerivative1)
     "Reader for other electrical loads (combined lighting, devices, refrigerator, etc.)"
-    annotation (Placement(transformation(extent={{-90,16},{-70,36}})));
+    annotation (Placement(transformation(extent={{-100,40},{-80,60}})));
   Modelica.Blocks.Math.Gain gain(k=0.25)
-    annotation (Placement(transformation(extent={{-60,16},{-40,36}})));
+    annotation (Placement(transformation(extent={{-70,40},{-50,60}})));
+  Buildings.Controls.OBC.CDL.Continuous.MultiSum PConSum(nin=3)
+    "Sum of consumer powers"
+    annotation (Placement(transformation(extent={{-60,0},{-40,20}})));
 equation
   connect(terminal, ele.terminal) annotation (Line(points={{-110,80},{-40,80},{-40,
           37},{-21,37}}, color={0,120,120}));
@@ -148,15 +144,16 @@ equation
           {-100,-60}}, color={0,127,255}));
   connect(ele.yOut, yOut) annotation (Line(points={{1,38},{30,38},{30,80},{110,80}},
         color={0,0,127}));
-  connect(mec.PHeaPum, ele.PCon[1]) annotation (Line(points={{-1,-25},{-40,-25},
-          {-40,24},{-22,24},{-22,22.6667}}, color={0,0,127}));
-  connect(mec.PPum, ele.PCon[2]) annotation (Line(points={{-1,-22},{-38,-22},{
-          -38,22},{-24,22},{-24,24},{-22,24}},
-                                           color={0,0,127}));
   connect(loaOth.y[1], gain.u)
-    annotation (Line(points={{-69,26},{-62,26}}, color={0,0,127}));
-  connect(gain.y, ele.PCon[3]) annotation (Line(points={{-39,26},{-22,26},{-22,
-          25.3333}}, color={0,0,127}));
+    annotation (Line(points={{-79,50},{-72,50}}, color={0,0,127}));
+  connect(mec.PHeaPum, PConSum.u[1]) annotation (Line(points={{-1,-25},{-70,-25},
+          {-70,11.3333},{-62,11.3333}}, color={0,0,127}));
+  connect(mec.PPum, PConSum.u[2]) annotation (Line(points={{-1,-22},{-66,-22},{-66,
+          10},{-62,10},{-62,10}}, color={0,0,127}));
+  connect(gain.y, PConSum.u[3]) annotation (Line(points={{-49,50},{-46,50},{-46,
+          30},{-68,30},{-68,8.66667},{-62,8.66667}}, color={0,0,127}));
+  connect(PConSum.y, ele.PCon) annotation (Line(points={{-38,10},{-32,10},{-32,24},
+          {-22,24}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Polygon(
           points={{0,70},{-60,40},{60,40},{0,70}},

@@ -9,13 +9,12 @@ model SingleFamilyResidentialBuilding
     "Library path of the files with other electrical loads as time series";
   BICEPS.Combined.ElectricalAndFluid.SingleFamilyResidentialBuilding bld(
     redeclare package MediumWat = Medium,
-    biomimeticControl=false,
+    biomimeticControl=true,
     show_T=true,
     lat=weaDat.lat,
     PHeaPum_nominal(displayUnit="kW") = 4000,
     POth_nominal=9653,
     PPV_nominal(displayUnit="kW") = 1000*(4*3.36),
-    PWin_nominal(displayUnit="kW") = 1000*(2*3.36),
     PBat_nominal=500,
     PBatMin=500,
     filNam=filNam,
@@ -49,16 +48,16 @@ model SingleFamilyResidentialBuilding
   Modelica.Blocks.Sources.RealExpression PGriRea(y=gri.P.real)
     "Real grid power"
     annotation (Placement(transformation(extent={{20,100},{40,120}})));
-  Modelica.Blocks.Continuous.Integrator Epv if bld.have_pv "PV energy"
+  Modelica.Blocks.Continuous.Integrator Epv "PV energy"
     annotation (Placement(transformation(extent={{60,70},{80,90}})));
   Modelica.Blocks.Continuous.Integrator EHeaPum "Heat pump energy"
     annotation (Placement(transformation(extent={{-20,40},{0,60}})));
   Modelica.Blocks.Continuous.Integrator EBat "Battery energy"
     annotation (Placement(transformation(extent={{60,10},{80,30}})));
-  Modelica.Blocks.Sources.RealExpression Ppv(y=bld.ele.dev.pv.pv.P) if bld.have_pv
+  Modelica.Blocks.Sources.RealExpression Ppv(y=bld.ele.dev.pv.pv.P)
     "PV power"
     annotation (Placement(transformation(extent={{20,70},{40,90}})));
-  Modelica.Blocks.Sources.RealExpression PHeaPum(y=bld.ele.dev.con[1].loa.P)
+  Modelica.Blocks.Sources.RealExpression PHeaPum(y=bld.mec.PHeaPum)
     "Heat pump power"
     annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
   Modelica.Blocks.Sources.RealExpression PBat(y=-1*bld.ele.dev.bat[1].bat.P)
@@ -66,20 +65,14 @@ model SingleFamilyResidentialBuilding
     annotation (Placement(transformation(extent={{20,10},{40,30}})));
   Modelica.Blocks.Continuous.Integrator EPum "Pump energy"
     annotation (Placement(transformation(extent={{-20,100},{0,120}})));
-  Modelica.Blocks.Sources.RealExpression PPum(y=bld.ele.dev.con[2].loa.P)
+  Modelica.Blocks.Sources.RealExpression PPum(y=bld.mec.PPum)
     "Pump power"
     annotation (Placement(transformation(extent={{-60,100},{-40,120}})));
   Modelica.Blocks.Continuous.Integrator EOth "Other loads"
     annotation (Placement(transformation(extent={{-20,70},{0,90}})));
-  Modelica.Blocks.Sources.RealExpression POth(y=bld.ele.dev.con[3].loa.P)
+  Modelica.Blocks.Sources.RealExpression POth(y=bld.gain.y)
     "Other loads power"
     annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
-  Modelica.Blocks.Continuous.Integrator EWin if bld.have_wind "Wind energy"
-    annotation (Placement(transformation(extent={{60,40},{80,60}})));
-  Modelica.Blocks.Sources.RealExpression PWin(y=bld.ele.dev.win.winTur.P) if
-       bld.have_wind
-    "Wind power"
-    annotation (Placement(transformation(extent={{20,40},{40,60}})));
   Modelica.Blocks.Logical.GreaterThreshold dis "Discharging"
     annotation (Placement(transformation(extent={{60,-60},{80,-40}})));
   Modelica.Blocks.Logical.LessThreshold cha "Charging"
@@ -123,8 +116,6 @@ equation
                                                  color={0,0,127}));
   connect(POth.y, EOth.u)
     annotation (Line(points={{-39,80},{-22,80}}, color={0,0,127}));
-  connect(PWin.y, EWin.u)
-    annotation (Line(points={{41,50},{58,50}}, color={0,0,127}));
   connect(PBat.y, cha.u) annotation (Line(points={{41,20},{50,20},{50,-10},{58,
           -10}}, color={0,0,127}));
   connect(PBat.y, dis.u) annotation (Line(points={{41,20},{50,20},{50,-50},{58,
@@ -153,8 +144,8 @@ equation
       file="modelica://BICEPS/Resources/Scripts/Dymola/Combined/ElectricalAndFluid/Examples/SingleFamilyResidentialBuilding.mos"
       "Simulate and plot"),
     experiment(
-      StartTime=1728000,
-      StopTime=2419200,
+      StartTime=86400,
+      StopTime=172800,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
 end SingleFamilyResidentialBuilding;
