@@ -126,10 +126,6 @@ model ThermoFluidFourElements "Thermofluid subsystem"
     a={0.9,0.1},                   tSmo=tSmo) if biomimeticControl
     annotation (Placement(transformation(extent={{40,20},{60,40}})));
 
-  Modelica.Blocks.Logical.Hysteresis noHea(uLow=-300, uHigh=0) "Enable heating"
-    annotation (Placement(transformation(extent={{60,-40},{40,-20}})));
-  Modelica.Blocks.Logical.Not enaHea "Heating enabled"
-    annotation (Placement(transformation(extent={{28,-40},{8,-20}})));
   Modelica.Blocks.Interfaces.RealOutput PPum(
     final quantity="Power",
     final unit="W",
@@ -177,10 +173,6 @@ equation
           {80,-46},{-9,-46}}, color={0,0,127}));
   connect(conFlu.yOut, fcu.y) annotation (Line(points={{61,30},{80,30},{80,4},{
           -36,4},{-36,-2},{-32,-2}},   color={0,0,127}));
-  connect(zon.QAct_flow, noHea.u) annotation (Line(points={{-9,34},{18,34},{18,
-          28},{38,28},{38,18},{78,18},{78,-30},{62,-30}}, color={0,0,127}));
-  connect(noHea.y, enaHea.u)
-    annotation (Line(points={{39,-30},{30,-30}}, color={255,0,255}));
   connect(heaPumOn.y, heaPum.u) annotation (Line(points={{19,-80},{2,-80},{2,
           -42},{-9,-42}}, color={255,0,255}));
   connect(addPumFan.y, PPum)

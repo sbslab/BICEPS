@@ -54,10 +54,10 @@ model SingleFamilyResidentialBuilding
     annotation (Placement(transformation(extent={{-20,40},{0,60}})));
   Modelica.Blocks.Continuous.Integrator EBat "Battery energy"
     annotation (Placement(transformation(extent={{60,10},{80,30}})));
-  Modelica.Blocks.Sources.RealExpression Ppv(y=bld.ele.dev.pv[1].pv.P)
+  Modelica.Blocks.Sources.RealExpression Ppv(y=bld.ele.dev.pv.pv.P)
     "PV power"
     annotation (Placement(transformation(extent={{20,70},{40,90}})));
-  Modelica.Blocks.Sources.RealExpression PHeaPum(y=bld.ele.dev.con[1].loa.P)
+  Modelica.Blocks.Sources.RealExpression PHeaPum(y=bld.mec.PHeaPum)
     "Heat pump power"
     annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
   Modelica.Blocks.Sources.RealExpression PBat(y=-1*bld.ele.dev.bat[1].bat.P)
@@ -65,12 +65,12 @@ model SingleFamilyResidentialBuilding
     annotation (Placement(transformation(extent={{20,10},{40,30}})));
   Modelica.Blocks.Continuous.Integrator EPum "Pump energy"
     annotation (Placement(transformation(extent={{-20,100},{0,120}})));
-  Modelica.Blocks.Sources.RealExpression PPum(y=bld.ele.dev.con[2].loa.P)
+  Modelica.Blocks.Sources.RealExpression PPum(y=bld.mec.PPum)
     "Pump power"
     annotation (Placement(transformation(extent={{-60,100},{-40,120}})));
   Modelica.Blocks.Continuous.Integrator EOth "Other loads"
     annotation (Placement(transformation(extent={{-20,70},{0,90}})));
-  Modelica.Blocks.Sources.RealExpression POth(y=bld.ele.dev.con[3].loa.P)
+  Modelica.Blocks.Sources.RealExpression POth(y=bld.gain.y)
     "Other loads power"
     annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
   Modelica.Blocks.Logical.GreaterThreshold dis "Discharging"

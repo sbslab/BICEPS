@@ -5,8 +5,6 @@ model ConnectedDevices
   extends Buildings.BaseClasses.BaseIconLow;
   parameter Boolean biomimeticControl=true
     "True if biomimetic control is enabled. False for standard control practice.";
-  parameter Integer nPro=1 "Number of producer connections";
-  parameter Integer nCon=1 "Number of consumer connections";
   parameter Integer nSto=1 "Number of storage connections";
 
   // Producer:
@@ -37,43 +35,41 @@ model ConnectedDevices
   // 50 kWh
   parameter Modelica.SIunits.Energy EBatMax = 180000000
     "Maximum energy capacity of the battery";
-  Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terPro[nPro]
+  Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terPro
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
-        origin={60,110}),   iconTransformation(extent={{30,100},{50,120}})));
+        origin={60,110}), iconTransformation(extent={{30,100},{50,120}})));
   Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_p terSto[nSto]
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={0,110}),  iconTransformation(extent={{-10,100},{10,120}})));
-  Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_n terCon[nCon]
+  Buildings.Electrical.AC.ThreePhasesBalanced.Interfaces.Terminal_n terCon
     "Connector for consumers" annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={-40,110}), iconTransformation(extent={{-50,100},{-30,120}})));
-  Modelica.Blocks.Interfaces.RealOutput yCon[nCon] if biomimeticControl
+  Modelica.Blocks.Interfaces.RealOutput yCon if biomimeticControl
     "Consumer control signal(s)"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
   Modelica.Blocks.Interfaces.RealInput PNetIn "Net power input"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
-  Modelica.Blocks.Interfaces.RealInput PCon[nCon]
-    "Power of consumers"
+  Modelica.Blocks.Interfaces.RealInput PCon "Total power of all consumers"
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
-  Equipment.ConsumerThreePhaseBalanced con[nCon](
+  Equipment.ConsumerThreePhaseBalanced con(
     each final biomimeticControl=biomimeticControl,
     each final V_nominal=V_nominal,
     each final tol=tol,
-    each final k=k)
-    "Consumers"
+    each final k=k) "Consumers"
     annotation (Placement(transformation(extent={{-50,-50},{-30,-70}})));
   Modelica.Blocks.Interfaces.RealOutput ySto[nSto] if biomimeticControl
     "Storage control signal(s)"
     annotation (Placement(transformation(extent={{100,30},{120,50}})));
-  Modelica.Blocks.Interfaces.RealOutput yPro[nPro] if biomimeticControl
+  Modelica.Blocks.Interfaces.RealOutput yPro if biomimeticControl
     "Producer control signal(s)"
-    annotation (Placement(transformation(extent={{98,70},{118,90}})));
-  Equipment.ProducerPV pv[nPro](
+    annotation (Placement(transformation(extent={{100,70},{120,90}})));
+  Equipment.ProducerPV pv(
     each final biomimeticControl=biomimeticControl,
     each final V_nominal=V_nominal,
     each final tol=tol,
@@ -112,8 +108,7 @@ equation
     connect(PNetIn, bat[i].PNetIn) annotation (Line(points={{-120,60},{-80,60},
             {-80,0},{-12,0}}, color={0,0,127}));
   end for;
-  for i in 1:nPro loop
-    connect(weaBus, pv[i].weaBus) annotation (Line(
+  connect(weaBus, pv.weaBus) annotation (Line(
         points={{-80,100},{-80,70},{52,70},{52,60}},
         color={255,204,51},
         thickness=0.5), Text(
@@ -121,7 +116,6 @@ equation
         index=-1,
         extent={{-3,6},{-3,6}},
         horizontalAlignment=TextAlignment.Right));
-  end for;
   connect(bat.terminal, terSto)
     annotation (Line(points={{0,4.8},{0,110}},          color={0,120,120}));
   connect(bat.yOut, ySto) annotation (Line(points={{11,0},{90,0},{90,40},{110,
@@ -129,7 +123,7 @@ equation
         color={0,0,127}));
   connect(terPro, pv.terminal)
     annotation (Line(points={{60,110},{60,60.8}}, color={0,120,120}));
-  connect(pv.yOut, yPro) annotation (Line(points={{71,44},{80,44},{80,80},{108,80}},
+  connect(pv.yOut, yPro) annotation (Line(points={{71,44},{80,44},{80,80},{110,80}},
         color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
