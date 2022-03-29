@@ -5,45 +5,50 @@ model Electrical
   BICEPS.Electrical.BuildingSystems.Electrical ele(
     biomimeticControl=false,
     lat=weaDat.lat,
-    PCon_nominal={PHeaPum.k},
-    PPro_nominal=4000,
+    PCon_nominal=PHeaPum.k,
     PSun=5000,
     PSto_nominal=1000,
-    PBatMax=2000)              "Electrical subsystem"
+    PBatMax=2000)
+    "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,0},{0,20}})));
-  Modelica.Blocks.Continuous.Integrator EGri "Grid energy"
+  Modelica.Blocks.Continuous.Integrator EGri
+    "Grid energy"
     annotation (Placement(transformation(extent={{60,60},{80,80}})));
   Modelica.Blocks.Sources.RealExpression PGriRea(y=gri.P.real)
     "Real grid power"
     annotation (Placement(transformation(extent={{20,60},{40,80}})));
-  Modelica.Blocks.Continuous.Integrator Epv "PV energy"
+  Modelica.Blocks.Continuous.Integrator Epv
+    "PV energy"
     annotation (Placement(transformation(extent={{60,30},{80,50}})));
-  Modelica.Blocks.Continuous.Integrator ELoa "Load energy"
+  Modelica.Blocks.Continuous.Integrator ELoa
+    "Load energy"
     annotation (Placement(transformation(extent={{60,0},{80,20}})));
-  Modelica.Blocks.Continuous.Integrator EBat "Battery energy"
+  Modelica.Blocks.Continuous.Integrator EBat
+    "Battery energy"
     annotation (Placement(transformation(extent={{60,-30},{80,-10}})));
-  Modelica.Blocks.Sources.RealExpression Ppv(y=ele.dev.pv[1].pv.P)
-                                                         "PV power"
+  Modelica.Blocks.Sources.RealExpression Ppv(y=ele.dev.pv.pv.P)
+    "PV power"
     annotation (Placement(transformation(extent={{20,30},{40,50}})));
-  Modelica.Blocks.Sources.RealExpression PLoa(y=ele.dev.con[1].loa.P)
-                                                           "Load power"
+  Modelica.Blocks.Sources.RealExpression PLoa(y=ele.dev.con.loa.P)
+    "Load power"
     annotation (Placement(transformation(extent={{20,0},{40,20}})));
   Modelica.Blocks.Sources.RealExpression PBat(y=-1*ele.dev.bat[1].bat.P)
-                                                           "Battery power"
+    "Battery power"
     annotation (Placement(transformation(extent={{20,-30},{40,-10}})));
-  Buildings.BoundaryConditions.WeatherData.ReaderTMY3
-                                            weaDat(computeWetBulbTemperature=
-        false, filNam=Modelica.Utilities.Files.loadResource(
-        "modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
+  Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(
+    computeWetBulbTemperature=false,
+    filNam=Modelica.Utilities.Files.loadResource(
+      "modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
     "Weather data model"
     annotation (Placement(transformation(extent={{-40,60},{-20,80}})));
-  Buildings.Electrical.AC.ThreePhasesBalanced.Sources.Grid
-                                      gri(
+  Buildings.Electrical.AC.ThreePhasesBalanced.Sources.Grid gri(
     f=60,
     V=208,
-    phiSou=0) "Grid model that provides power to the system"
+    phiSou=0)
+    "Grid model that provides power to the system"
     annotation (Placement(transformation(extent={{-80,40},{-60,60}})));
-  Modelica.Blocks.Sources.Constant PHeaPum(k=500)    "Heat pump power"
+  Modelica.Blocks.Sources.Constant PHeaPum(k=500)
+    "Heat pump power"
     annotation (Placement(transformation(extent={{-80,-20},{-60,0}})));
 equation
   connect(PGriRea.y,EGri. u)
@@ -60,7 +65,7 @@ equation
       points={{-20,70},{-10,70},{-10,20}},
       color={255,204,51},
       thickness=0.5));
-  connect(PHeaPum.y, ele.PCon[1]) annotation (Line(points={{-59,-10},{-40,-10},
+  connect(PHeaPum.y, ele.PCon) annotation (Line(points={{-59,-10},{-40,-10},
           {-40,4},{-22,4}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
