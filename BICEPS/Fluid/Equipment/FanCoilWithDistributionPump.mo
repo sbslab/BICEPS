@@ -58,7 +58,7 @@ model FanCoilWithDistributionPump
   // AHRI 440 Standard Heating
   parameter Modelica.SIunits.Temperature T_aHeaWat_nominal=273.15 + 60
     "Heating water inlet temperature at nominal conditions"
-    annotation (Dialog(group="Nominal condition",enable=have_heaWat and not have_chaOve));
+    annotation (Dialog(group="Nominal condition"));
   parameter Modelica.SIunits.Temperature T_bHeaWat_nominal(
     min=273.15,
     displayUnit="degC")=T_aHeaWat_nominal-22.2

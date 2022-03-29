@@ -14,7 +14,7 @@ model ThermoFluid4E "Test model for the thermofluid subsystem"
 
   BICEPS.Fluid.BuildingSystems.ThermoFluidFourElements thermoFluid(
     redeclare package MediumWat = Medium,
-    biomimeticControl=false,
+    biomimeticControl=true,
     show_T=true,
     QHea_flow_nominal(displayUnit="kW") = 20000,
     COP_nominal=4,

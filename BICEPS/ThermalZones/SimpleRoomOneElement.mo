@@ -128,9 +128,7 @@ model SimpleRoomOneElement
   BICEPS.Utilities.Math.CubicHermite spl(
     final xMin=TMin,
     final xMax=TMax,
-    final x0=T0,
-    final k=k,
-    final ensureMonotonicity=true)
+    final x0=T0)
     annotation (Placement(transformation(extent={{70,70},{90,90}})));
   Modelica.Blocks.Interfaces.RealOutput y "Control signal"
     annotation (Placement(transformation(extent={{100,70},{120,90}}),
