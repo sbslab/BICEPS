@@ -16,7 +16,7 @@ model ProducerWind "Wind subsystem"
   Modelica.Blocks.Interfaces.RealOutput yOut if biomimeticControl
     "Output control signal"
     annotation (Placement(transformation(extent={{100,50},{120,70}})));
-  Experimental.Examples.Sensors.RelativeElectricalExergyPotential senWin(
+  BICEPS.Obsolete.Examples.Sensors.RelativeElectricalExergyPotential senWin(
     tol=tol,
     v0=V_nominal,
     k=k) if biomimeticControl

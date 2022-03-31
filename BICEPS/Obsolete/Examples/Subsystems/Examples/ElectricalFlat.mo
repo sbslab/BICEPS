@@ -1,7 +1,7 @@
 within BICEPS.Obsolete.Examples.Subsystems.Examples;
 model ElectricalFlat "Example model for the electrical subsystem"
   extends Modelica.Icons.Example;
-  BICEPS.Experimental.Examples.Subsystems.ElectricalFlat ele(V_nominal=480, lat=
+  BICEPS.Obsolete.Examples.Subsystems.ElectricalFlat ele(V_nominal=480, lat=
        weaDat.lat) "Electrical subsystem"
     annotation (Placement(transformation(extent={{-20,0},{0,20}})));
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3
@@ -60,7 +60,7 @@ equation
     annotation (Line(points={{41,-50},{58,-50}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)),
         __Dymola_Commands(
-      file="modelica://BICEPS/Resources/Scripts/Dymola/Experimental/Examples/Subsystems/Examples/Electrical.mos"
+      file="modelica://BICEPS/Resources/Scripts/Dymola/Obsolete/Examples/Subsystems/Examples/ElectricalFlat.mos"
       "Simulate and plot"),
     experiment(StopTime=86400, Tolerance=1e-6, __Dymola_Algorithm="Radau"),
     Diagram(

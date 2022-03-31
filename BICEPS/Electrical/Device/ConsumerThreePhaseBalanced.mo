@@ -13,7 +13,7 @@ model ConsumerThreePhaseBalanced
   Buildings.Electrical.AC.ThreePhasesBalanced.Loads.Inductive loa(linearized=false,
       mode=Buildings.Electrical.Types.Load.VariableZ_P_input)
     annotation (Placement(transformation(extent={{-20,-10},{-40,10}})));
-  Experimental.Examples.Sensors.RelativeElectricalExergyPotential senV(
+  BICEPS.Obsolete.Examples.Sensors.RelativeElectricalExergyPotential senV(
     tol=tol,
     v0=V_nominal,
     k=k) if biomimeticControl

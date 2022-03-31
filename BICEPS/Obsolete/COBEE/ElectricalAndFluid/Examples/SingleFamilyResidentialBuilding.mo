@@ -5,9 +5,9 @@ model SingleFamilyResidentialBuilding
   package Medium=Buildings.Media.Water
     "Medium in the building distribution system";
   parameter String filNam=
-    "modelica://BICEPS/Resources/Data/Experimental/COBEE/ElectricalAndFluid/SingleFamilyBuildingElectricity.mos"
+    "modelica://BICEPS/Resources/Data/Obsolete/COBEE/ElectricalAndFluid/SingleFamilyResidentialBuilding.mos"
     "Library path of the files with other electrical loads as time series";
-  BICEPS.Experimental.COBEE.ElectricalAndFluid.SingleFamilyResidentialBuilding bld(
+  BICEPS.Obsolete.COBEE.ElectricalAndFluid.SingleFamilyResidentialBuilding bld(
     redeclare package MediumWat = Medium,
     biomimeticControl=true,
     show_T=true,

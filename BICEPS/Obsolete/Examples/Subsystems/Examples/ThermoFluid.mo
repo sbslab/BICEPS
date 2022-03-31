@@ -1,7 +1,7 @@
 within BICEPS.Obsolete.Examples.Subsystems.Examples;
 model ThermoFluid "Example model for the thermofluid subsystem"
   extends Modelica.Icons.Example;
-  BICEPS.Experimental.Examples.Subsystems.ThermoFluid staTF(
+  BICEPS.Obsolete.Examples.Subsystems.ThermoFluid staTF(
     TMin=303.15,
     TMax=323.15,
     T0=313.15) annotation (Placement(transformation(extent={{0,0},{20,20}})));
@@ -9,11 +9,11 @@ model ThermoFluid "Example model for the thermofluid subsystem"
     annotation (Placement(transformation(extent={{-60,46},{-40,66}})));
   Modelica.Blocks.Sources.Sine staPul(freqHz=1) "Stable pulse"
     annotation (Placement(transformation(extent={{-60,6},{-40,26}})));
-  BICEPS.Experimental.Examples.Subsystems.ThermoFluid conTF(
+  BICEPS.Obsolete.Examples.Subsystems.ThermoFluid conTF(
     TMin=303.15,
     TMax=323.15,
     T0=313.15) annotation (Placement(transformation(extent={{0,40},{20,60}})));
-  BICEPS.Experimental.Examples.Subsystems.ThermoFluid unStaTF(
+  BICEPS.Obsolete.Examples.Subsystems.ThermoFluid unStaTF(
     TMin=303.15,
     TMax=323.15,
     T0=313.15) annotation (Placement(transformation(extent={{0,-40},{20,-20}})));
@@ -28,7 +28,7 @@ equation
           {-20,-24},{-2,-24}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)),
    __Dymola_Commands(
-      file="modelica://BICEPS/Resources/Scripts/Dymola/Experimental/Examples/Subsystems/Examples/ThermoFluid.mos"
+      file="modelica://BICEPS/Resources/Scripts/Dymola/Obsolete/Examples/Subsystems/Examples/ThermoFluid.mos"
       "Simulate and plot"),
     experiment(
       StopTime=1,
