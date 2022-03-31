@@ -223,12 +223,14 @@ model HeatPump "Heat pump model"
   Buildings.Controls.OBC.CDL.Continuous.Add heaFloEvaHHW
     "Heat flow rate at evaporator"
     annotation (Placement(transformation(extent={{62,-34},{82,-14}})));
-  Controls.PrimaryVariableFlow conFloCon(Q_flow_nominal=Q1_flow_nominal,
-      dT_nominal=dT1_nominal,
+  Controls.PrimaryVariableFlow conFloCon(
+    Q_flow_nominal=Q1_flow_nominal,
+    dT_nominal=dT1_nominal,
     ratFloMin=0.3)
     annotation (Placement(transformation(extent={{60,74},{80,94}})));
-  Controls.PrimaryVariableFlow conFloEva(Q_flow_nominal=-Q1_flow_nominal*(1 + 1
-        /COP_nominal), dT_nominal=dT2_nominal,
+  Controls.PrimaryVariableFlow conFloEva(
+    Q_flow_nominal=-Q1_flow_nominal*(1 + 1/COP_nominal),
+    dT_nominal=dT2_nominal,
     ratFloMin=0.3)
     annotation (Placement(transformation(extent={{110,-34},{130,-14}})));
   Modelica.Blocks.Interfaces.RealInput yHeaPum if biomimeticControl
