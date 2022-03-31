@@ -1,0 +1,28 @@
+﻿// Simulate
+simulateModel("BICEPS.Obsolete.Examples.Subsystems.Examples.ThermoFluid", tolerance=1e-06, stopTime=1, resultFile="ThermoFluid");
+// Plot 
+createPlot(id=1, position={20, 15, 1029, 658}, 
+  filename="ThermoFluid.mat", 
+  y={"conSta.y", "staPul.y", "unStaPul.y"}, 
+  range={0.0, 1.0, -4.0, 4.0}, 
+  subPlot=101,
+  grid=true, 
+  colors={{28,108,200}, {238,46,47}, {0,140,72}});
+createPlot(id=1, position={15, 15, 1093, 658}, 
+  y={"conTF.heaPum.sta_b1.T", "staTF.heaPum.sta_b1.T", "unStaTF.heaPum.sta_b1.T", "staTF.TMin", "staTF.TMax", "staTF.T0"}, 
+  range={0.0, 2.0, 25.0, 55.0}, 
+  grid=true,  
+  subPlot=102, 
+  colors={{28,108,200}, {238,46,47}, {0,140,72}, {0,0,0}, {0,0,0}, {0,0,0}}, 
+  patterns={LinePattern.Solid, LinePattern.Solid, LinePattern.Solid, LinePattern.Dot, 
+  LinePattern.Dot, LinePattern.Dot}, markers={MarkerStyle.None, MarkerStyle.None, MarkerStyle.None, MarkerStyle.Cross, MarkerStyle.Cross, MarkerStyle.Cross}, 
+  displayUnits={"degC", "degC", "degC", "degC", "degC", "degC"});
+createPlot(id=1, position={20, 15, 1029, 658}, 
+  y={"conTF.heaPum.P", "staTF.heaPum.P", "unStaTF.heaPum.P"}, 
+  range={0.0, 1.0, 0.0, 200000.0}, 
+  grid=true, 
+  subPlot=103, 
+  colors={{28,108,200}, {238,46,47}, {0,140,72}}, 
+  displayUnits={"W", "W", "W"});
+
+
