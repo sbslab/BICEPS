@@ -7,7 +7,8 @@ package UsersGuide "User's Guide"
 end UsersGuide;
 
   annotation (
- uses(Modelica(version="3.2.3"),Buildings(version="8.0.0")),
+ uses(Modelica(version="3.2.3"),Buildings(version="8.0.0"),
+    ModelicaServices(version="3.2.3")),
  Icon(graphics={Line(points={{-2,90}}, color={28,108,200}),
   Text(
    extent={{-100,100},{100,-100}},

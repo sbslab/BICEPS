@@ -1,0 +1,7 @@
+compareVars :=
+  {
+    "PNet.y",
+    "bat.con.sta.sta",
+    "bat.bat.P",
+    "bat.bat.SOC"
+  };

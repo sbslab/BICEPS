@@ -41,4 +41,24 @@ package Functions "Package with mathematical functions"
       x:=(y - y2)/y2d + x2;
     end if;
   end inverseMonotonicCubicHermite;
+
+  function standardDeviationPopulation "The population standard deviation, 
+  used if the inputs represent the entire population of the data set"
+
+  algorithm
+
+  end standardDeviationPopulation;
+
+  function standardDeviationSample "The sample standard deviation, 
+  used if the inputs represent a sample of the entire population"
+
+  algorithm
+
+  end standardDeviationSample;
+
+  function variance "The variance of the input data"
+
+  algorithm
+
+  end variance;
 end Functions;
