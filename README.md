@@ -1,7 +1,7 @@
+![Build Status](https://github.com/sbslab/BICEPS/actions/workflows/formatting.yml/badge.svg)
+
 # BICEPS
 The Biomimetic Integrated Community Energy and Power System
-
-![Build Status](https://github.com/sbslab/BICEPS/actions/workflows/formatting.yml/badge.svg)
 
 ## Description
 This repository contains a Modelica library for modeling heterogenous community energy systems -- 
