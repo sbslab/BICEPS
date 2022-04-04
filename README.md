@@ -1,6 +1,9 @@
 # BICEPS
 The Biomimetic Integrated Community Energy and Power System
 
+[![Build Status](https://github.com/sbslab/BICEPS?branch=master)](https://github.com/sbslab/BICEPS)
+
+
 ## Description
 This repository contains a Modelica library for modeling heterogenous community energy systems -- 
 involving thermo-fluid, electrical, and biofuel systems -- and their controls.
