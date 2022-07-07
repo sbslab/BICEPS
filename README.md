@@ -31,3 +31,7 @@ The above script will simulate all unit tests for the entire package. Individual
 separately with the `-s` option, as in:
 
 `python ../bin/runUnitTests.py -s BICEPS.Fluid.Examples`
+
+# Publications
+
+Hinkelman, Kathryn, W. Zuo, J. Wang, S. Huang, M. Wetter. 2022. “Ecosystem-Level Biomimicry for the Built Environment: Adopting Systems Ecology Principles for the Control of Heterogeneous Energy Systems.” Proceedings of The 5th International Conference on Building Energy and Environment. Montreal, Canada.
