@@ -34,4 +34,4 @@ separately with the `-s` option, as in:
 
 # Publications
 
-Hinkelman, Kathryn, W. Zuo, J. Wang, S. Huang, M. Wetter. 2022. “Ecosystem-Level Biomimicry for the Built Environment: Adopting Systems Ecology Principles for the Control of Heterogeneous Energy Systems.” Proceedings of The 5th International Conference on Building Energy and Environment. Montreal, Canada.
+Hinkelman, Kathryn, Wangda Zuo, Jing Wang, Sen Huang, Michael Wetter. 2022. “Ecosystem-Level Biomimicry for the Built Environment: Adopting Systems Ecology Principles for the Control of Heterogeneous Energy Systems.” The 5th International Conference on Building Energy and Environment. Montreal, Canada. 10.1007/978-981-19-9822-5_284.
